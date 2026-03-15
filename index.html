@@ -1,318 +1,71 @@
-<!DOCTYPE html>
-
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XAU / USDT AI Trading Signals</title>
-
-<style>
-
-body{
-margin:0;
-font-family:Segoe UI;
-background:linear-gradient(135deg,#02152f,#0a2e63);
-color:white;
-}
-
-.container{
-max-width:1300px;
-margin:auto;
-padding:25px;
-}
-
-.title{
-text-align:center;
-font-size:38px;
-color:#FFD700;
-margin-bottom:25px;
-}
-
-.topbar{
-display:flex;
-justify-content:space-between;
-background:rgba(255,255,255,0.05);
-padding:15px;
-border-radius:10px;
-margin-bottom:25px;
-}
-
-.price{font-size:20px;color:#4fc3f7;}
-.prob{font-size:18px;color:#00ff9c;}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
-}
-
-.card{
-background:rgba(255,255,255,0.05);
-border-radius:15px;
-padding:20px;
-box-shadow:0 0 20px rgba(0,0,0,0.6);
-}
-
-h3{color:#4fc3f7}
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:10px;
-}
-
-th{
-background:rgba(255,215,0,0.15);
-padding:10px;
-}
-
-td{
-padding:10px;
-text-align:center;
-}
-
-.buy{
-color:#00ff9c;
-font-weight:bold;
-animation:pulse 1s infinite;
-}
-
-.sell{
-color:#ff3b3b;
-font-weight:bold;
-animation:pulse 1s infinite;
-}
-
-.wait{
-color:#aaa;
-}
-
-@keyframes pulse{
-0%{opacity:0.6}
-50%{opacity:1}
-100%{opacity:0.6}
-}
-
-.chart{
-margin-top:20px;
-}
-
-.footer{
-text-align:center;
-margin-top:25px;
-color:#aaa;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="container">
-
-<div class="title">
-⚡ XAU / USDT AI SIGNAL PLATFORM
-</div>
-
-<div class="topbar">
-<div class="price">
-Gold Price: <span id="price">Loading...</span>
-</div>
-
-<div class="prob">
-AI Strength: <span id="ai">--</span>%
-</div>
-</div>
-
-<div class="grid">
-
-<div class="card">
-
-<h3>Trend Strategy</h3>
-
-<table>
-<tr>
-<th>TF</th>
-<th>Signal</th>
-</tr>
-
-<tr>
-<td>M5</td>
-<td id="trend_m5">WAIT</td>
-</tr>
-
-<tr>
-<td>M15</td>
-<td id="trend_m15">WAIT</td>
-</tr>
-
-<tr>
-<td>H1</td>
-<td id="trend_h1">WAIT</td>
-</tr>
-
-</table>
-
-</div>
-
-<div class="card">
-
-<h3>Scalping Strategy</h3>
-
-<table>
-
-<tr>
-<th>TF</th>
-<th>Signal</th>
-</tr>
-
-<tr>
-<td>M1</td>
-<td id="scalp_m1">WAIT</td>
-</tr>
-
-<tr>
-<td>M5</td>
-<td id="scalp_m5">WAIT</td>
-</tr>
-
-</table>
-
-</div>
-
-<div class="card">
-
-<h3>Smart Money</h3>
-
-<table>
-
-<tr>
-<th>TF</th>
-<th>Signal</th>
-</tr>
-
-<tr>
-<td>M15</td>
-<td id="sm_m15">WAIT</td>
-</tr>
-
-<tr>
-<td>H1</td>
-<td id="sm_h1">WAIT</td>
-</tr>
-
-<tr>
-<td>H4</td>
-<td id="sm_h4">WAIT</td>
-</tr>
-
-</table>
-
-</div>
-
-<div class="card">
-
-<h3>AI Prediction</h3>
-
-<div id="prediction">
-Waiting...
-</div>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h3>📈 Live Gold Chart</h3>
-
-<div class="chart">
-
-<iframe
-src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=15&theme=dark"
-width="100%"
-height="500"
-frameborder="0">
-</iframe>
-
-</div>
-
-</div>
-
-<div class="footer">
-AI Trading Dashboard • Auto update every 10s
-</div>
-
-</div>
-
 <script>
-
-function randomSignal(){
-
-const signals=["BUY","SELL","WAIT"];
-return signals[Math.floor(Math.random()*signals.length)];
-
-}
 
 function applySignal(el,signal){
 
-el.innerText=signal;
+el.innerText = signal
 
-el.className="";
+el.className = ""
 
-if(signal=="BUY") el.classList.add("buy");
-else if(signal=="SELL") el.classList.add("sell");
-else el.classList.add("wait");
+if(signal=="BUY") el.classList.add("buy")
+else if(signal=="SELL") el.classList.add("sell")
+else el.classList.add("wait")
+
+}
+
+
+async function loadSignals(){
+
+try{
+
+let r = await fetch("/signals")
+let d = await r.json()
+
+applySignal(document.getElementById("trend_m5"), d.signals.ema)
+applySignal(document.getElementById("trend_m15"), d.signals.ema)
+applySignal(document.getElementById("trend_h1"), d.signals.ema)
+
+applySignal(document.getElementById("scalp_m1"), d.signals.rsi)
+applySignal(document.getElementById("scalp_m5"), d.signals.rsi)
+
+applySignal(document.getElementById("sm_m15"), d.signals.macd)
+applySignal(document.getElementById("sm_h1"), d.signals.macd)
+applySignal(document.getElementById("sm_h4"), d.signals.macd)
+
+document.getElementById("ai").innerText = d.accuracy.ai
+document.getElementById("prediction").innerText = d.signals.ai
+
+}catch{
+
+console.log("Signal API error")
 
 }
 
-function updateSignals(){
-
-applySignal(trend_m5,randomSignal());
-applySignal(trend_m15,randomSignal());
-applySignal(trend_h1,randomSignal());
-
-applySignal(scalp_m1,randomSignal());
-applySignal(scalp_m5,randomSignal());
-
-applySignal(sm_m15,randomSignal());
-applySignal(sm_h1,randomSignal());
-applySignal(sm_h4,randomSignal());
-
-let ai=Math.floor(Math.random()*100);
-document.getElementById("ai").innerText=ai;
-
-if(ai>70) prediction.innerHTML="<span class='buy'>Strong BUY</span>";
-else if(ai<30) prediction.innerHTML="<span class='sell'>Strong SELL</span>";
-else prediction.innerHTML="<span class='wait'>Neutral</span>";
-
 }
+
+
 
 async function updatePrice(){
 
 try{
 
-let r=await fetch("https://api.gold-api.com/price/XAU");
-let d=await r.json();
+let r = await fetch("https://api.gold-api.com/price/XAU")
+let d = await r.json()
 
-document.getElementById("price").innerText=d.price+" USD";
+document.getElementById("price").innerText = d.price + " USD"
 
 }catch{
 
-document.getElementById("price").innerText="API Error";
+document.getElementById("price").innerText = "API Error"
 
 }
 
 }
 
-updateSignals();
-updatePrice();
 
-setInterval(updateSignals,10000);
-setInterval(updatePrice,10000);
+loadSignals()
+updatePrice()
+
+setInterval(loadSignals,60000)
+setInterval(updatePrice,10000)
 
 </script>
-
-</body>
-</html>
