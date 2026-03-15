@@ -1,8 +1,16 @@
-const express = require("express");
-const app = express();
+const express=require("express")
+const fs=require("fs")
 
-app.use(express.static("."));
+const app=express()
 
-app.listen(3000, () => {
-  console.log("Server running");
-});
+app.use(express.static("."))
+
+app.get("/signals",(req,res)=>{
+
+const data=fs.readFileSync("./data/signals.json")
+
+res.json(JSON.parse(data))
+
+})
+
+app.listen(3000)
