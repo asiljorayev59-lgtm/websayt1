@@ -1,0 +1,20 @@
+{
+ "symbol":"BTCUSDT",
+
+ "signals":{
+   "ema":"BUY",
+   "rsi":"SELL",
+   "macd":"BUY",
+   "ai":"BUY"
+ },
+
+ "accuracy":{
+   "ema":62,
+   "rsi":58,
+   "macd":60,
+   "ai":66
+ },
+
+ "price":50192.3,
+ "timestamp":"2026-03-15T10:22:00"
+}
