@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>XAU / USDT Signal Platform</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,Arial;
+}
+
+body{
+background:linear-gradient(135deg,#050b1f,#0a2c5f);
+color:white;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.dashboard{
+
+width:900px;
+background:rgba(255,255,255,0.04);
+border-radius:20px;
+padding:40px;
+
+box-shadow:
+0 0 40px rgba(0,0,0,0.8),
+0 0 20px rgba(0,150,255,0.2);
+
+backdrop-filter:blur(12px);
+}
+
+.title{
+
+text-align:center;
+font-size:32px;
+color:#FFD700;
+margin-bottom:35px;
+letter-spacing:2px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+text-align:center;
+margin-bottom:20px;
+}
+
+th{
+background:rgba(255,215,0,0.15);
+padding:18px;
+font-size:18px;
+}
+
+td{
+padding:16px;
+font-size:18px;
+}
+
+tr{
+transition:0.3s;
+}
+
+tr:hover{
+background:rgba(255,255,255,0.05);
+}
+
+/* SIGNAL COLORS */
+
+.buy{
+color:#00ff9c;
+font-weight:bold;
+animation:glowBuy 1.5s infinite;
+}
+
+.sell{
+color:#ff3b3b;
+font-weight:bold;
+animation:glowSell 1.5s infinite;
+}
+
+.wait{
+color:#9ca3af;
+}
+
+/* ANIMATIONS */
+
+@keyframes glowBuy{
+
+0%{text-shadow:0 0 5px #00ff9c;}
+50%{text-shadow:0 0 20px #00ff9c;}
+100%{text-shadow:0 0 5px #00ff9c;}
+
+}
+
+@keyframes glowSell{
+
+0%{text-shadow:0 0 5px #ff3b3b;}
+50%{text-shadow:0 0 20px #ff3b3b;}
+100%{text-shadow:0 0 5px #ff3b3b;}
+
+}
+
+.strategy-title{
+
+margin-top:30px;
+margin-bottom:10px;
+font-size:20px;
+color:#38bdf8;
+}
+
+.footer{
+
+margin-top:25px;
+text-align:center;
+font-size:13px;
+color:#9ca3af;
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<div class="title">
+⚡ XAU / USDT SIGNAL PLATFORM
+</div>
+
+<div class="strategy-title">
+Trend Strategy
+</div>
+
+<table>
+
+<tr>
+<th>Timeframe</th>
+<th>Signal</th>
+</tr>
+
+<tr>
+<td>M5</td>
+<td class="wait">WAIT</td>
+</tr>
+
+<tr>
+<td>M15</td>
+<td class="wait">WAIT</td>
+</tr>
+
+<tr>
+<td>H1</td>
+<td class="wait">WAIT</td>
+</tr>
+
+</table>
+
+<div class="strategy-title">
+Scalping Strategy
+</div>
+
+<table>
+
+<tr>
+<th>Timeframe</th>
+<th>Signal</th>
+</tr>
+
+<tr>
+<td>M1</td>
+<td class="wait">WAIT</td>
+</tr>
+
+<tr>
+<td>M5</td>
+<td class="wait">WAIT</td>
+</tr>
+
+</table>
+
+<div class="strategy-title">
+Smart Money Strategy
+</div>
+
+<table>
+
+<tr>
+<th>Timeframe</th>
+<th>Signal</th>
+</tr>
+
+<tr>
+<td>M15</td>
+<td class="wait">WAIT</td>
+</tr>
+
+<tr>
+<td>H1</td>
+<td class="wait">WAIT</td>
+</tr>
+
+<tr>
+<td>H4</td>
+<td class="wait">WAIT</td>
+</tr>
+
+</table>
+
+<div class="footer">
+AI Analysis • Auto Update • XAU/USDT Trading Signals
+</div>
+
+</div>
+
+</body>
+</html>
