@@ -1,0 +1,15 @@
+[
+ {
+  "time":"10:20",
+  "strategy":"ema",
+  "signal":"BUY",
+  "result":"correct"
+ },
+
+ {
+  "time":"10:21",
+  "strategy":"rsi",
+  "signal":"SELL",
+  "result":"wrong"
+ }
+]
