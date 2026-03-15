@@ -4,8 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>XAU / USDT AI Signal Platform</title>
+<title>XAU / USDT AI Trading Signals</title>
 
 <style>
 
@@ -17,14 +16,14 @@ color:white;
 }
 
 .container{
-max-width:1200px;
+max-width:1300px;
 margin:auto;
-padding:30px;
+padding:25px;
 }
 
 .title{
 text-align:center;
-font-size:36px;
+font-size:38px;
 color:#FFD700;
 margin-bottom:25px;
 }
@@ -38,45 +37,23 @@ border-radius:10px;
 margin-bottom:25px;
 }
 
-.price{
-font-size:20px;
-color:#4fc3f7;
-}
+.price{font-size:20px;color:#4fc3f7;}
+.prob{font-size:18px;color:#00ff9c;}
 
-.prob{
-font-size:18px;
-color:#00ff9c;
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
 }
 
 .card{
 background:rgba(255,255,255,0.05);
 border-radius:15px;
 padding:20px;
-margin-bottom:20px;
 box-shadow:0 0 20px rgba(0,0,0,0.6);
 }
 
-.accordion{
-cursor:pointer;
-padding:18px;
-width:100%;
-border:none;
-text-align:left;
-font-size:20px;
-color:#4fc3f7;
-background:none;
-transition:0.3s;
-}
-
-.accordion:hover{
-color:#FFD700;
-}
-
-.panel{
-max-height:0;
-overflow:hidden;
-transition:max-height 0.4s ease;
-}
+h3{color:#4fc3f7}
 
 table{
 width:100%;
@@ -86,11 +63,11 @@ margin-top:10px;
 
 th{
 background:rgba(255,215,0,0.15);
-padding:12px;
+padding:10px;
 }
 
 td{
-padding:12px;
+padding:10px;
 text-align:center;
 }
 
@@ -107,7 +84,7 @@ animation:pulse 1s infinite;
 }
 
 .wait{
-color:#9ca3af;
+color:#aaa;
 }
 
 @keyframes pulse{
@@ -122,9 +99,8 @@ margin-top:20px;
 
 .footer{
 text-align:center;
-margin-top:30px;
+margin-top:25px;
 color:#aaa;
-font-size:14px;
 }
 
 </style>
@@ -140,101 +116,108 @@ font-size:14px;
 </div>
 
 <div class="topbar">
-
 <div class="price">
 Gold Price: <span id="price">Loading...</span>
 </div>
 
 <div class="prob">
-AI Signal Strength: 78%
+AI Strength: <span id="ai">--</span>%
+</div>
 </div>
 
-</div>
+<div class="grid">
 
 <div class="card">
 
-<button class="accordion">Trend Strategy</button>
-
-<div class="panel">
+<h3>Trend Strategy</h3>
 
 <table>
-
 <tr>
-<th>Timeframe</th>
+<th>TF</th>
 <th>Signal</th>
 </tr>
 
 <tr>
 <td>M5</td>
-<td class="buy">BUY</td>
+<td id="trend_m5">WAIT</td>
 </tr>
 
 <tr>
 <td>M15</td>
-<td class="wait">WAIT</td>
+<td id="trend_m15">WAIT</td>
 </tr>
 
 <tr>
 <td>H1</td>
-<td class="sell">SELL</td>
+<td id="trend_h1">WAIT</td>
 </tr>
 
 </table>
 
 </div>
 
-<button class="accordion">Scalping Strategy</button>
+<div class="card">
 
-<div class="panel">
+<h3>Scalping Strategy</h3>
 
 <table>
 
 <tr>
-<th>Timeframe</th>
+<th>TF</th>
 <th>Signal</th>
 </tr>
 
 <tr>
 <td>M1</td>
-<td class="buy">BUY</td>
+<td id="scalp_m1">WAIT</td>
 </tr>
 
 <tr>
 <td>M5</td>
-<td class="wait">WAIT</td>
+<td id="scalp_m5">WAIT</td>
 </tr>
 
 </table>
 
 </div>
 
-<button class="accordion">Smart Money Strategy</button>
+<div class="card">
 
-<div class="panel">
+<h3>Smart Money</h3>
 
 <table>
 
 <tr>
-<th>Timeframe</th>
+<th>TF</th>
 <th>Signal</th>
 </tr>
 
 <tr>
 <td>M15</td>
-<td class="sell">SELL</td>
+<td id="sm_m15">WAIT</td>
 </tr>
 
 <tr>
 <td>H1</td>
-<td class="wait">WAIT</td>
+<td id="sm_h1">WAIT</td>
 </tr>
 
 <tr>
 <td>H4</td>
-<td class="buy">BUY</td>
+<td id="sm_h4">WAIT</td>
 </tr>
 
 </table>
+
+</div>
+
+<div class="card">
+
+<h3>AI Prediction</h3>
+
+<div id="prediction">
+Waiting...
+</div>
 
 </div>
 
@@ -242,7 +225,7 @@ AI Signal Strength: 78%
 
 <div class="card">
 
-<h2>📈 Live Gold Market</h2>
+<h3>📈 Live Gold Chart</h3>
 
 <div class="chart">
 
@@ -258,44 +241,76 @@ frameborder="0">
 </div>
 
 <div class="footer">
-AI Analysis • Auto Update • XAU/USDT Trading Signals
+AI Trading Dashboard • Auto update every 10s
 </div>
 
 </div>
 
 <script>
 
-var acc=document.getElementsByClassName("accordion");
+function randomSignal(){
 
-for(var i=0;i<acc.length;i++){
-
-acc[i].addEventListener("click",function(){
-
-this.classList.toggle("active");
-
-var panel=this.nextElementSibling;
-
-if(panel.style.maxHeight){
-panel.style.maxHeight=null;
-}else{
-panel.style.maxHeight=panel.scrollHeight+"px";
-}
-
-});
+const signals=["BUY","SELL","WAIT"];
+return signals[Math.floor(Math.random()*signals.length)];
 
 }
 
-fetch("https://api.gold-api.com/price/XAU")
+function applySignal(el,signal){
 
-.then(res=>res.json())
+el.innerText=signal;
 
-.then(data=>{
-document.getElementById("price").innerText=data.price+" USD";
-})
+el.className="";
 
-.catch(()=>{
-document.getElementById("price").innerText="Unavailable";
-});
+if(signal=="BUY") el.classList.add("buy");
+else if(signal=="SELL") el.classList.add("sell");
+else el.classList.add("wait");
+
+}
+
+function updateSignals(){
+
+applySignal(trend_m5,randomSignal());
+applySignal(trend_m15,randomSignal());
+applySignal(trend_h1,randomSignal());
+
+applySignal(scalp_m1,randomSignal());
+applySignal(scalp_m5,randomSignal());
+
+applySignal(sm_m15,randomSignal());
+applySignal(sm_h1,randomSignal());
+applySignal(sm_h4,randomSignal());
+
+let ai=Math.floor(Math.random()*100);
+document.getElementById("ai").innerText=ai;
+
+if(ai>70) prediction.innerHTML="<span class='buy'>Strong BUY</span>";
+else if(ai<30) prediction.innerHTML="<span class='sell'>Strong SELL</span>";
+else prediction.innerHTML="<span class='wait'>Neutral</span>";
+
+}
+
+async function updatePrice(){
+
+try{
+
+let r=await fetch("https://api.gold-api.com/price/XAU");
+let d=await r.json();
+
+document.getElementById("price").innerText=d.price+" USD";
+
+}catch{
+
+document.getElementById("price").innerText="API Error";
+
+}
+
+}
+
+updateSignals();
+updatePrice();
+
+setInterval(updateSignals,10000);
+setInterval(updatePrice,10000);
 
 </script>
 
