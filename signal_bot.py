@@ -1,31 +1,30 @@
 import json
-import time
 from data_fetch import get_candles
-from strategies import ema_strategy
-from strategies import rsi_strategy
-from strategies import macd_strategy
+from strategies import ema_signal,rsi_signal,macd_signal
+from ai_engine import ai_signal
 
-while True:
+df=get_candles()
 
-    df=get_candles()
+ema=ema_signal(df)
+rsi=rsi_signal(df)
+macd=macd_signal(df)
 
-    ema=ema_strategy(df)
-    rsi=rsi_strategy(df)
-    macd=macd_strategy(df)
+signals=[ema,rsi,macd]
 
-    ai=ai_signal([ema,rsi,macd])
+ai=ai_signal(signals)
 
-    data={
-        "symbol":"BTCUSDT",
-        "signals":{
-            "ema":ema,
-            "rsi":rsi,
-            "macd":macd,
-            "ai":ai
-        }
-    }
+data={
 
-    with open("data/signals.json","w") as f:
-        json.dump(data,f)
+"symbol":"BTCUSDT",
 
-    time.sleep(60)
+"signals":{
+"ema":ema,
+"rsi":rsi,
+"macd":macd,
+"ai":ai
+}
+
+}
+
+with open("signals.json","w") as f:
+    json.dump(data,f)
