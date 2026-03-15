@@ -11,10 +11,22 @@ def get_candles():
         "limit":200
     }
 
-    data=requests.get(url,params=params).json()
+    r=requests.get(url,params=params)
+    data=r.json()
 
     df=pd.DataFrame(data)
 
-    df["close"]=df[4].astype(float)
+    df=df[[0,1,2,3,4,5]]
+
+    df.columns=[
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+    ]
+
+    df["close"]=df["close"].astype(float)
 
     return df
