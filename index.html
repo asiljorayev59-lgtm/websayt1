@@ -102,6 +102,20 @@ margin-top:25px;
 color:#aaa;
 }
 
+/* Crypto box */
+#marketBox{
+max-height:0;
+overflow:hidden;
+transition:0.5s;
+}
+
+.crypto-grid{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:10px;
+margin-top:15px;
+}
+
 </style>
 </head>
 
@@ -128,108 +142,72 @@ AI Strength: <span id="ai">--</span>%
 <div class="card">
 <h3>Trend Strategy</h3>
 <table>
-<tr>
-<th>TF</th>
-<th>Signal</th>
-</tr>
-
-<tr>
-<td>M5</td>
-<td id="trend_m5">WAIT</td>
-</tr>
-
-<tr>
-<td>M15</td>
-<td id="trend_m15">WAIT</td>
-</tr>
-
-<tr>
-<td>H1</td>
-<td id="trend_h1">WAIT</td>
-</tr>
-
+<tr><th>TF</th><th>Signal</th></tr>
+<tr><td>M5</td><td id="trend_m5">WAIT</td></tr>
+<tr><td>M15</td><td id="trend_m15">WAIT</td></tr>
+<tr><td>H1</td><td id="trend_h1">WAIT</td></tr>
 </table>
 </div>
 
 <div class="card">
-
 <h3>Scalping Strategy</h3>
-
 <table>
-
-<tr>
-<th>TF</th>
-<th>Signal</th>
-</tr>
-
-<tr>
-<td>M1</td>
-<td id="scalp_m1">WAIT</td>
-</tr>
-
-<tr>
-<td>M5</td>
-<td id="scalp_m5">WAIT</td>
-</tr>
-
+<tr><th>TF</th><th>Signal</th></tr>
+<tr><td>M1</td><td id="scalp_m1">WAIT</td></tr>
+<tr><td>M5</td><td id="scalp_m5">WAIT</td></tr>
 </table>
-
 </div>
 
 <div class="card">
-
 <h3>Smart Money</h3>
-
 <table>
-
-<tr>
-<th>TF</th>
-<th>Signal</th>
-</tr>
-
-<tr>
-<td>M15</td>
-<td id="sm_m15">WAIT</td>
-</tr>
-
-<tr>
-<td>H1</td>
-<td id="sm_h1">WAIT</td>
-</tr>
-
-<tr>
-<td>H4</td>
-<td id="sm_h4">WAIT</td>
-</tr>
-
+<tr><th>TF</th><th>Signal</th></tr>
+<tr><td>M15</td><td id="sm_m15">WAIT</td></tr>
+<tr><td>H1</td><td id="sm_h1">WAIT</td></tr>
+<tr><td>H4</td><td id="sm_h4">WAIT</td></tr>
 </table>
-
 </div>
 
 <div class="card">
-
 <h3>AI Prediction</h3>
-
-<div id="prediction">
-Waiting...
+<div id="prediction">Waiting...</div>
 </div>
 
 </div>
 
-</div>
-
+<!-- GOLD CHART -->
 <div class="card">
-
 <h3>📈 Live Gold Chart</h3>
 
 <div class="chart">
-
 <iframe
 src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=15&theme=dark"
 width="100%"
 height="500"
 frameborder="0">
 </iframe>
+</div>
+
+</div>
+
+<!-- ✅ CRYPTO MARKET (TO‘G‘RI JOY) -->
+<div class="mt-6">
+
+<button onclick="toggleMarket()" style="background:#00bcd4;padding:10px 15px;border:none;border-radius:8px;color:white;">
+📊 Crypto Market
+</button>
+
+<div id="marketBox">
+
+<div class="crypto-grid">
+
+<div class="card"><h3>BTC</h3><p id="btc">$0</p></div>
+<div class="card"><h3>ETH</h3><p id="eth">$0</p></div>
+<div class="card"><h3>BNB</h3><p id="bnb">$0</p></div>
+<div class="card"><h3>SOL</h3><p id="sol">$0</p></div>
+<div class="card"><h3>TON</h3><p id="ton">$0</p></div>
+
+</div>
 
 </div>
 
@@ -243,21 +221,18 @@ AI Trading Dashboard • Auto update every 10s
 
 <script>
 
+// SIGNAL
 function randomSignal(){
 const signals=["BUY","SELL","WAIT"];
 return signals[Math.floor(Math.random()*signals.length)];
 }
 
 function applySignal(el,signal){
-
 el.innerText=signal;
-
 el.className="";
-
 if(signal=="BUY") el.classList.add("buy");
 else if(signal=="SELL") el.classList.add("sell");
 else el.classList.add("wait");
-
 }
 
 function updateSignals(){
@@ -274,7 +249,7 @@ applySignal(sm_h1,randomSignal());
 applySignal(sm_h4,randomSignal());
 
 let ai=Math.floor(Math.random()*100);
-document.getElementById("ai").innerText=ai;
+aiText.innerText=ai;
 
 if(ai>70) prediction.innerHTML="<span class='buy'>Strong BUY</span>";
 else if(ai<30) prediction.innerHTML="<span class='sell'>Strong SELL</span>";
@@ -282,28 +257,47 @@ else prediction.innerHTML="<span class='wait'>Neutral</span>";
 
 }
 
+// GOLD API
 async function updatePrice(){
-
 try{
-
 let r=await fetch("https://api.gold-api.com/price/XAU");
 let d=await r.json();
+price.innerText=d.price+" USD";
+}catch{
+price.innerText="API Error";
+}
+}
 
-document.getElementById("price").innerText=d.price+" USD";
+// ✅ CRYPTO
+function toggleMarket(){
+let box=document.getElementById("marketBox");
+box.style.maxHeight = box.style.maxHeight ? null : "300px";
+}
+
+async function updateCrypto(){
+try{
+let r=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,solana,toncoin&vs_currencies=usd");
+let d=await r.json();
+
+btc.innerText="$"+d.bitcoin.usd;
+eth.innerText="$"+d.ethereum.usd;
+bnb.innerText="$"+d.binancecoin.usd;
+sol.innerText="$"+d.solana.usd;
+ton.innerText="$"+d.toncoin.usd;
 
 }catch{
-
-document.getElementById("price").innerText="API Error";
-
+console.log("crypto error");
+}
 }
 
-}
-
+// RUN
 updateSignals();
 updatePrice();
+updateCrypto();
 
 setInterval(updateSignals,10000);
 setInterval(updatePrice,10000);
+setInterval(updateCrypto,10000);
 
 </script>
 
