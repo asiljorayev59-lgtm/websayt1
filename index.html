@@ -102,7 +102,7 @@ margin-top:25px;
 color:#aaa;
 }
 
-/* Crypto box */
+/* Crypto */
 #marketBox{
 max-height:0;
 overflow:hidden;
@@ -190,10 +190,10 @@ frameborder="0">
 
 </div>
 
-<!-- ✅ CRYPTO MARKET (TO‘G‘RI JOY) -->
-<div class="mt-6">
+<!-- CRYPTO MARKET -->
+<div style="margin-top:20px;">
 
-<button onclick="toggleMarket()" style="background:#00bcd4;padding:10px 15px;border:none;border-radius:8px;color:white;">
+<button onclick="toggleMarket()" style="background:#00bcd4;padding:10px 15px;border:none;border-radius:8px;color:white;cursor:pointer;">
 📊 Crypto Market
 </button>
 
@@ -249,7 +249,7 @@ applySignal(sm_h1,randomSignal());
 applySignal(sm_h4,randomSignal());
 
 let ai=Math.floor(Math.random()*100);
-aiText.innerText=ai;
+document.getElementById("ai").innerText=ai;
 
 if(ai>70) prediction.innerHTML="<span class='buy'>Strong BUY</span>";
 else if(ai<30) prediction.innerHTML="<span class='sell'>Strong SELL</span>";
@@ -268,36 +268,47 @@ price.innerText="API Error";
 }
 }
 
-// ✅ CRYPTO
+// CRYPTO
+let marketOpen = false;
+
 function toggleMarket(){
-let box=document.getElementById("marketBox");
-box.style.maxHeight = box.style.maxHeight ? null : "300px";
+const box = document.getElementById("marketBox");
+
+if(!box) return;
+
+if(marketOpen){
+box.style.maxHeight = "0px";
+} else {
+box.style.maxHeight = "500px";
 }
 
-async function updateCrypto(){
+marketOpen = !marketOpen;
+}
+
+async function loadCrypto(){
 try{
-let r=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,solana,toncoin&vs_currencies=usd");
-let d=await r.json();
+const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,solana,the-open-network&vs_currencies=usd");
+const data = await res.json();
 
-btc.innerText="$"+d.bitcoin.usd;
-eth.innerText="$"+d.ethereum.usd;
-bnb.innerText="$"+d.binancecoin.usd;
-sol.innerText="$"+d.solana.usd;
-ton.innerText="$"+d.toncoin.usd;
+btc.innerText="$"+data.bitcoin.usd;
+eth.innerText="$"+data.ethereum.usd;
+bnb.innerText="$"+data.binancecoin.usd;
+sol.innerText="$"+data.solana.usd;
+ton.innerText="$"+data["the-open-network"].usd;
 
-}catch{
-console.log("crypto error");
+}catch(e){
+console.log("Crypto API error:", e);
 }
 }
 
 // RUN
 updateSignals();
 updatePrice();
-updateCrypto();
+loadCrypto();
 
 setInterval(updateSignals,10000);
 setInterval(updatePrice,10000);
-setInterval(updateCrypto,10000);
+setInterval(loadCrypto,10000);
 
 </script>
 
