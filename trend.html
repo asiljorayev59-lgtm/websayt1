@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>Trend Strategy</title>
+
+<style>
+body{
+background:#02152f;
+color:white;
+font-family:Segoe UI;
+margin:0;
+}
+
+.container{
+padding:20px;
+max-width:1200px;
+margin:auto;
+}
+
+.title{
+font-size:30px;
+color:#FFD700;
+margin-bottom:20px;
+}
+
+.card{
+background:rgba(255,255,255,0.05);
+padding:15px;
+border-radius:10px;
+margin-bottom:15px;
+}
+
+.buy{color:#00ff9c}
+.sell{color:#ff3b3b}
+.wait{color:#aaa}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="title">📊 Trend Strategy Analysis</div>
+
+<!-- SIGNAL -->
+<div class="card">
+<h3>Current Signal</h3>
+<p id="signal">Loading...</p>
+</div>
+
+<!-- ANALYSIS -->
+<div class="card">
+<h3>Market Analysis</h3>
+<p id="analysis">AI analiz yuklanmoqda...</p>
+</div>
+
+<!-- GRAPH -->
+<div class="card">
+<h3>📈 Chart</h3>
+
+<iframe
+src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=15&theme=dark"
+width="100%"
+height="400">
+</iframe>
+
+</div>
+
+<!-- HISTORY -->
+<div class="card">
+<h3>📜 Signal History</h3>
+<ul id="history"></ul>
+</div>
+
+</div>
+
+<script>
+
+// 🔥 SIGNAL FETCH
+async function loadTrend(){
+
+let res = await fetch("/signal")
+let data = await res.json()
+
+let sig = data.trend_m15
+
+document.getElementById("signal").innerText = sig
+
+// STYLE
+if(sig=="BUY") signal.className="buy"
+else if(sig=="SELL") signal.className="sell"
+else signal.className="wait"
+
+// ANALYSIS
+document.getElementById("analysis").innerText =
+"Trend yo‘nalishiga qarab AI signal hisoblandi"
+
+// HISTORY
+let list = document.getElementById("history")
+let item = document.createElement("li")
+
+item.innerText = sig + " - " + new Date().toLocaleTimeString()
+
+list.prepend(item)
+
+}
+
+setInterval(loadTrend,10000)
+loadTrend()
+
+</script>
+
+</body>
+</html>
