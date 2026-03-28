@@ -3,11 +3,11 @@ const fs = require("fs");
 
 const app = express();
 
-// Static fayllar (frontend uchun)
+// Static fayllar
 app.use(express.static("."));
 
 /**
- * SIGNALS (data/signals.json)
+ * SIGNALS LIST
  */
 app.get("/signals", (req, res) => {
   try {
@@ -19,7 +19,7 @@ app.get("/signals", (req, res) => {
 });
 
 /**
- * HISTORY (data/history.json)
+ * HISTORY
  */
 app.get("/history", (req, res) => {
   try {
@@ -31,12 +31,12 @@ app.get("/history", (req, res) => {
 });
 
 /**
- * SINGLE SIGNAL (signals.json rootda bo‘lsa)
+ * SINGLE SIGNAL ✅ (FAKAT BITTA)
  */
 app.get("/signal", (req, res) => {
   try {
-    const data = require("./signals.json");
-    res.json(data);
+    const data = fs.readFileSync("signals.json", "utf-8");
+    res.json(JSON.parse(data));
   } catch (err) {
     res.status(500).json({ error: "signal topilmadi" });
   }
