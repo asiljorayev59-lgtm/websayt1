@@ -1,5 +1,10 @@
 [
- { "time":"12:00", "signal":"BUY" },
- { "time":"12:01", "signal":"SELL" },
- { "time":"12:02", "signal":"BUY" }
+  {
+    "signal": "BUY",
+    "time": "2026-03-28"
+  },
+  {
+    "signal": "SELL",
+    "time": "2026-03-28"
+  }
 ]
