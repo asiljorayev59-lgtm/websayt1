@@ -1,93 +1,279 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XAU / USDT AI Trading Signals</title>
+
+<style>
+body{
+margin:0;
+font-family:Segoe UI;
+background:linear-gradient(135deg,#02152f,#0a2e63);
+color:white;
+}
+
+.container{
+max-width:1300px;
+margin:auto;
+padding:25px;
+}
+
+.title{
+text-align:center;
+font-size:38px;
+color:#FFD700;
+margin-bottom:25px;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+background:rgba(255,255,255,0.05);
+padding:15px;
+border-radius:10px;
+margin-bottom:25px;
+}
+
+.price{font-size:20px;color:#4fc3f7;}
+.prob{font-size:18px;color:#00ff9c;}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+.card{
+background:rgba(255,255,255,0.05);
+border-radius:15px;
+padding:20px;
+box-shadow:0 0 20px rgba(0,0,0,0.6);
+}
+
+h3{color:#4fc3f7}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th{
+background:rgba(255,215,0,0.15);
+padding:10px;
+}
+
+td{
+padding:10px;
+text-align:center;
+}
+
+.buy{
+color:#00ff9c;
+font-weight:bold;
+animation:pulse 1s infinite;
+}
+
+.sell{
+color:#ff3b3b;
+font-weight:bold;
+animation:pulse 1s infinite;
+}
+
+.wait{
+color:#aaa;
+}
+
+@keyframes pulse{
+0%{opacity:0.6}
+50%{opacity:1}
+100%{opacity:0.6}
+}
+
+.chart{
+margin-top:20px;
+}
+
+.footer{
+text-align:center;
+margin-top:25px;
+color:#aaa;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="title">⚡ XAU / USDT AI SIGNAL PLATFORM</div>
+
+<div class="topbar">
+<div class="price">Gold Price: <span id="price">Loading...</span></div>
+<div class="prob">AI Strength: <span id="ai">--</span>%</div>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h3>Trend Strategy</h3>
+<table>
+<tr><th>TF</th><th>Signal</th></tr>
+<tr><td>M5</td><td id="trend_m5">WAIT</td></tr>
+<tr><td>M15</td><td id="trend_m15">WAIT</td></tr>
+<tr><td>H1</td><td id="trend_h1">WAIT</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h3>Scalping Strategy</h3>
+<table>
+<tr><th>TF</th><th>Signal</th></tr>
+<tr><td>M1</td><td id="scalp_m1">WAIT</td></tr>
+<tr><td>M5</td><td id="scalp_m5">WAIT</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h3>Smart Money</h3>
+<table>
+<tr><th>TF</th><th>Signal</th></tr>
+<tr><td>M15</td><td id="sm_m15">WAIT</td></tr>
+<tr><td>H1</td><td id="sm_h1">WAIT</td></tr>
+<tr><td>H4</td><td id="sm_h4">WAIT</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h3>AI Prediction</h3>
+<div id="prediction">Waiting...</div>
+</div>
+
+</div>
+
+<div class="card">
+<h3>📈 Live Gold Chart</h3>
+
+<div class="chart">
+<iframe
+src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=15&theme=dark"
+width="100%"
+height="500"
+frameborder="0">
+</iframe>
+</div>
+
+<!-- CRYPTO MARKET -->
+<div style="margin-top:20px">
+
+<button onclick="toggleMarket()" style="background:#4fc3f7;padding:10px 15px;border:none;border-radius:8px;color:white;cursor:pointer;">
+📊 Crypto Market
+</button>
+
+<div id="marketBox" style="overflow:hidden;max-height:0;transition:0.5s;">
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:15px;">
+
+<div class="card"><h3>BTC</h3><p id="btc">$0</p></div>
+<div class="card"><h3>ETH</h3><p id="eth">$0</p></div>
+<div class="card"><h3>BNB</h3><p id="bnb">$0</p></div>
+<div class="card"><h3>SOL</h3><p id="sol">$0</p></div>
+<div class="card"><h3>TON</h3><p id="ton">$0</p></div>
+
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">AI Trading Dashboard • Auto update every 10s</div>
+
+</div>
+
 <script>
 
-// ❌ randomSignal O‘CHIRILDI
+// 🔥 REAL SIGNAL (API)
+async function updateSignals(){
 
+let res = await fetch("/signal")
+let data = await res.json()
+
+applySignal(document.getElementById("trend_m5"), data.trend_m5)
+applySignal(document.getElementById("trend_m15"), data.trend_m15)
+applySignal(document.getElementById("trend_h1"), data.trend_h1)
+
+applySignal(document.getElementById("scalp_m1"), data.scalp_m1)
+applySignal(document.getElementById("scalp_m5"), data.scalp_m5)
+
+applySignal(document.getElementById("sm_m15"), data.sm_m15)
+applySignal(document.getElementById("sm_h1"), data.sm_h1)
+applySignal(document.getElementById("sm_h4"), data.sm_h4)
+
+document.getElementById("ai").innerText = data.ai
+
+if(data.ai > 70)
+document.getElementById("prediction").innerHTML = "<span class='buy'>Strong BUY</span>"
+else if(data.ai < 30)
+document.getElementById("prediction").innerHTML = "<span class='sell'>Strong SELL</span>"
+else
+document.getElementById("prediction").innerHTML = "<span class='wait'>Neutral</span>"
+}
+
+// STYLE APPLY
 function applySignal(el,signal){
 el.innerText=signal;
 el.className="";
+
 if(signal=="BUY") el.classList.add("buy");
 else if(signal=="SELL") el.classList.add("sell");
 else el.classList.add("wait");
 }
 
-// ✅ YANGI updateSignals (API orqali)
-async function updateSignals(){
-
-  let res = await fetch("/signal")
-  let data = await res.json()
-
-  applySignal(document.getElementById("trend_m5"), data.trend_m5)
-  applySignal(document.getElementById("trend_m15"), data.trend_m15)
-  applySignal(document.getElementById("trend_h1"), data.trend_h1)
-
-  applySignal(document.getElementById("scalp_m1"), data.scalp_m1)
-  applySignal(document.getElementById("scalp_m5"), data.scalp_m5)
-
-  applySignal(document.getElementById("sm_m15"), data.sm_m15)
-  applySignal(document.getElementById("sm_h1"), data.sm_h1)
-  applySignal(document.getElementById("sm_h4"), data.sm_h4)
-
-  document.getElementById("ai").innerText = data.ai
-
-  if(data.ai > 70)
-    document.getElementById("prediction").innerHTML = "<span class='buy'>Strong BUY</span>"
-  else if(data.ai < 30)
-    document.getElementById("prediction").innerHTML = "<span class='sell'>Strong SELL</span>"
-  else
-    document.getElementById("prediction").innerHTML = "<span class='wait'>Neutral</span>"
-}
-
-// GOLD API
+// GOLD PRICE
 async function updatePrice(){
 try{
 let r=await fetch("https://api.gold-api.com/price/XAU");
 let d=await r.json();
-price.innerText=d.price+" USD";
+document.getElementById("price").innerText=d.price+" USD";
 }catch{
-price.innerText="API Error";
+document.getElementById("price").innerText="API Error";
 }
 }
 
-// CRYPTO
-let marketOpen = false;
-
+// CRYPTO MARKET
 function toggleMarket(){
-const box = document.getElementById("marketBox");
-
-if(!box) return;
-
-if(marketOpen){
-box.style.maxHeight = "0px";
-} else {
-box.style.maxHeight = "500px";
+let box=document.getElementById("marketBox");
+box.style.maxHeight=(box.style.maxHeight=="0px"||box.style.maxHeight=="")?"500px":"0px";
 }
 
-marketOpen = !marketOpen;
-}
-
-async function loadCrypto(){
+async function updateCrypto(){
 try{
-const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,solana,the-open-network&vs_currencies=usd");
-const data = await res.json();
+let res=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,solana,the-open-network&vs_currencies=usd");
+let data=await res.json();
 
-btc.innerText="$"+data.bitcoin.usd;
-eth.innerText="$"+data.ethereum.usd;
-bnb.innerText="$"+data.binancecoin.usd;
-sol.innerText="$"+data.solana.usd;
-ton.innerText="$"+data["the-open-network"].usd;
+document.getElementById("btc").innerText="$"+data.bitcoin.usd;
+document.getElementById("eth").innerText="$"+data.ethereum.usd;
+document.getElementById("bnb").innerText="$"+data.binancecoin.usd;
+document.getElementById("sol").innerText="$"+data.solana.usd;
+document.getElementById("ton").innerText="$"+data["the-open-network"].usd;
 
-}catch(e){
-console.log("Crypto API error:", e);
+}catch{
+console.log("Crypto API error");
 }
 }
 
-// RUN
+// INIT
 updateSignals();
 updatePrice();
-loadCrypto();
+updateCrypto();
 
 setInterval(updateSignals,10000);
 setInterval(updatePrice,10000);
-setInterval(loadCrypto,10000);
+setInterval(updateCrypto,10000);
 
 </script>
+
+</body>
+</html>
