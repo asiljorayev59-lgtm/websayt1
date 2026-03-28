@@ -1,19 +1,11 @@
 {
- "symbol":"BTCUSDT",
-
- "signals":{
-   "ema":"BUY",
-   "rsi":"SELL",
-   "macd":"BUY",
-   "ai":"BUY"
- },
-
- "accuracy":{
-   "ema":63,
-   "rsi":58,
-   "macd":61,
-   "ai":67
- },
-
- "price":65000
+  "trend_m5": "BUY",
+  "trend_m15": "SELL",
+  "trend_h1": "BUY",
+  "scalp_m1": "BUY",
+  "scalp_m5": "WAIT",
+  "sm_m15": "SELL",
+  "sm_h1": "BUY",
+  "sm_h4": "BUY",
+  "ai": 82
 }
