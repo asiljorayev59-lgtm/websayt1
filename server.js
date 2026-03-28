@@ -1,50 +1,32 @@
-const express = require("express");
-const fs = require("fs");
+const express = require("express")
+const fs = require("fs")
 
-const app = express();
+const app = express()
+app.use(express.json())
+app.use(express.static("public"))
 
-// Static fayllar
-app.use(express.static("."));
+// 🔥 SIGNAL API
+app.get("/signal", (req,res)=>{
+  delete require.cache[require.resolve("./signals.json")]
+  const data = require("./signals.json")
+  res.json(data)
+})
 
-/**
- * SIGNALS LIST
- */
-app.get("/signals", (req, res) => {
-  try {
-    const data = fs.readFileSync("data/signals.json", "utf-8");
-    res.json(JSON.parse(data));
-  } catch (err) {
-    res.status(500).json({ error: "signals.json o‘qilmadi" });
-  }
-});
+// 🔥 HISTORY API
+app.get("/history", (req,res)=>{
+  const data = JSON.parse(fs.readFileSync("./history.json"))
+  res.json(data)
+})
 
-/**
- * HISTORY
- */
-app.get("/history", (req, res) => {
-  try {
-    const data = fs.readFileSync("data/history.json", "utf-8");
-    res.json(JSON.parse(data));
-  } catch (err) {
-    res.status(500).json({ error: "history.json o‘qilmadi" });
-  }
-});
+// 🔥 SAVE HISTORY
+app.post("/save", (req,res)=>{
+  let history = JSON.parse(fs.readFileSync("./history.json"))
 
-/**
- * SINGLE SIGNAL ✅ (FAKAT BITTA)
- */
-app.get("/signal", (req, res) => {
-  try {
-    const data = fs.readFileSync("signals.json", "utf-8");
-    res.json(JSON.parse(data));
-  } catch (err) {
-    res.status(500).json({ error: "signal topilmadi" });
-  }
-});
+  history.unshift(req.body)
 
-/**
- * SERVER
- */
-app.listen(3000, () => {
-  console.log("🚀 Server running on http://localhost:3000");
-});
+  fs.writeFileSync("./history.json", JSON.stringify(history,null,2))
+
+  res.json({msg:"saved"})
+})
+
+app.listen(3000,()=>console.log("SERVER RUNNING"))
