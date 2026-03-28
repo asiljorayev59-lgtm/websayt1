@@ -1,26 +1,50 @@
-const express = require("express")
-const fs = require("fs")
+const express = require("express");
+const fs = require("fs");
 
-const app = express()
+const app = express();
 
-app.use(express.static("."))
+// Static fayllar (frontend uchun)
+app.use(express.static("."));
 
-app.get("/signals",(req,res)=>{
+/**
+ * SIGNALS (data/signals.json)
+ */
+app.get("/signals", (req, res) => {
+  try {
+    const data = fs.readFileSync("data/signals.json", "utf-8");
+    res.json(JSON.parse(data));
+  } catch (err) {
+    res.status(500).json({ error: "signals.json o‘qilmadi" });
+  }
+});
 
-const data = fs.readFileSync("data/signals.json")
+/**
+ * HISTORY (data/history.json)
+ */
+app.get("/history", (req, res) => {
+  try {
+    const data = fs.readFileSync("data/history.json", "utf-8");
+    res.json(JSON.parse(data));
+  } catch (err) {
+    res.status(500).json({ error: "history.json o‘qilmadi" });
+  }
+});
 
-res.json(JSON.parse(data))
+/**
+ * SINGLE SIGNAL (signals.json rootda bo‘lsa)
+ */
+app.get("/signal", (req, res) => {
+  try {
+    const data = require("./signals.json");
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: "signal topilmadi" });
+  }
+});
 
-})
-
-app.get("/history",(req,res)=>{
-
-const data = fs.readFileSync("data/history.json")
-
-res.json(JSON.parse(data))
-
-})
-
-app.listen(3000,()=>{
-console.log("Server running")
-})
+/**
+ * SERVER
+ */
+app.listen(3000, () => {
+  console.log("🚀 Server running on http://localhost:3000");
+});
