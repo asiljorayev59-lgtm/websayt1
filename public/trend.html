@@ -10,6 +10,7 @@ body{background:#020617;color:white;font-family:Segoe UI;margin:0}
 .card{background:#111;padding:15px;margin-bottom:10px;border-radius:10px}
 .buy{color:#22c55e}
 .sell{color:#ef4444}
+.wait{color:gray}
 </style>
 </head>
 
@@ -25,10 +26,25 @@ body{background:#020617;color:white;font-family:Segoe UI;margin:0}
 </div>
 
 <div class="card">
+<h3>Analysis</h3>
+<p>EMA50: <span id="ema50">-</span></p>
+<p>EMA200: <span id="ema200">-</span></p>
+<p>RSI: <span id="rsi">-</span></p>
+</div>
+
+<div class="card">
 <h3>Entry / Exit</h3>
 <p id="entry"></p>
 <p id="tp"></p>
 <p id="sl"></p>
+</div>
+
+<!-- 🔥 YANGI QO‘SHILDI -->
+<div class="card">
+<h3>🎯 Trade Setup</h3>
+<p id="entryLine"></p>
+<p id="tpLine"></p>
+<p id="slLine"></p>
 </div>
 
 <div class="card">
@@ -49,7 +65,6 @@ async function load(){
 
   let s = await fetch("/signal").then(r=>r.json())
 
-  // 🔥 ELEMENTLARNI OLISH
   const signalEl = document.getElementById("signal")
   const ema50El = document.getElementById("ema50")
   const ema200El = document.getElementById("ema200")
@@ -59,39 +74,54 @@ async function load(){
   const slEl = document.getElementById("sl")
   const historyEl = document.getElementById("history")
 
-  // 🔥 QAYSI SIGNALNI OLAMIZ
+  const entryLine = document.getElementById("entryLine")
+  const tpLine = document.getElementById("tpLine")
+  const slLine = document.getElementById("slLine")
+
   let sig = s.trend_h1 || "WAIT"
 
   // SIGNAL
   signalEl.innerText = sig
-
   signalEl.className = ""
+
   if(sig == "BUY") signalEl.classList.add("buy")
   else if(sig == "SELL") signalEl.classList.add("sell")
   else signalEl.classList.add("wait")
 
-  // 📊 ANALYSIS
+  // ANALYSIS
   ema50El.innerText = s.ema50 ?? "-"
   ema200El.innerText = s.ema200 ?? "-"
   rsiEl.innerText = s.rsi ?? "-"
 
-  // 💰 ENTRY LOGIC
+  // ENTRY
   let price = s.price ?? 2300
 
   entryEl.innerText = "Entry: " + price
 
+  let tp, sl
+
   if(sig == "BUY"){
-    tpEl.innerText = "TP: " + (price + 50).toFixed(2)
-    slEl.innerText = "SL: " + (price - 30).toFixed(2)
+    tp = price + 50
+    sl = price - 30
   } else if(sig == "SELL"){
-    tpEl.innerText = "TP: " + (price - 50).toFixed(2)
-    slEl.innerText = "SL: " + (price + 30).toFixed(2)
+    tp = price - 50
+    sl = price + 30
+  }
+
+  if(tp && sl){
+    tpEl.innerText = "TP: " + tp.toFixed(2)
+    slEl.innerText = "SL: " + sl.toFixed(2)
+
+    // 🎯 VISUAL LINES
+    entryLine.innerText = "🟡 Entry Zone: " + price
+    tpLine.innerText = "🟢 Take Profit: " + tp.toFixed(2)
+    slLine.innerText = "🔴 Stop Loss: " + sl.toFixed(2)
   } else {
     tpEl.innerText = "-"
     slEl.innerText = "-"
   }
 
-  // 💾 SAVE HISTORY
+  // SAVE HISTORY
   await fetch("/save",{
     method:"POST",
     headers:{"Content-Type":"application/json"},
@@ -101,7 +131,7 @@ async function load(){
     })
   })
 
-  // 📜 LOAD HISTORY
+  // LOAD HISTORY
   let h = await fetch("/history").then(r=>r.json())
 
   historyEl.innerHTML = h.slice(0,10)
@@ -110,7 +140,7 @@ async function load(){
 
 }
 
-// 🔁 LOOP
+// LOOP
 setInterval(load,10000)
 load()
 
