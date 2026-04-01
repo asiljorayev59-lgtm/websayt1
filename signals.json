@@ -1,7 +1,9 @@
 {
-  "trend_h1": "BUY",
+  "h1": "BUY",
+  "h4": "SELL",
+  "d1": "BUY",
+  "price": 2320,
   "ema50": 2340,
   "ema200": 2300,
-  "rsi": 61,
-  "price": 2320
+  "rsi": 61
 }
