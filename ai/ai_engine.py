@@ -1,21 +1,52 @@
+import pandas as pd
+import requests
 import json
-import random
-from datetime import datetime
 
-signals = ["BUY","SELL","WAIT"]
+# 🔥 DATA (free API)
+url = "https://api.binance.com/api/v3/klines?symbol=XAUUSDT&interval=1h&limit=200"
+data = requests.get(url).json()
 
-data = {
-    "trend_m5": random.choice(signals),
-    "trend_m15": random.choice(signals),
-    "trend_h1": random.choice(signals),
-    "scalp_m1": random.choice(signals),
-    "scalp_m5": random.choice(signals),
-    "sm_m15": random.choice(signals),
-    "sm_h1": random.choice(signals),
-    "sm_h4": random.choice(signals),
-    "ai": random.randint(40,90),
-    "time": str(datetime.now())
+df = pd.DataFrame(data)
+df = df.iloc[:,0:6]
+df.columns = ["time","open","high","low","close","volume"]
+
+df["close"] = df["close"].astype(float)
+
+# 📊 EMA
+df["ema50"] = df["close"].ewm(span=50).mean()
+df["ema200"] = df["close"].ewm(span=200).mean()
+
+# 📊 RSI
+delta = df["close"].diff()
+gain = delta.clip(lower=0)
+loss = -delta.clip(upper=0)
+
+avg_gain = gain.rolling(14).mean()
+avg_loss = loss.rolling(14).mean()
+
+rs = avg_gain / avg_loss
+df["rsi"] = 100 - (100/(1+rs))
+
+last = df.iloc[-1]
+
+# 🔥 SIGNAL
+signal = "WAIT"
+
+if last["ema50"] > last["ema200"] and last["rsi"] > 50:
+    signal = "BUY"
+
+elif last["ema50"] < last["ema200"] and last["rsi"] < 50:
+    signal = "SELL"
+
+# 📦 SAVE
+result = {
+    "trend_h1": signal,
+    "ema50": round(last["ema50"],2),
+    "ema200": round(last["ema200"],2),
+    "rsi": round(last["rsi"],2)
 }
 
 with open("../signals.json","w") as f:
-    json.dump(data,f,indent=2)
+    json.dump(result,f,indent=2)
+
+print(result)
