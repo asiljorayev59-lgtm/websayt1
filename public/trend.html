@@ -5,61 +5,13 @@
 <title>Trend Strategy PRO</title>
 
 <style>
-body{
-background:#020617;
-color:white;
-font-family:Segoe UI;
-margin:0;
-}
-
-.container{
-max-width:1200px;
-margin:auto;
-padding:20px;
-}
-
-.title{
-text-align:center;
-font-size:30px;
-color:#FFD700;
-margin-bottom:20px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:20px;
-}
-
-.card{
-background:#111;
-padding:15px;
-border-radius:12px;
-box-shadow:0 0 10px rgba(0,0,0,0.6);
-transition:0.3s;
-}
-
-.card:hover{
-transform:scale(1.02);
-}
-
-h3{
-color:#4fc3f7;
-}
-
-.buy{color:#22c55e;font-weight:bold;}
-.sell{color:#ef4444;font-weight:bold;}
-
-.stat{
-margin-top:10px;
-font-size:14px;
-color:#aaa;
-}
-
-iframe{
-border-radius:10px;
-margin-top:10px;
-}
+body{background:#020617;color:white;font-family:Segoe UI;margin:0}
+.container{padding:20px}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.card{background:#111;padding:15px;border-radius:10px}
+.buy{color:#22c55e}
+.sell{color:#ef4444}
+.title{text-align:center;color:#FFD700;font-size:28px}
 </style>
 </head>
 
@@ -67,77 +19,50 @@ margin-top:10px;
 
 <div class="container">
 
-<div class="title">
-⚡ MULTI TIMEFRAME GOLD AI ⚡
-</div>
+<div class="title">💰 GOLD: <span id="price"></span></div>
 
 <div class="grid">
 
-<!-- H1 -->
 <div class="card">
 <h3>H1</h3>
-
-<p id="h1">...</p>
-
-<p>EMA50: <span id="h1ema"></span></p>
+<p id="h1"></p>
+<p>EMA: <span id="h1ema"></span></p>
 <p>RSI: <span id="h1rsi"></span></p>
-
 <p id="h1entry"></p>
 <p id="h1tp"></p>
 <p id="h1sl"></p>
-
-<iframe 
-src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=60&theme=dark"
-width="100%" height="250"></iframe>
-
+<iframe src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=60&theme=dark" width="100%" height="200"></iframe>
 <ul id="h1History"></ul>
-<p id="h1Stats" class="stat"></p>
+<p id="h1Stats"></p>
 </div>
 
-<!-- H4 -->
 <div class="card">
 <h3>H4</h3>
-
-<p id="h4">...</p>
-
-<p>EMA50: <span id="h4ema"></span></p>
+<p id="h4"></p>
+<p>EMA: <span id="h4ema"></span></p>
 <p>RSI: <span id="h4rsi"></span></p>
-
 <p id="h4entry"></p>
 <p id="h4tp"></p>
 <p id="h4sl"></p>
-
-<iframe 
-src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=240&theme=dark"
-width="100%" height="250"></iframe>
-
+<iframe src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=240&theme=dark" width="100%" height="200"></iframe>
 <ul id="h4History"></ul>
-<p id="h4Stats" class="stat"></p>
+<p id="h4Stats"></p>
 </div>
 
-<!-- D1 -->
 <div class="card">
 <h3>D1</h3>
-
-<p id="d1">...</p>
-
-<p>EMA50: <span id="d1ema"></span></p>
+<p id="d1"></p>
+<p>EMA: <span id="d1ema"></span></p>
 <p>RSI: <span id="d1rsi"></span></p>
-
 <p id="d1entry"></p>
 <p id="d1tp"></p>
 <p id="d1sl"></p>
-
-<iframe 
-src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=D&theme=dark"
-width="100%" height="250"></iframe>
-
+<iframe src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=D&theme=dark" width="100%" height="200"></iframe>
 <ul id="d1History"></ul>
-<p id="d1Stats" class="stat"></p>
+<p id="d1Stats"></p>
 </div>
 
 </div>
-
 </div>
 
 <script>
@@ -146,81 +71,61 @@ async function load(){
 
 let s = await fetch("/signal").then(r=>r.json())
 
-// SIGNAL TEXT
-function setSignal(el, sig){
-el.innerText = sig
-el.className = ""
-if(sig=="BUY") el.classList.add("buy")
-else if(sig=="SELL") el.classList.add("sell")
+price.innerText = s.price + " USD"
+
+function set(el,val){
+el.innerText = val
+el.className = val=="BUY"?"buy":val=="SELL"?"sell":""
 }
 
-setSignal(h1, s.h1)
-setSignal(h4, s.h4)
-setSignal(d1, s.d1)
+set(h1,s.h1)
+set(h4,s.h4)
+set(d1,s.d1)
 
-// ANALYSIS
-h1ema.innerText = s.ema50
-h1rsi.innerText = s.rsi
+h1ema.innerText=s.ema50
+h4ema.innerText=s.ema50
+d1ema.innerText=s.ema50
 
-h4ema.innerText = s.ema50
-h4rsi.innerText = s.rsi
+h1rsi.innerText=s.rsi
+h4rsi.innerText=s.rsi
+d1rsi.innerText=s.rsi
 
-d1ema.innerText = s.ema50
-d1rsi.innerText = s.rsi
-
-// ENTRY LOGIC
-function trade(sig, entryEl, tpEl, slEl){
-let price = s.price ?? 2300
-
-entryEl.innerText = "Entry: "+price
-
+function trade(sig,e,tp,sl){
+let p=s.price
+e.innerText="Entry "+p
 if(sig=="BUY"){
-tpEl.innerText = "TP: "+(price+50)
-slEl.innerText = "SL: "+(price-30)
-}
-else if(sig=="SELL"){
-tpEl.innerText = "TP: "+(price-50)
-slEl.innerText = "SL: "+(price+30)
-}
-else{
-tpEl.innerText = "-"
-slEl.innerText = "-"
+tp.innerText="TP "+(p+50)
+sl.innerText="SL "+(p-30)
+}else{
+tp.innerText="TP "+(p-50)
+sl.innerText="SL "+(p+30)
 }
 }
 
-trade(s.h1, h1entry, h1tp, h1sl)
-trade(s.h4, h4entry, h4tp, h4sl)
-trade(s.d1, d1entry, d1tp, d1sl)
+trade(s.h1,h1entry,h1tp,h1sl)
+trade(s.h4,h4entry,h4tp,h4sl)
+trade(s.d1,d1entry,d1tp,d1sl)
 
-// SAVE SIGNAL
 await fetch("/save",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tf:"H1",signal:s.h1,entry:s.price})})
 await fetch("/save",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tf:"H4",signal:s.h4,entry:s.price})})
 await fetch("/save",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tf:"D1",signal:s.d1,entry:s.price})})
 
-// HISTORY
 let h = await fetch("/history").then(r=>r.json())
 
 function render(tf){
-return h.filter(x=>x.tf==tf)
-.slice(0,5)
-.map(x=>`<li>${x.signal} ${x.result=="WIN"?"✔️":"❌"}</li>`).join("")
+return h.filter(x=>x.tf==tf).slice(0,5)
+.map(x=>`<li>${x.signal} ${x.result=="WIN"?"✔":"❌"}</li>`).join("")
 }
 
-h1History.innerHTML = render("H1")
-h4History.innerHTML = render("H4")
-d1History.innerHTML = render("D1")
+h1History.innerHTML=render("H1")
+h4History.innerHTML=render("H4")
+d1History.innerHTML=render("D1")
 
-// STATS
 let stats = await fetch("/stats").then(r=>r.json())
 
-h1Stats.innerText = `✔ ${stats.H1.win} | ❌ ${stats.H1.loss}`
-h4Stats.innerText = `✔ ${stats.H4.win} | ❌ ${stats.H4.loss}`
-d1Stats.innerText = `✔ ${stats.D1.win} | ❌ ${stats.D1.loss}`
-
-// STRONG SIGNAL
-if(s.h1 == s.h4 && s.h4 == s.d1){
-alert("🔥 STRONG SIGNAL 🔥")
-}
+h1Stats.innerText=`✔ ${stats.H1.win} ❌ ${stats.H1.loss}`
+h4Stats.innerText=`✔ ${stats.H4.win} ❌ ${stats.H4.loss}`
+d1Stats.innerText=`✔ ${stats.D1.win} ❌ ${stats.D1.loss}`
 
 }
 
