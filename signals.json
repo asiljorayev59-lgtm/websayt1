@@ -1,11 +1,7 @@
 {
-  "trend_m5": "BUY",
-  "trend_m15": "SELL",
   "trend_h1": "BUY",
-  "scalp_m1": "BUY",
-  "scalp_m5": "WAIT",
-  "sm_m15": "SELL",
-  "sm_h1": "BUY",
-  "sm_h4": "BUY",
-  "ai": 82
+  "ema50": 2340,
+  "ema200": 2300,
+  "rsi": 61,
+  "price": 2320
 }
