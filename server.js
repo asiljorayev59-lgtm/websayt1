@@ -7,38 +7,37 @@ const app = express()
 app.use(express.json())
 app.use(express.static("public"))
 
-// 🔥 ROOT
+// ROOT
 app.get("/", (req,res)=>{
   res.sendFile(path.join(__dirname,"public","index.html"))
 })
 
-// 🔥 SIGNAL API
-app.get("/signal", (req,res)=>{
+// SIGNAL
+app.get("/signal",(req,res)=>{
   delete require.cache[require.resolve("./signals.json")]
   const data = require("./signals.json")
   res.json(data)
 })
 
-// 🔥 HISTORY GET
-app.get("/history", (req,res)=>{
-  const data = JSON.parse(fs.readFileSync("./history.json"))
-  res.json(data)
+// HISTORY
+app.get("/history",(req,res)=>{
+  res.json(JSON.parse(fs.readFileSync("./history.json")))
 })
 
-
-// 🔥 SAVE SIGNAL (DUPLICATE BLOK)
-app.post("/save", (req,res)=>{
+// SAVE SIGNAL
+app.post("/save",(req,res)=>{
 
   let history = JSON.parse(fs.readFileSync("./history.json"))
 
   let last = history[0]
 
-  // ❌ agar oxirgi signal bir xil bo‘lsa saqlamaydi
-  if(last && last.signal === req.body.signal){
-    return res.json({msg:"duplicate signal ignored"})
+  // duplicate block
+  if(last && last.signal === req.body.signal && last.tf === req.body.tf){
+    return res.json({msg:"duplicate"})
   }
 
   let newSignal = {
+    tf: req.body.tf,        // H1 / H4 / D1
     signal: req.body.signal,
     entry: req.body.entry,
     time: new Date().toISOString(),
@@ -53,62 +52,62 @@ app.post("/save", (req,res)=>{
 })
 
 
-// 🔥 AUTO RESULT CHECK (H4 SYSTEM)
+// AUTO CHECK (TF BASED)
 setInterval(()=>{
 
   let history = JSON.parse(fs.readFileSync("./history.json"))
 
-  if(history.length === 0) return
-
-  let last = history[0]
-
-  // faqat tekshirilmagan signalni tekshiradi
-  if(last.result !== "WAIT") return
-
   let now = new Date()
-  let signalTime = new Date(last.time)
 
-  let diff = (now - signalTime) / 1000 // sekund
+  history.forEach(trade => {
 
-  // ⏱ 4 soat = 14400 sekund
-  if(diff < 14400) return
+    if(trade.result !== "WAIT") return
 
-  // 🔥 REAL PRICE (hozircha fake, keyin API qo‘shamiz)
-  let priceNow = last.entry + (Math.random()*100 - 50)
+    let openTime = new Date(trade.time)
+    let diff = (now - openTime) / 1000
 
-  if(last.signal === "BUY"){
-    last.result = priceNow > last.entry ? "WIN" : "LOSS"
-  }
+    let tfTime = 3600 // H1
 
-  if(last.signal === "SELL"){
-    last.result = priceNow < last.entry ? "WIN" : "LOSS"
-  }
+    if(trade.tf === "H4") tfTime = 14400
+    if(trade.tf === "D1") tfTime = 86400
+
+    if(diff < tfTime) return
+
+    // 🔥 REAL PRICE keyin qo‘shamiz (hozircha fake)
+    let priceNow = trade.entry + (Math.random()*100 - 50)
+
+    if(trade.signal === "BUY"){
+      trade.result = priceNow > trade.entry ? "WIN" : "LOSS"
+    }
+
+    if(trade.signal === "SELL"){
+      trade.result = priceNow < trade.entry ? "WIN" : "LOSS"
+    }
+
+  })
 
   fs.writeFileSync("./history.json", JSON.stringify(history,null,2))
 
-  console.log("RESULT UPDATED:", last)
-
-}, 60000) // har 1 minut tekshiradi lekin 4 soat bo‘lmaguncha ishlamaydi
+},60000)
 
 
-// 🔥 STATISTICS API
-app.get("/stats", (req,res)=>{
+// STATS
+app.get("/stats",(req,res)=>{
 
   let h = JSON.parse(fs.readFileSync("./history.json"))
 
-  let win = h.filter(x=>x.result==="WIN").length
-  let loss = h.filter(x=>x.result==="LOSS").length
-
-  let total = win + loss
-
-  let accuracy = total ? ((win/total)*100).toFixed(2) : 0
+  function calc(tf){
+    let f = h.filter(x=>x.tf===tf)
+    let win = f.filter(x=>x.result==="WIN").length
+    let loss = f.filter(x=>x.result==="LOSS").length
+    return {win,loss}
+  }
 
   res.json({
-    win,
-    loss,
-    accuracy
+    H1: calc("H1"),
+    H4: calc("H4"),
+    D1: calc("D1")
   })
 })
 
-
-app.listen(3000, ()=> console.log("SERVER RUNNING 🚀"))
+app.listen(3000,()=>console.log("SERVER RUNNING 🚀"))
