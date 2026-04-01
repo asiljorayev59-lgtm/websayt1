@@ -1,9 +1,9 @@
 {
-  "h1": "BUY",
-  "h4": "SELL",
-  "d1": "BUY",
-  "price": 2320,
-  "ema50": 2340,
-  "ema200": 2300,
-  "rsi": 61
+  "h1": "WAIT",
+  "h4": "WAIT",
+  "d1": "WAIT",
+  "price": 0,
+  "ema50": 0,
+  "ema200": 0,
+  "rsi": 0
 }
