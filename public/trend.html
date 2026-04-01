@@ -47,35 +47,73 @@ body{background:#020617;color:white;font-family:Segoe UI;margin:0}
 
 async function load(){
 
-let s = await fetch("/signal").then(r=>r.json())
+  let s = await fetch("/signal").then(r=>r.json())
 
-signal.innerText = s.trend_m15
-entry.innerText = "Entry: "+(2300 + Math.random()*50).toFixed(2)
-tp.innerText = "TP: +50"
-sl.innerText = "SL: -30"
+  // 🔥 ELEMENTLARNI OLISH
+  const signalEl = document.getElementById("signal")
+  const ema50El = document.getElementById("ema50")
+  const ema200El = document.getElementById("ema200")
+  const rsiEl = document.getElementById("rsi")
+  const entryEl = document.getElementById("entry")
+  const tpEl = document.getElementById("tp")
+  const slEl = document.getElementById("sl")
+  const historyEl = document.getElementById("history")
 
-// SAVE HISTORY
-await fetch("/save",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-signal:s.trend_m15,
-time:new Date()
-})
-})
+  // 🔥 QAYSI SIGNALNI OLAMIZ
+  let sig = s.trend_h1 || "WAIT"
 
-// LOAD HISTORY
-let h = await fetch("/history").then(r=>r.json())
+  // SIGNAL
+  signalEl.innerText = sig
 
-history.innerHTML = h.slice(0,10)
-.map(x=>`<li>${x.signal} - ${x.time}</li>`).join("")
+  signalEl.className = ""
+  if(sig == "BUY") signalEl.classList.add("buy")
+  else if(sig == "SELL") signalEl.classList.add("sell")
+  else signalEl.classList.add("wait")
+
+  // 📊 ANALYSIS
+  ema50El.innerText = s.ema50 ?? "-"
+  ema200El.innerText = s.ema200 ?? "-"
+  rsiEl.innerText = s.rsi ?? "-"
+
+  // 💰 ENTRY LOGIC
+  let price = s.price ?? 2300
+
+  entryEl.innerText = "Entry: " + price
+
+  if(sig == "BUY"){
+    tpEl.innerText = "TP: " + (price + 50).toFixed(2)
+    slEl.innerText = "SL: " + (price - 30).toFixed(2)
+  } else if(sig == "SELL"){
+    tpEl.innerText = "TP: " + (price - 50).toFixed(2)
+    slEl.innerText = "SL: " + (price + 30).toFixed(2)
+  } else {
+    tpEl.innerText = "-"
+    slEl.innerText = "-"
+  }
+
+  // 💾 SAVE HISTORY
+  await fetch("/save",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      signal:sig,
+      time:new Date().toLocaleTimeString()
+    })
+  })
+
+  // 📜 LOAD HISTORY
+  let h = await fetch("/history").then(r=>r.json())
+
+  historyEl.innerHTML = h.slice(0,10)
+    .map(x=>`<li>${x.signal} - ${x.time}</li>`)
+    .join("")
 
 }
 
+// 🔁 LOOP
 setInterval(load,10000)
 load()
 
 </script>
-
 </body>
 </html>
