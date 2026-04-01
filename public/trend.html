@@ -2,15 +2,37 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trend Strategy</title>
 
 <style>
-body{background:#020617;color:white;font-family:Segoe UI;margin:0}
+body{
+  background:#020617;
+  color:white;
+  font-family:Segoe UI;
+  margin:0;
+}
+
 .container{padding:20px}
-.card{background:#111;padding:15px;margin-bottom:10px;border-radius:10px}
-.buy{color:#22c55e}
-.sell{color:#ef4444}
+
+.card{
+  background:#111;
+  padding:15px;
+  margin-bottom:12px;
+  border-radius:12px;
+  box-shadow:0 0 10px rgba(0,0,0,0.5);
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:scale(1.02);
+}
+
+.buy{color:#22c55e;font-weight:bold}
+.sell{color:#ef4444;font-weight:bold}
 .wait{color:gray}
+
+h2{margin-bottom:15px}
 </style>
 </head>
 
@@ -18,28 +40,31 @@ body{background:#020617;color:white;font-family:Segoe UI;margin:0}
 
 <div class="container">
 
-<h2>📈 Trend Strategy</h2>
+<h2>📈 Trend Strategy (GOLD)</h2>
 
+<!-- SIGNAL -->
 <div class="card">
-<h3>Signal</h3>
-<p id="signal">...</p>
+<h3>📊 Signal</h3>
+<p id="signal">Loading...</p>
 </div>
 
+<!-- ANALYSIS -->
 <div class="card">
-<h3>Analysis</h3>
+<h3>📉 Analysis</h3>
 <p>EMA50: <span id="ema50">-</span></p>
 <p>EMA200: <span id="ema200">-</span></p>
 <p>RSI: <span id="rsi">-</span></p>
 </div>
 
+<!-- ENTRY / EXIT -->
 <div class="card">
-<h3>Entry / Exit</h3>
+<h3>💰 Entry / Exit</h3>
 <p id="entry"></p>
 <p id="tp"></p>
 <p id="sl"></p>
 </div>
 
-<!-- 🔥 YANGI QO‘SHILDI -->
+<!-- TRADE SETUP -->
 <div class="card">
 <h3>🎯 Trade Setup</h3>
 <p id="entryLine"></p>
@@ -47,13 +72,18 @@ body{background:#020617;color:white;font-family:Segoe UI;margin:0}
 <p id="slLine"></p>
 </div>
 
+<!-- CHART -->
 <div class="card">
-<h3>Chart</h3>
-<iframe src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD" width="100%" height="400"></iframe>
+<h3>📈 Chart (XAUUSD)</h3>
+<iframe 
+  src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD"
+  width="100%" height="400" frameborder="0">
+</iframe>
 </div>
 
+<!-- HISTORY -->
 <div class="card">
-<h3>History</h3>
+<h3>📜 History</h3>
 <ul id="history"></ul>
 </div>
 
@@ -63,87 +93,99 @@ body{background:#020617;color:white;font-family:Segoe UI;margin:0}
 
 async function load(){
 
-  let s = await fetch("/signal").then(r=>r.json())
+  try{
+    let s = await fetch("/signal").then(r=>r.json())
 
-  const signalEl = document.getElementById("signal")
-  const ema50El = document.getElementById("ema50")
-  const ema200El = document.getElementById("ema200")
-  const rsiEl = document.getElementById("rsi")
-  const entryEl = document.getElementById("entry")
-  const tpEl = document.getElementById("tp")
-  const slEl = document.getElementById("sl")
-  const historyEl = document.getElementById("history")
+    const signalEl = document.getElementById("signal")
+    const ema50El = document.getElementById("ema50")
+    const ema200El = document.getElementById("ema200")
+    const rsiEl = document.getElementById("rsi")
+    const entryEl = document.getElementById("entry")
+    const tpEl = document.getElementById("tp")
+    const slEl = document.getElementById("sl")
+    const historyEl = document.getElementById("history")
 
-  const entryLine = document.getElementById("entryLine")
-  const tpLine = document.getElementById("tpLine")
-  const slLine = document.getElementById("slLine")
+    const entryLine = document.getElementById("entryLine")
+    const tpLine = document.getElementById("tpLine")
+    const slLine = document.getElementById("slLine")
 
-  let sig = s.trend_h1 || "WAIT"
+    let sig = s.trend_h1 || "WAIT"
 
-  // SIGNAL
-  signalEl.innerText = sig
-  signalEl.className = ""
+    // SIGNAL
+    signalEl.innerText = sig
+    signalEl.className = ""
 
-  if(sig == "BUY") signalEl.classList.add("buy")
-  else if(sig == "SELL") signalEl.classList.add("sell")
-  else signalEl.classList.add("wait")
+    if(sig === "BUY") signalEl.classList.add("buy")
+    else if(sig === "SELL") signalEl.classList.add("sell")
+    else signalEl.classList.add("wait")
 
-  // ANALYSIS
-  ema50El.innerText = s.ema50 ?? "-"
-  ema200El.innerText = s.ema200 ?? "-"
-  rsiEl.innerText = s.rsi ?? "-"
+    // ANALYSIS
+    ema50El.innerText = s.ema50 ?? "-"
+    ema200El.innerText = s.ema200 ?? "-"
+    rsiEl.innerText = s.rsi ?? "-"
 
-  // ENTRY
-  let price = s.price ?? 2300
+    // PRICE
+    let price = s.price ?? 2300
 
-  entryEl.innerText = "Entry: " + price
+    entryEl.innerText = "Entry: " + price
 
-  let tp, sl
+    let tp = null
+    let sl = null
 
-  if(sig == "BUY"){
-    tp = price + 50
-    sl = price - 30
-  } else if(sig == "SELL"){
-    tp = price - 50
-    sl = price + 30
-  }
+    if(sig === "BUY"){
+      tp = price + 50
+      sl = price - 30
+    } 
+    else if(sig === "SELL"){
+      tp = price - 50
+      sl = price + 30
+    }
 
-  if(tp && sl){
-    tpEl.innerText = "TP: " + tp.toFixed(2)
-    slEl.innerText = "SL: " + sl.toFixed(2)
+    if(tp && sl){
+      tpEl.innerText = "TP: " + tp.toFixed(2)
+      slEl.innerText = "SL: " + sl.toFixed(2)
 
-    // 🎯 VISUAL LINES
-    entryLine.innerText = "🟡 Entry Zone: " + price
-    tpLine.innerText = "🟢 Take Profit: " + tp.toFixed(2)
-    slLine.innerText = "🔴 Stop Loss: " + sl.toFixed(2)
-  } else {
-    tpEl.innerText = "-"
-    slEl.innerText = "-"
-  }
+      // 🎯 TRADE LINES (PRO)
+      entryLine.innerText = "🟡 ENTRY → " + price
+      tpLine.innerText = "🟢 TP → " + tp.toFixed(2)
+      slLine.innerText = "🔴 SL → " + sl.toFixed(2)
+    } else {
+      tpEl.innerText = "-"
+      slEl.innerText = "-"
 
-  // SAVE HISTORY
-  await fetch("/save",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      signal:sig,
-      time:new Date().toLocaleTimeString()
+      entryLine.innerText = "❌ No Trade"
+      tpLine.innerText = ""
+      slLine.innerText = ""
+    }
+
+    // SAVE HISTORY
+    await fetch("/save",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        signal:sig,
+        time:new Date().toLocaleTimeString()
+      })
     })
-  })
 
-  // LOAD HISTORY
-  let h = await fetch("/history").then(r=>r.json())
+    // LOAD HISTORY
+    let h = await fetch("/history").then(r=>r.json())
 
-  historyEl.innerHTML = h.slice(0,10)
-    .map(x=>`<li>${x.signal} - ${x.time}</li>`)
-    .join("")
+    historyEl.innerHTML = h.slice(0,10)
+      .map(x=>`<li>${x.signal} - ${x.time}</li>`)
+      .join("")
+
+  } catch(e){
+    console.log("API error:", e)
+  }
 
 }
 
-// LOOP
+// 🔁 AUTO UPDATE
 setInterval(load,10000)
 load()
 
 </script>
+
 </body>
 </html>
