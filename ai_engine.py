@@ -2,8 +2,12 @@ import requests
 import pandas as pd
 import json
 
-# 🔥 H4 data (FOREX API yoki boshqa)
-url = "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=4h&limit=200"
+# 🔥 REAL GOLD PRICE
+price_data = requests.get("https://api.gold-api.com/price/XAU").json()
+price = price_data["price"]
+
+# 🔥 MARKET DATA (temporary BTC, keyin real XAU qo‘shamiz)
+url = "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=200"
 data = requests.get(url).json()
 
 df = pd.DataFrame(data)
@@ -28,28 +32,27 @@ rs = avg_gain / avg_loss
 df["rsi"] = 100 - (100/(1+rs))
 
 last = df.iloc[-1]
-prev = df.iloc[-2]
 
-signal = "WAIT"
+# 🔥 SIGNAL LOGIC
+def get_signal():
+    if last["ema50"] > last["ema200"] and last["rsi"] > 55:
+        return "BUY"
+    elif last["ema50"] < last["ema200"] and last["rsi"] < 45:
+        return "SELL"
+    else:
+        return "WAIT"
 
-# 🔥 FAqat candle yopilganda
-if last["time"] != prev["time"]:
-
-    if last["ema50"] > last["ema200"] and last["rsi"] > 50:
-        signal = "BUY"
-
-    elif last["ema50"] < last["ema200"] and last["rsi"] < 50:
-        signal = "SELL"
-
-result = {
-    "trend_h4": signal,
+signals = {
+    "h1": get_signal(),
+    "h4": get_signal(),
+    "d1": get_signal(),
+    "price": round(price,2),
     "ema50": round(last["ema50"],2),
     "ema200": round(last["ema200"],2),
-    "rsi": round(last["rsi"],2),
-    "price": last["close"]
+    "rsi": round(last["rsi"],2)
 }
 
 with open("signals.json","w") as f:
-    json.dump(result,f,indent=2)
+    json.dump(signals,f,indent=2)
 
-print(result)
+print(signals)
