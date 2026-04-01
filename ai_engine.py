@@ -6,8 +6,8 @@ import json
 price_data = requests.get("https://api.gold-api.com/price/XAU").json()
 price = price_data["price"]
 
-# 🔥 MARKET DATA (temporary BTC, keyin real XAU qo‘shamiz)
-url = "https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1h&limit=200"
+# 🔥 REAL FOREX CANDLES (XAUUSD proxy orqali)
+url = "https://api.binance.com/api/v3/klines?symbol=XAUUSDT&interval=1h&limit=200"
 data = requests.get(url).json()
 
 df = pd.DataFrame(data)
@@ -33,19 +33,17 @@ df["rsi"] = 100 - (100/(1+rs))
 
 last = df.iloc[-1]
 
-# 🔥 SIGNAL LOGIC
-def get_signal():
+def signal():
     if last["ema50"] > last["ema200"] and last["rsi"] > 55:
         return "BUY"
     elif last["ema50"] < last["ema200"] and last["rsi"] < 45:
         return "SELL"
-    else:
-        return "WAIT"
+    return "WAIT"
 
 signals = {
-    "h1": get_signal(),
-    "h4": get_signal(),
-    "d1": get_signal(),
+    "h1": signal(),
+    "h4": signal(),
+    "d1": signal(),
     "price": round(price,2),
     "ema50": round(last["ema50"],2),
     "ema200": round(last["ema200"],2),
