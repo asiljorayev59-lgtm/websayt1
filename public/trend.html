@@ -5,36 +5,12 @@
 <title>PRO GOLD AI</title>
 
 <style>
-body{
-background:#020617;
-color:white;
-font-family:Segoe UI;
-margin:0;
-}
-
-.container{
-max-width:1100px;
-margin:auto;
-padding:20px;
-}
-
-.card{
-background:#0f172a;
-padding:15px;
-border-radius:12px;
-margin-bottom:15px;
-position:relative;
-}
-
+body{background:#020617;color:white;font-family:Segoe UI}
+.container{padding:20px}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.card{background:#111;padding:15px;border-radius:10px}
 .buy{color:#22c55e}
 .sell{color:#ef4444}
-
-canvas{
-position:absolute;
-top:0;
-left:0;
-pointer-events:none;
-}
 </style>
 </head>
 
@@ -44,34 +20,45 @@ pointer-events:none;
 
 <h2>💰 GOLD: <span id="price"></span></h2>
 
+<div class="grid">
+
+<!-- H1 -->
 <div class="card">
+<h3>H1</h3>
+<p id="h1"></p>
 
-<h3>📊 H4 SIGNAL</h3>
-<p id="signal"></p>
+<iframe src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=60&theme=dark"
+width="100%" height="200"></iframe>
 
-<p id="entryText"></p>
-<p id="tpText"></p>
-<p id="slText"></p>
-
-<!-- CHART -->
-<div style="position:relative">
-
-<iframe id="chart"
-src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=240&theme=dark"
-width="100%" height="400"></iframe>
-
-<!-- 🔥 CHIZIQ -->
-<canvas id="overlay"></canvas>
-
+<ul id="h1History"></ul>
+<p id="h1Stats"></p>
 </div>
 
-</div>
-
+<!-- H4 -->
 <div class="card">
-<h3>📜 HISTORY</h3>
-<ul id="history"></ul>
+<h3>H4</h3>
+<p id="h4"></p>
+
+<iframe src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=240&theme=dark"
+width="100%" height="200"></iframe>
+
+<ul id="h4History"></ul>
+<p id="h4Stats"></p>
 </div>
 
+<!-- D1 -->
+<div class="card">
+<h3>D1</h3>
+<p id="d1"></p>
+
+<iframe src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=D&theme=dark"
+width="100%" height="200"></iframe>
+
+<ul id="d1History"></ul>
+<p id="d1Stats"></p>
+</div>
+
+</div>
 </div>
 
 <script>
@@ -80,92 +67,44 @@ async function load(){
 
 let s = await fetch("/signal").then(r=>r.json())
 
-price.innerText = s.price + " USD"
+price.innerText = s.price
 
-let sig = s.h4
-
-signal.innerText = sig
-signal.className = sig=="BUY"?"buy":"sell"
-
-// ENTRY
-let entry = s.price
-let tp, sl
-
-if(sig=="BUY"){
-tp = entry + 50
-sl = entry - 30
-}else{
-tp = entry - 50
-sl = entry + 30
+function set(el,val){
+el.innerText = val
+el.className = val=="BUY"?"buy":val=="SELL"?"sell":""
 }
 
-entryText.innerText = "ENTRY: "+entry
-tpText.innerText = "TP: "+tp
-slText.innerText = "SL: "+sl
+set(h1,s.h1)
+set(h4,s.h4)
+set(d1,s.d1)
 
-// 🔥 HISTORY SAVE (serverga yoziladi)
-await fetch("/save",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-tf:"H4",
-signal:sig,
-entry:entry
-})
-})
+// SAVE
+await fetch("/save",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tf:"H1",signal:s.h1,entry:s.price})})
+await fetch("/save",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tf:"H4",signal:s.h4,entry:s.price})})
+await fetch("/save",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tf:"D1",signal:s.d1,entry:s.price})})
 
-// 🔥 HISTORY LOAD
+// HISTORY
 let h = await fetch("/history").then(r=>r.json())
 
-history.innerHTML = h.slice(0,10)
-.map(x=>`<li>${x.signal} ${x.result=="WIN"?"✔️":"❌"}</li>`).join("")
+function render(tf){
+return h.filter(x=>x.tf==tf).slice(0,5)
+.map(x=>`<li>${x.signal} ${x.result=="WIN"?"✔":"❌"}</li>`).join("")
+}
 
-// 🔥 CHIZIQ CHIZISH
-drawLines(entry,tp,sl)
+h1History.innerHTML=render("H1")
+h4History.innerHTML=render("H4")
+d1History.innerHTML=render("D1")
+
+// STATS
+let stats = await fetch("/stats").then(r=>r.json())
+
+h1Stats.innerText=`✔ ${stats.H1.win} ❌ ${stats.H1.loss}`
+h4Stats.innerText=`✔ ${stats.H4.win} ❌ ${stats.H4.loss}`
+d1Stats.innerText=`✔ ${stats.D1.win} ❌ ${stats.D1.loss}`
 
 }
 
-function drawLines(entry,tp,sl){
-
-const canvas = document.getElementById("overlay")
-const ctx = canvas.getContext("2d")
-
-const chart = document.getElementById("chart")
-
-canvas.width = chart.offsetWidth
-canvas.height = chart.offsetHeight
-
-ctx.clearRect(0,0,canvas.width,canvas.height)
-
-// FAKE scale (vizual uchun)
-function map(price){
-return canvas.height - (price % 100) * 3
-}
-
-// ENTRY
-ctx.strokeStyle = "yellow"
-ctx.beginPath()
-ctx.moveTo(0,map(entry))
-ctx.lineTo(canvas.width,map(entry))
-ctx.stroke()
-
-// TP
-ctx.strokeStyle = "lime"
-ctx.beginPath()
-ctx.moveTo(0,map(tp))
-ctx.lineTo(canvas.width,map(tp))
-ctx.stroke()
-
-// SL
-ctx.strokeStyle = "red"
-ctx.beginPath()
-ctx.moveTo(0,map(sl))
-ctx.lineTo(canvas.width,map(sl))
-ctx.stroke()
-
-}
-
-setInterval(load,10000)
+setInterval(load,60000)
 load()
 
 </script>
