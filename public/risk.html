@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>🛡️ Risk Boshqaruvi - GOLD AI PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    :root {
+        --gold: #fbbf24;
+        --green: #22c55e;
+        --red: #ef4444;
+        --dark: #020617;
+    }
+    
+    * { margin:0; padding:0; box-sizing:border-box; }
+    
+    body {
+        background: radial-gradient(circle at 50% 30%, #1e3a5f 0%, #020617 70%);
+        color: white;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        min-height: 100vh;
+    }
+    
+    .header {
+        background: rgba(15, 23, 42, 0.92);
+        backdrop-filter: blur(20px);
+        padding: 18px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    
+    .main { padding: 30px 20px; max-width: 100%; }
+    
+    h1 {
+        text-align: center;
+        font-size: 2.6em;
+        color: var(--gold);
+        margin-bottom: 10px;
+    }
+    
+    .subtitle {
+        text-align: center;
+        color: #94a3b8;
+        margin-bottom: 40px;
+    }
+    
+    .card {
+        background: #0f172a;
+        border-radius: 28px;
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .input-group {
+        margin: 20px 0;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 8px;
+        color: #cbd5e1;
+        font-size: 1.1em;
+    }
+    
+    input, select {
+        width: 100%;
+        padding: 14px;
+        background: #1e2937;
+        border: 1px solid #475569;
+        border-radius: 12px;
+        color: white;
+        font-size: 1.1em;
+    }
+    
+    .result {
+        background: #1e2937;
+        border-radius: 20px;
+        padding: 25px;
+        margin-top: 30px;
+        text-align: center;
+    }
+    
+    .result-value {
+        font-size: 2.8em;
+        font-weight: 800;
+        color: var(--gold);
+        margin: 10px 0;
+    }
+    
+    .footer {
+        text-align: center;
+        padding: 60px 20px;
+        color: #64748b;
+        font-size: 1.1em;
+    }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div style="font-size:1.8em; font-weight:700; color:var(--gold);">🛡️ Risk Boshqaruvi</div>
+    <div id="time" style="color:#94a3b8;"></div>
+</div>
+
+<div class="main">
+    <h1>Risk Manager</h1>
+    <p class="subtitle">Depozitingizni himoya qiling — har bir savdoda to‘g‘ri risk hisoblang</p>
+
+    <div class="card">
+        <div class="input-group">
+            <label>Joriy Balance (USD)</label>
+            <input type="number" id="balance" value="10000" oninput="calculateRisk()">
+        </div>
+        
+        <div class="input-group">
+            <label>Risk foizi (har bir savdoda)</label>
+            <input type="number" id="riskPercent" value="1" step="0.1" oninput="calculateRisk()">
+        </div>
+        
+        <div class="input-group">
+            <label>Stop Loss (pips)</label>
+            <input type="number" id="stopLoss" value="30" oninput="calculateRisk()">
+        </div>
+        
+        <div class="input-group">
+            <label>1 lot narxi (XAUUSD uchun odatda 100 USD = 1 pip)</label>
+            <select id="pipValue" onchange="calculateRisk()">
+                <option value="100">1 pip = 100 USD (Standart lot)</option>
+                <option value="10" selected>1 pip = 10 USD (0.1 lot)</option>
+                <option value="1">1 pip = 1 USD (0.01 lot)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="result" id="resultBox">
+        <p style="color:#94a3b8;">Sizning tavakkalchingiz (Risk)</p>
+        <div class="result-value" id="riskAmount">$100.00</div>
+        
+        <p style="margin:20px 0 10px; font-size:1.2em;">Tavsiya etilgan Lot hajmi</p>
+        <div class="result-value" id="lotSize">0.03 lot</div>
+        
+        <p style="margin-top:25px; color:#22c55e; font-size:1.1em;" id="advice">
+            ✅ Bu xavfsiz risk darajasi. Depozitni saqlash uchun yaxshi.
+        </p>
+    </div>
+
+    <div style="margin-top:40px; text-align:center; color:#94a3b8; font-size:1.05em;">
+        Tavsiya: Har bir savdoda 1% dan ortiq risk qilmang<br>
+        Professional traderlar odatda 0.5% - 1% oralig‘ida ishlaydi.
+    </div>
+</div>
+
+<div class="footer">
+    Risk boshqaruvi — muvaffaqiyatli savdoning asosiy kaliti
+</div>
+
+<script>
+function updateTime() {
+    const now = new Date();
+    document.getElementById("time").textContent = now.toLocaleTimeString('uz-UZ', {hour:'2-digit', minute:'2-digit'});
+}
+setInterval(updateTime, 10000);
+updateTime();
+
+function calculateRisk() {
+    const balance = parseFloat(document.getElementById("balance").value) || 10000;
+    const riskPercent = parseFloat(document.getElementById("riskPercent").value) || 1;
+    const stopLoss = parseFloat(document.getElementById("stopLoss").value) || 30;
+    const pipValue = parseFloat(document.getElementById("pipValue").value);
+    
+    // Risk miqdori (USD)
+    const riskAmount = (balance * riskPercent / 100).toFixed(2);
+    
+    // Lot hajmi
+    const lotSize = (riskAmount / (stopLoss * pipValue)).toFixed(2);
+    
+    document.getElementById("riskAmount").textContent = "$" + riskAmount;
+    document.getElementById("lotSize").textContent = lotSize + " lot";
+    
+    // Maslahat
+    const adviceEl = document.getElementById("advice");
+    if (riskPercent > 2) {
+        adviceEl.style.color = "#ef4444";
+        adviceEl.textContent = "⚠️ Risk juda yuqori! Depozitingiz xavf ostida.";
+    } else if (riskPercent <= 0.5) {
+        adviceEl.style.color = "#22c55e";
+        adviceEl.textContent = "✅ Juda konservativ va xavfsiz yondashuv.";
+    } else {
+        adviceEl.style.color = "#22c55e";
+        adviceEl.textContent = "✅ Bu xavfsiz risk darajasi. Depozitni saqlash uchun yaxshi.";
+    }
+}
+
+// Dastlabki hisoblash
+window.onload = calculateRisk;
+</script>
+</body>
+</html>
