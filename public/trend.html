@@ -5,12 +5,62 @@
 <title>PRO GOLD AI</title>
 
 <style>
-body{background:#020617;color:white;font-family:Segoe UI}
-.container{padding:20px}
-.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
-.card{background:#111;padding:15px;border-radius:10px}
-.buy{color:#22c55e}
-.sell{color:#ef4444}
+
+body{
+background:linear-gradient(135deg,#020617,#020c1b);
+color:white;
+font-family:Segoe UI;
+margin:0;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:20px;
+}
+
+.card{
+background:#0f172a;
+padding:15px;
+border-radius:12px;
+box-shadow:0 0 15px rgba(0,0,0,0.5);
+transition:0.3s;
+}
+
+.card:hover{
+transform:scale(1.02);
+}
+
+h3{
+margin-top:0;
+color:#38bdf8;
+}
+
+.buy{color:#22c55e;font-weight:bold}
+.sell{color:#ef4444;font-weight:bold}
+
+.info{
+font-size:13px;
+color:#94a3b8;
+margin-top:5px;
+}
+
+.stat{
+margin-top:10px;
+font-size:14px;
+}
+
+iframe{
+border-radius:10px;
+margin-top:10px;
+}
+
 </style>
 </head>
 
@@ -18,44 +68,67 @@ body{background:#020617;color:white;font-family:Segoe UI}
 
 <div class="container">
 
-<h2>💰 GOLD: <span id="price"></span></h2>
+<h2>💰 GOLD PRICE: <span id="price"></span></h2>
 
 <div class="grid">
 
 <!-- H1 -->
 <div class="card">
-<h3>H1</h3>
+<h3>⚡ H1</h3>
+
 <p id="h1"></p>
+
+<div class="info">
+<p>Breakout: <span id="b1"></span></p>
+<p>Liquidity: <span id="l1"></span></p>
+</div>
 
 <iframe src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=60&theme=dark"
 width="100%" height="200"></iframe>
 
 <ul id="h1History"></ul>
-<p id="h1Stats"></p>
+<p id="h1Stats" class="stat"></p>
+
 </div>
 
 <!-- H4 -->
 <div class="card">
-<h3>H4</h3>
+<h3>🔥 H4 (BEST)</h3>
+
 <p id="h4"></p>
+
+<div class="info">
+<p>Breakout: <span id="b4"></span></p>
+<p>Liquidity: <span id="l4"></span></p>
+<p>Resistance: <span id="res"></span></p>
+<p>Support: <span id="sup"></span></p>
+</div>
 
 <iframe src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=240&theme=dark"
 width="100%" height="200"></iframe>
 
 <ul id="h4History"></ul>
-<p id="h4Stats"></p>
+<p id="h4Stats" class="stat"></p>
+
 </div>
 
 <!-- D1 -->
 <div class="card">
-<h3>D1</h3>
+<h3>📊 D1</h3>
+
 <p id="d1"></p>
+
+<div class="info">
+<p>Breakout: <span id="bD"></span></p>
+<p>Liquidity: <span id="lD"></span></p>
+</div>
 
 <iframe src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=D&theme=dark"
 width="100%" height="200"></iframe>
 
 <ul id="d1History"></ul>
-<p id="d1Stats"></p>
+<p id="d1Stats" class="stat"></p>
+
 </div>
 
 </div>
@@ -67,43 +140,58 @@ async function load(){
 
 let s = await fetch("/signal").then(r=>r.json())
 
-price.innerText = s.price
+price.innerText = s.price + " USD"
 
+// SIGNAL STYLE
 function set(el,val){
 el.innerText = val
 el.className = val=="BUY"?"buy":val=="SELL"?"sell":""
 }
 
+// SIGNAL
 set(h1,s.h1)
 set(h4,s.h4)
 set(d1,s.d1)
 
-// SAVE
+// 🔥 SMC DATA
+b1.innerText = s.breakout_h1
+b4.innerText = s.breakout_h4
+bD.innerText = s.breakout_d1
+
+l1.innerText = s.liquidity_h1
+l4.innerText = s.liquidity_h4
+lD.innerText = s.liquidity_d1
+
+res.innerText = s.resistance
+sup.innerText = s.support
+
+// SAVE HISTORY
 await fetch("/save",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tf:"H1",signal:s.h1,entry:s.price})})
 await fetch("/save",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tf:"H4",signal:s.h4,entry:s.price})})
 await fetch("/save",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tf:"D1",signal:s.d1,entry:s.price})})
 
-// HISTORY
+// HISTORY LOAD
 let h = await fetch("/history").then(r=>r.json())
 
 function render(tf){
 return h.filter(x=>x.tf==tf).slice(0,5)
-.map(x=>`<li>${x.signal} ${x.result=="WIN"?"✔":"❌"}</li>`).join("")
+.map(x=>`<li>${x.signal} ${x.result=="WIN"?"✔️":"❌"}</li>`).join("")
 }
 
-h1History.innerHTML=render("H1")
-h4History.innerHTML=render("H4")
-d1History.innerHTML=render("D1")
+h1History.innerHTML = render("H1")
+h4History.innerHTML = render("H4")
+d1History.innerHTML = render("D1")
 
 // STATS
 let stats = await fetch("/stats").then(r=>r.json())
 
-h1Stats.innerText=`✔ ${stats.H1.win} ❌ ${stats.H1.loss}`
-h4Stats.innerText=`✔ ${stats.H4.win} ❌ ${stats.H4.loss}`
-d1Stats.innerText=`✔ ${stats.D1.win} ❌ ${stats.D1.loss}`
+h1Stats.innerText=`✔ ${stats.H1.win} | ❌ ${stats.H1.loss}`
+h4Stats.innerText=`✔ ${stats.H4.win} | ❌ ${stats.H4.loss}`
+d1Stats.innerText=`✔ ${stats.D1.win} | ❌ ${stats.D1.loss}`
 
 }
 
+// 🔁 UPDATE
 setInterval(load,60000)
 load()
 
