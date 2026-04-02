@@ -2,7 +2,7 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<title>💎 GOLD AI PRO v4.0 - Premium Trading Intelligence</title>
+<title>💎 GOLD AI PRO v4.1 - Premium Trading Intelligence</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
     :root {
@@ -163,25 +163,6 @@
         font-size: 0.95em;
     }
     
-    /* Yangi bo‘limlar uchun maxsus uslub */
-    .sentiment-card {
-        background: linear-gradient(135deg, #1e2937, #0f172a);
-    }
-    
-    .strength-bar {
-        height: 10px;
-        background: #334155;
-        border-radius: 9999px;
-        overflow: hidden;
-        margin: 12px 0;
-    }
-    
-    .strength-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #22c55e, #fbbf24);
-        transition: width 1.2s ease;
-    }
-    
     .footer {
         text-align: center;
         padding: 80px 20px 60px;
@@ -208,8 +189,8 @@
 </div>
 
 <div class="main">
-    <h1>GOLD AI PRO v4.0</h1>
-    <p class="subtitle">Premium savdo strategiyalari + yangi muhim vositalar</p>
+    <h1>GOLD AI PRO v4.1</h1>
+    <p class="subtitle">Premium strategiyalar + Market Sentiment, Signal Strength va Trade History</p>
     
     <div class="price-ticker">
         <span>XAUUSD</span>
@@ -219,7 +200,7 @@
 
     <div class="grid">
         
-        <!-- Eski bo‘limlar -->
+        <!-- 1 -->
         <div class="card" onclick="window.location.href='trend.html'">
             <span class="card-icon">📈</span>
             <h3>Trend Strategy</h3>
@@ -227,77 +208,56 @@
             <div class="badge">TOP</div>
         </div>
 
+        <!-- 2 -->
         <div class="card" onclick="window.location.href='scalping.html'">
             <span class="card-icon">⚡</span>
             <h3>Scalping AI</h3>
             <p>M1 va M5 da tezkor scalping</p>
         </div>
 
+        <!-- 3 -->
         <div class="card" onclick="window.location.href='smartmoney.html'">
             <span class="card-icon">🧠</span>
             <h3>Smart Money Concepts</h3>
             <p>BOS, Order Block, Liquidity</p>
         </div>
 
+        <!-- 4 -->
         <div class="card" onclick="window.location.href='ai.html'">
             <span class="card-icon">🤖</span>
             <h3>AI Price Prediction</h3>
             <p>15 daqiqa - 7 kun bashorat</p>
         </div>
 
-        <!-- Yangi 1: Market Sentiment -->
-        <div class="card sentiment-card" onclick="alert('Market Sentiment bo‘limi tez orada to‘liq ochiladi!')">
+        <!-- 5 YANGI - Market Sentiment -->
+        <div class="card" onclick="window.location.href='sentiment.html'">
             <span class="card-icon">📊</span>
             <h3>Market Sentiment</h3>
-            <p>Bozorda hozirgi kayfiyat: odamlar ko‘proq BUY yoki SELL qilyapti?</p>
-            <div style="margin-top:20px; font-size:1.1em;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                    <span style="color:var(--green);">BUY <strong id="buyPercent">68%</strong></span>
-                    <span style="color:var(--red);">SELL <strong id="sellPercent">32%</strong></span>
-                </div>
-                <div class="strength-bar">
-                    <div class="strength-fill" style="width:68%; background:linear-gradient(90deg, #22c55e, #86efac);"></div>
-                </div>
-                <p style="font-size:0.95em; color:#94a3b8; margin-top:12px;">
-                    Fear & Greed Index: <strong style="color:#fbbf24;">72 (Greed)</strong>
-                </p>
-            </div>
+            <p>Bozorda hozirgi kayfiyat: BUY yoki SELL?</p>
+            <p style="margin-top:12px; font-size:0.95em; color:#94a3b8;">Fear & Greed Index + Real-time Buy/Sell foiz</p>
         </div>
 
-        <!-- Yangi 2: Signal Strength -->
-        <div class="card" onclick="alert('Signal Strength bo‘limi tez orada to‘liq ishlaydi!')">
+        <!-- 6 YANGI - Signal Strength -->
+        <div class="card" onclick="window.location.href='strength.html'">
             <span class="card-icon">🔥</span>
             <h3>Signal Strength (AI Score)</h3>
-            <p>Har bir signalga AI tomonidan ball beriladi</p>
-            <div style="margin-top:25px; text-align:center;">
-                <div style="font-size:2.2em; font-weight:800; color:var(--gold);" id="currentStrength">82%</div>
-                <p style="margin-top:8px; color:#22c55e;">SIGNAL: <strong>BUY</strong></p>
-                <div class="strength-bar" style="margin-top:15px;">
-                    <div class="strength-fill" style="width:82%;"></div>
-                </div>
-                <p style="font-size:0.95em; color:#94a3b8;">Trend + BOS + RSI kuchli signal</p>
-            </div>
+            <p>Har bir signalga AI tomonidan kuchlilik balli</p>
+            <p style="margin-top:12px; font-size:0.95em; color:#94a3b8;">82% — juda kuchli signal</p>
         </div>
 
-        <!-- Yangi 3: Trade History Pro + Risk Manager -->
-        <div class="card" onclick="alert('Trade History & Risk Manager bo‘limi tez orada to‘liq ochiladi!')">
+        <!-- 7 YANGI - Trade History Pro -->
+        <div class="card" onclick="window.location.href='history.html'">
             <span class="card-icon">📜</span>
             <h3>Trade History Pro</h3>
-            <p>Win Rate • Profit Factor • Risk Manager</p>
-            <div style="margin-top:20px; font-size:1.05em; line-height:1.8;">
-                <p>Umumiy Win Rate: <strong style="color:#22c55e;">74%</strong></p>
-                <p>Joriy Balance: <strong>$12,450</strong></p>
-                <p>Risk per Trade: <strong style="color:#fbbf24;">1%</strong></p>
-                <p>Eng yaxshi strategiya: <strong>Smart Money</strong></p>
-            </div>
+            <p>Win Rate • Balance • Risk Manager • Profit Factor</p>
         </div>
 
     </div>
 </div>
 
 <div class="footer">
-    © 2026 GOLD AI PRO v4.0 • Barcha ma’lumotlar real vaqt rejimida<br>
-    <strong style="color:#fbbf24;">Risk boshqaruvini birinchi o‘ringa qo‘ying</strong>
+    © 2026 GOLD AI PRO v4.1 • Barcha strategiyalar real vaqt rejimida ishlaydi<br>
+    <strong style="color:#fbbf24;">Risk boshqaruvini doimo birinchi o‘ringa qo‘ying!</strong>
 </div>
 
 <canvas id="particles" class="particles"></canvas>
@@ -316,12 +276,12 @@ setInterval(updateLivePrice, 2500);
 // Time
 function updateTime() {
     const now = new Date();
-    document.getElementById("currentTime").textContent = now.toLocaleTimeString('uz-UZ', { hour:'2-digit', minute:'2-digit' });
+    document.getElementById("currentTime").textContent = now.toLocaleTimeString('uz-UZ', {hour:'2-digit', minute:'2-digit'});
 }
 setInterval(updateTime, 10000);
 updateTime();
 
-// Particles (Mobil uchun optimallashtirilgan)
+// Particles Background
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
 
@@ -376,13 +336,13 @@ function animateParticles() {
 initParticles();
 animateParticles();
 
-// Card touch effect
+// Touch effect for mobile
 document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('touchstart', () => card.style.transform = 'scale(0.96)');
     card.addEventListener('touchend', () => card.style.transform = 'scale(1)');
 });
 
-console.log("%c💎 GOLD AI PRO v4.0 — Yangi bo‘limlar (Sentiment, Signal Strength, Trade History) qo‘shildi!", "color:#fbbf24; font-size:18px");
+console.log("%c✅ GOLD AI PRO v4.1 — Barcha yangi bo‘limlar qo‘shildi!", "color:#fbbf24; font-size:18px");
 </script>
 </body>
 </html>
