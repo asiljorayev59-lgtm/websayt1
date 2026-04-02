@@ -2,8 +2,7 @@ import requests
 import pandas as pd
 import json
 
-price_data = requests.get("https://api.gold-api.com/price/XAU").json()
-price = price_data["price"]
+price = requests.get("https://api.gold-api.com/price/XAU").json()["price"]
 
 def analyze(tf):
 
@@ -14,9 +13,7 @@ def analyze(tf):
     df = df.iloc[:,0:6]
     df.columns = ["time","open","high","low","close","volume"]
 
-    df["close"] = df["close"].astype(float)
-    df["high"] = df["high"].astype(float)
-    df["low"] = df["low"].astype(float)
+    df = df.astype(float)
 
     # EMA
     df["ema50"] = df["close"].ewm(span=50).mean()
@@ -27,74 +24,80 @@ def analyze(tf):
     gain = delta.clip(lower=0)
     loss = -delta.clip(upper=0)
 
-    avg_gain = gain.rolling(14).mean()
-    avg_loss = loss.rolling(14).mean()
-
-    rs = avg_gain / avg_loss
+    rs = gain.rolling(14).mean() / loss.rolling(14).mean()
     df["rsi"] = 100 - (100/(1+rs))
 
     last = df.iloc[-1]
 
-    # 🔥 BOS / CHoCH
-    prev_high = df["high"].iloc[-5]
-    prev_low = df["low"].iloc[-5]
-
+    # 🔥 BOS
     bos = "NONE"
-    if last["high"] > prev_high:
+    if last["high"] > df["high"].iloc[-5]:
         bos = "BOS UP"
-    elif last["low"] < prev_low:
+    elif last["low"] < df["low"].iloc[-5]:
         bos = "BOS DOWN"
 
-    # 🔥 ORDER BLOCK (oddiy)
-    ob = "NONE"
-    if last["close"] > last["open"]:
-        ob = "Bullish OB"
-    elif last["close"] < last["open"]:
-        ob = "Bearish OB"
+    # 🔥 ORDER BLOCK (eng kuchli candle)
+    ob_price = df["close"].iloc[-3]
 
-    # 🔥 FVG
-    fvg = "NONE"
-    if df["low"].iloc[-2] > df["high"].iloc[-4]:
-        fvg = "FVG UP"
-    elif df["high"].iloc[-2] < df["low"].iloc[-4]:
-        fvg = "FVG DOWN"
+    # 🔥 LIQUIDITY ZONE
+    resistance = df["high"].tail(20).max()
+    support = df["low"].tail(20).min()
 
-    # 🔥 FINAL SIGNAL
+    # 🔥 ENTRY LOGIC (AI)
     signal = "WAIT"
+    entry = price
+    tp = 0
+    sl = 0
 
-    if bos == "BOS UP" and fvg == "FVG UP":
+    if (
+        bos == "BOS UP" and
+        last["ema50"] > last["ema200"] and
+        last["rsi"] > 55
+    ):
         signal = "BUY"
-    elif bos == "BOS DOWN" and fvg == "FVG DOWN":
+        tp = entry + 50
+        sl = entry - 30
+
+    elif (
+        bos == "BOS DOWN" and
+        last["ema50"] < last["ema200"] and
+        last["rsi"] < 45
+    ):
         signal = "SELL"
+        tp = entry - 50
+        sl = entry + 30
 
-    return signal, bos, ob, fvg
+    return {
+        "signal": signal,
+        "bos": bos,
+        "ob": round(ob_price,2),
+        "res": round(resistance,2),
+        "sup": round(support,2),
+        "entry": round(entry,2),
+        "tp": round(tp,2),
+        "sl": round(sl,2)
+    }
 
-# TIMEFRAMES
-h1, bos1, ob1, fvg1 = analyze("1h")
-h4, bos4, ob4, fvg4 = analyze("4h")
-d1, bosD, obD, fvgD = analyze("1d")
+h1 = analyze("1h")
+h4 = analyze("4h")
+d1 = analyze("1d")
 
 signals = {
-    "h1": h1,
-    "h4": h4,
-    "d1": d1,
+    "price": round(price,2),
 
-    "bos_h1": bos1,
-    "bos_h4": bos4,
-    "bos_d1": bosD,
+    "h1": h1["signal"],
+    "h4": h4["signal"],
+    "d1": d1["signal"],
 
-    "ob_h1": ob1,
-    "ob_h4": ob4,
-    "ob_d1": obD,
+    "bos_h4": h4["bos"],
+    "ob_h4": h4["ob"],
+    "resistance": h4["res"],
+    "support": h4["sup"],
 
-    "fvg_h1": fvg1,
-    "fvg_h4": fvg4,
-    "fvg_d1": fvgD,
-
-    "price": round(price,2)
+    "entry": h4["entry"],
+    "tp": h4["tp"],
+    "sl": h4["sl"]
 }
 
 with open("signals.json","w") as f:
     json.dump(signals,f,indent=2)
-
-print(signals)
