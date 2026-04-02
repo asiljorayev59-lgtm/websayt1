@@ -2,318 +2,68 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XAU AI Trading Platform</title>
+<title>AI TRADING DASHBOARD</title>
 
 <style>
-
-/* COLORS */
-:root{
---gold:#FFD700;
---neon:#00ffc3;
---blue:#38bdf8;
---purple:#a855f7;
---bg1:#020617;
---bg2:#0f172a;
-}
-
-/* BODY */
 body{
-margin:0;
-font-family:Segoe UI;
-background:linear-gradient(135deg,var(--bg1),var(--bg2));
+background:#020617;
 color:white;
-overflow-x:hidden;
-}
-
-/* BACKGROUND CANVAS */
-#bg{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-1;
-}
-
-/* TITLE */
-.title{
+font-family:Segoe UI;
 text-align:center;
-font-size:42px;
-color:var(--gold);
-text-shadow:0 0 20px var(--gold);
-margin-bottom:20px;
 }
 
-/* CONTAINER */
-.container{
-max-width:1300px;
-margin:auto;
-padding:20px;
-}
+.container{padding:30px}
 
-/* TOPBAR */
-.topbar{
-display:flex;
-justify-content:space-between;
-background:rgba(255,255,255,0.05);
-padding:15px;
-border-radius:10px;
-margin-bottom:20px;
-}
-
-/* GRID */
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+grid-template-columns:1fr 1fr;
 gap:20px;
+max-width:600px;
+margin:auto;
 }
 
-/* CARD */
 .card{
-background:rgba(255,255,255,0.05);
+background:#111;
 padding:20px;
-border-radius:15px;
-transition:0.3s;
-text-decoration:none;
-color:white;
-}
-
-.card:hover{
-transform:translateY(-8px) scale(1.03);
-box-shadow:0 0 25px var(--neon);
-}
-
-/* SIGNAL COLORS */
-.buy{color:#22c55e;font-weight:bold;}
-.sell{color:#ef4444;font-weight:bold;}
-.wait{color:#9ca3af;}
-
-/* TABLE */
-table{
-width:100%;
-margin-top:10px;
-}
-td,th{
-padding:8px;
-text-align:center;
-}
-
-/* BUTTON */
-.market-btn{
-background:linear-gradient(45deg,var(--blue),var(--purple));
-padding:10px 15px;
-border:none;
-border-radius:8px;
-color:white;
+border-radius:12px;
 cursor:pointer;
 transition:0.3s;
 }
 
-.market-btn:hover{
-transform:scale(1.1);
-box-shadow:0 0 20px var(--purple);
+.card:hover{
+transform:scale(1.05);
+background:#1e293b;
 }
-
-/* CHART */
-.chart{
-margin-top:20px;
-border-radius:15px;
-overflow:hidden;
-}
-
-/* FOOTER */
-.footer{
-text-align:center;
-margin-top:25px;
-color:#aaa;
-}
-
 </style>
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
-
 <div class="container">
 
-<div class="title">⚡ XAU AI SIGNAL PLATFORM</div>
+<h1>🚀 AI TRADING SYSTEM</h1>
 
-<div class="topbar">
-<div>Gold Price: <span id="price">Loading...</span></div>
-<div>AI Strength: <span id="ai">--</span>%</div>
-</div>
-
-<!-- CARDS -->
 <div class="grid">
 
 <a href="/trend.html" class="card">
-<h3>📈 Trend Strategy</h3>
-<table>
-<tr><td>M5</td><td id="trend_m5">WAIT</td></tr>
-<tr><td>M15</td><td id="trend_m15">WAIT</td></tr>
-<tr><td>H1</td><td id="trend_h1">WAIT</td></tr>
-</table>
+📈 Trend Strategy
 </a>
 
 <a href="/scalping.html" class="card">
-<h3>⚡ Scalping</h3>
-<table>
-<tr><td>M1</td><td id="scalp_m1">WAIT</td></tr>
-<tr><td>M5</td><td id="scalp_m5">WAIT</td></tr>
-</table>
+⚡ Scalping Strategy
 </a>
 
 <a href="/smartmoney.html" class="card">
-<h3>💰 Smart Money</h3>
-<table>
-<tr><td>M15</td><td id="sm_m15">WAIT</td></tr>
-<tr><td>H1</td><td id="sm_h1">WAIT</td></tr>
-<tr><td>H4</td><td id="sm_h4">WAIT</td></tr>
-</table>
+🧠 Smart Money
 </a>
 
 <a href="/ai.html" class="card">
-<h3>🧠 AI Prediction</h3>
-<div id="prediction">Waiting...</div>
+🤖 AI Prediction
 </a>
 
 </div>
 
-<!-- CHART -->
-<div class="card">
-<h3>📈 Gold Chart</h3>
-
-<div class="chart">
-<iframe
-src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=15&theme=dark"
-width="100%"
-height="500"
-style="border:none;will-change:transform;"
-loading="lazy">
-</iframe>
 </div>
-
-<!-- CRYPTO -->
-<div style="margin-top:20px">
-<button onclick="toggleMarket()" class="market-btn">📊 Crypto Market</button>
-
-<div id="marketBox" style="max-height:0;overflow:hidden;transition:0.5s;">
-<div class="grid" style="margin-top:15px">
-
-<div class="card"><h3>BTC</h3><p id="btc">$0</p></div>
-<div class="card"><h3>ETH</h3><p id="eth">$0</p></div>
-<div class="card"><h3>BNB</h3><p id="bnb">$0</p></div>
-<div class="card"><h3>SOL</h3><p id="sol">$0</p></div>
-<div class="card"><h3>TON</h3><p id="ton">$0</p></div>
-
-</div>
-</div>
-
-</div>
-
-</div>
-
-<div class="footer">AI Dashboard • Auto update 10s</div>
-
-</div>
-
-<script>
-
-// SIGNAL
-async function updateSignals(){
-let res = await fetch("/signal")
-let d = await res.json()
-
-apply(trend_m5,d.trend_m5)
-apply(trend_m15,d.trend_m15)
-apply(trend_h1,d.trend_h1)
-
-apply(scalp_m1,d.scalp_m1)
-apply(scalp_m5,d.scalp_m5)
-
-apply(sm_m15,d.sm_m15)
-apply(sm_h1,d.sm_h1)
-apply(sm_h4,d.sm_h4)
-
-ai.innerText=d.ai
-
-prediction.innerHTML = d.ai>70
-? "<span class='buy'>BUY</span>"
-: d.ai<30
-? "<span class='sell'>SELL</span>"
-: "<span class='wait'>WAIT</span>"
-}
-
-function apply(el,v){
-el.innerText=v
-el.className=""
-el.classList.add(v=="BUY"?"buy":v=="SELL"?"sell":"wait")
-}
-
-// GOLD
-async function updatePrice(){
-try{
-let r=await fetch("https://api.gold-api.com/price/XAU")
-let d=await r.json()
-price.innerText=d.price+" USD"
-}catch{
-price.innerText="Error"
-}
-}
-
-// CRYPTO
-function toggleMarket(){
-marketBox.style.maxHeight = marketBox.style.maxHeight ? "" : "500px"
-}
-
-async function updateCrypto(){
-let r=await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,solana,the-open-network&vs_currencies=usd")
-let d=await r.json()
-
-btc.innerText="$"+d.bitcoin.usd
-eth.innerText="$"+d.ethereum.usd
-bnb.innerText="$"+d.binancecoin.usd
-sol.innerText="$"+d.solana.usd
-ton.innerText="$"+d["the-open-network"].usd
-}
-
-// BACKGROUND
-const c=document.getElementById("bg")
-const ctx=c.getContext("2d")
-c.width=innerWidth
-c.height=innerHeight
-
-let p=[]
-for(let i=0;i<50;i++){
-p.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2})
-}
-
-function anim(){
-ctx.clearRect(0,0,c.width,c.height)
-p.forEach(o=>{
-o.y+=0.2
-if(o.y>c.height)o.y=0
-ctx.beginPath()
-ctx.arc(o.x,o.y,o.r,0,6.28)
-ctx.fillStyle="rgba(0,255,200,0.2)"
-ctx.fill()
-})
-requestAnimationFrame(anim)
-}
-anim()
-
-// INIT
-updateSignals()
-updatePrice()
-updateCrypto()
-
-setInterval(updateSignals,10000)
-setInterval(updatePrice,10000)
-setInterval(updateCrypto,10000)
-
-</script>
 
 </body>
 </html>
