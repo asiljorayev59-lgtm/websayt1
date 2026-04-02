@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>📊 Market Sentiment - GOLD AI PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    :root { --gold: #fbbf24; --green: #22c55e; --red: #ef4444; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+        background: radial-gradient(circle at 50% 30%, #1e3a5f 0%, #020617 70%);
+        color: white;
+        font-family: 'Segoe UI', sans-serif;
+        min-height: 100vh;
+    }
+    .header {
+        background: rgba(15,23,42,0.92);
+        backdrop-filter: blur(20px);
+        padding: 18px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    .main { padding: 30px 20px; max-width: 100%; }
+    h1 { text-align:center; font-size:2.6em; margin-bottom:10px; color:var(--gold); }
+    .subtitle { text-align:center; color:#94a3b8; margin-bottom:40px; }
+    
+    .card {
+        background: #0f172a;
+        border-radius: 28px;
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .sentiment-bar {
+        height: 18px;
+        background: #334155;
+        border-radius: 9999px;
+        overflow: hidden;
+        margin: 20px 0;
+    }
+    .buy-bar { height:100%; background: linear-gradient(90deg, #22c55e, #86efac); }
+    .sell-bar { height:100%; background: linear-gradient(90deg, #ef4444, #f87171); }
+    
+    .footer {
+        text-align:center;
+        padding:60px 20px;
+        color:#64748b;
+        font-size:1.1em;
+    }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div style="font-size:1.8em; font-weight:700; color:var(--gold);">📊 Market Sentiment</div>
+    <div id="time" style="color:#94a3b8;"></div>
+</div>
+
+<div class="main">
+    <h1>Bozor Kayfiyati</h1>
+    <p class="subtitle">Real vaqt rejimida traderlarning umumiy fikri</p>
+
+    <div class="card">
+        <h3 style="text-align:center; margin-bottom:20px;">XAUUSD — Hozirgi Sentiment</h3>
+        
+        <div style="display:flex; justify-content:space-between; font-size:1.4em; margin-bottom:10px;">
+            <span style="color:var(--green);">BUY</span>
+            <span id="buyPercent" style="font-weight:800; color:var(--green);">67%</span>
+        </div>
+        <div class="sentiment-bar">
+            <div class="buy-bar" style="width:67%;"></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-size:1.4em; margin:25px 0 10px;">
+            <span style="color:var(--red);">SELL</span>
+            <span id="sellPercent" style="font-weight:800; color:var(--red);">33%</span>
+        </div>
+        <div class="sentiment-bar">
+            <div class="sell-bar" style="width:33%;"></div>
+        </div>
+
+        <div style="margin-top:40px; text-align:center;">
+            <p style="font-size:1.3em;">Fear & Greed Index</p>
+            <div style="font-size:3em; font-weight:800; color:#fbbf24;" id="fgIndex">74</div>
+            <p style="color:#22c55e; margin-top:8px;">GREED (Odamlar ochko‘zlik qilmoqda)</p>
+        </div>
+    </div>
+
+    <div style="text-align:center; color:#94a3b8; margin-top:30px;">
+        Yuqori Greed → narx ko‘tarilishi kutilmoqda<br>
+        Past Fear → sotish bosimi kuchayishi mumkin
+    </div>
+</div>
+
+<div class="footer">
+    Market Sentiment har 30 soniyada yangilanadi
+</div>
+
+<script>
+function updateTime() {
+    const now = new Date();
+    document.getElementById("time").textContent = now.toLocaleTimeString('uz-UZ', {hour:'2-digit', minute:'2-digit'});
+}
+setInterval(updateTime, 10000);
+updateTime();
+
+// Simulyatsiya
+setInterval(() => {
+    let buy = Math.floor(Math.random() * 25) + 60;
+    document.getElementById("buyPercent").textContent = buy + "%";
+    document.getElementById("sellPercent").textContent = (100 - buy) + "%";
+    document.getElementById("fgIndex").textContent = Math.floor(Math.random() * 20) + 65;
+}, 8000);
+</script>
+</body>
+</html>
