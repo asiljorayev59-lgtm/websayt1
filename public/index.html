@@ -2,24 +2,21 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<title>💎 GOLD AI PRO v3.1 - Premium</title>
+<title>💎 GOLD AI PRO v4.0 - Premium Trading Intelligence</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
     :root {
         --gold: #fbbf24;
-        --gold-light: #fde68c;
+        --green: #22c55e;
+        --red: #ef4444;
         --dark: #020617;
         --card: #0f172a;
     }
     
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; }
     
     body {
-        background: radial-gradient(circle at 50% 30%, #1e3a5f 0%, #020617 60%);
+        background: radial-gradient(circle at 50% 30%, #1e3a5f 0%, #020617 70%);
         color: white;
         font-family: 'Segoe UI', system-ui, sans-serif;
         min-height: 100vh;
@@ -27,7 +24,6 @@
         position: relative;
     }
     
-    /* Header */
     .header {
         background: rgba(15, 23, 42, 0.92);
         backdrop-filter: blur(20px);
@@ -65,10 +61,9 @@
         50% { box-shadow: 0 0 40px rgba(34, 197, 94, 1); }
     }
     
-    /* Main */
     .main {
         max-width: 100%;
-        padding: 30px 20px 80px;
+        padding: 30px 20px 100px;
     }
     
     h1 {
@@ -79,7 +74,6 @@
         background: linear-gradient(90deg, #fbbf24, #bae6fd);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        line-height: 1.1;
     }
     
     .subtitle {
@@ -104,18 +98,12 @@
         box-shadow: 0 15px 40px rgba(251, 191, 36, 0.3);
     }
     
-    .price-ticker span:first-child {
-        font-size: 1.4em;
-        color: var(--gold);
-    }
-    
     .price-ticker #livePrice {
         font-size: 2.1em;
         font-weight: 800;
         color: #22c55e;
     }
     
-    /* Grid */
     .grid {
         display: grid;
         grid-template-columns: 1fr;
@@ -124,9 +112,7 @@
     }
     
     @media (min-width: 768px) {
-        .grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
+        .grid { grid-template-columns: repeat(2, 1fr); }
         h1 { font-size: 3.6em; }
         .price-ticker { flex-direction: row; gap: 30px; }
     }
@@ -151,11 +137,6 @@
     .card-icon {
         font-size: 4.5em;
         margin-bottom: 20px;
-        transition: transform 0.6s;
-    }
-    
-    .card:hover .card-icon {
-        transform: scale(1.25) rotate(12deg);
     }
     
     .card h3 {
@@ -182,15 +163,32 @@
         font-size: 0.95em;
     }
     
+    /* Yangi bo‘limlar uchun maxsus uslub */
+    .sentiment-card {
+        background: linear-gradient(135deg, #1e2937, #0f172a);
+    }
+    
+    .strength-bar {
+        height: 10px;
+        background: #334155;
+        border-radius: 9999px;
+        overflow: hidden;
+        margin: 12px 0;
+    }
+    
+    .strength-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #22c55e, #fbbf24);
+        transition: width 1.2s ease;
+    }
+    
     .footer {
         text-align: center;
         padding: 80px 20px 60px;
         color: #64748b;
         font-size: 1.1em;
-        line-height: 1.8;
     }
     
-    /* Yaxshilangan Orqa Fon Animatsiyasi */
     .particles {
         position: fixed;
         top: 0; left: 0;
@@ -206,49 +204,100 @@
 <div class="header">
     <div class="logo">💎 GOLD AI PRO</div>
     <div class="live">🟢 LIVE</div>
-    <div id="currentTime" style="color:#94a3b8; font-size:1.05em;"></div>
+    <div id="currentTime" style="color:#94a3b8;"></div>
 </div>
 
 <div class="main">
-    <h1>GOLD AI PRO</h1>
-    <p class="subtitle">Premium savdo strategiyalari bir joyda</p>
+    <h1>GOLD AI PRO v4.0</h1>
+    <p class="subtitle">Premium savdo strategiyalari + yangi muhim vositalar</p>
     
     <div class="price-ticker">
         <span>XAUUSD</span>
         <span id="livePrice">4689.65</span>
-        <span id="priceChange" style="color:#22c55e; font-size:1.1em;">+27.80 (+0.60%)</span>
+        <span id="priceChange" style="color:#22c55e;">+27.80 (+0.60%)</span>
     </div>
 
     <div class="grid">
+        
+        <!-- Eski bo‘limlar -->
         <div class="card" onclick="window.location.href='trend.html'">
             <span class="card-icon">📈</span>
             <h3>Trend Strategy</h3>
-            <p>H1 • H4 • D1 da kuchli trend tahlili va SMC elementlari</p>
+            <p>H1 • H4 • D1 da kuchli trend tahlili</p>
             <div class="badge">TOP</div>
         </div>
 
         <div class="card" onclick="window.location.href='scalping.html'">
             <span class="card-icon">⚡</span>
             <h3>Scalping AI</h3>
-            <p>M1 va M5 da tezkor scalping bilan real grafik</p>
+            <p>M1 va M5 da tezkor scalping</p>
         </div>
 
         <div class="card" onclick="window.location.href='smartmoney.html'">
             <span class="card-icon">🧠</span>
             <h3>Smart Money Concepts</h3>
-            <p>BOS, Order Block, Liquidity va FVG</p>
+            <p>BOS, Order Block, Liquidity</p>
         </div>
 
         <div class="card" onclick="window.location.href='ai.html'">
             <span class="card-icon">🤖</span>
             <h3>AI Price Prediction</h3>
-            <p>Sun'iy intellekt bashoratlari (15 daqiqa - 7 kun)</p>
+            <p>15 daqiqa - 7 kun bashorat</p>
         </div>
+
+        <!-- Yangi 1: Market Sentiment -->
+        <div class="card sentiment-card" onclick="alert('Market Sentiment bo‘limi tez orada to‘liq ochiladi!')">
+            <span class="card-icon">📊</span>
+            <h3>Market Sentiment</h3>
+            <p>Bozorda hozirgi kayfiyat: odamlar ko‘proq BUY yoki SELL qilyapti?</p>
+            <div style="margin-top:20px; font-size:1.1em;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                    <span style="color:var(--green);">BUY <strong id="buyPercent">68%</strong></span>
+                    <span style="color:var(--red);">SELL <strong id="sellPercent">32%</strong></span>
+                </div>
+                <div class="strength-bar">
+                    <div class="strength-fill" style="width:68%; background:linear-gradient(90deg, #22c55e, #86efac);"></div>
+                </div>
+                <p style="font-size:0.95em; color:#94a3b8; margin-top:12px;">
+                    Fear & Greed Index: <strong style="color:#fbbf24;">72 (Greed)</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- Yangi 2: Signal Strength -->
+        <div class="card" onclick="alert('Signal Strength bo‘limi tez orada to‘liq ishlaydi!')">
+            <span class="card-icon">🔥</span>
+            <h3>Signal Strength (AI Score)</h3>
+            <p>Har bir signalga AI tomonidan ball beriladi</p>
+            <div style="margin-top:25px; text-align:center;">
+                <div style="font-size:2.2em; font-weight:800; color:var(--gold);" id="currentStrength">82%</div>
+                <p style="margin-top:8px; color:#22c55e;">SIGNAL: <strong>BUY</strong></p>
+                <div class="strength-bar" style="margin-top:15px;">
+                    <div class="strength-fill" style="width:82%;"></div>
+                </div>
+                <p style="font-size:0.95em; color:#94a3b8;">Trend + BOS + RSI kuchli signal</p>
+            </div>
+        </div>
+
+        <!-- Yangi 3: Trade History Pro + Risk Manager -->
+        <div class="card" onclick="alert('Trade History & Risk Manager bo‘limi tez orada to‘liq ochiladi!')">
+            <span class="card-icon">📜</span>
+            <h3>Trade History Pro</h3>
+            <p>Win Rate • Profit Factor • Risk Manager</p>
+            <div style="margin-top:20px; font-size:1.05em; line-height:1.8;">
+                <p>Umumiy Win Rate: <strong style="color:#22c55e;">74%</strong></p>
+                <p>Joriy Balance: <strong>$12,450</strong></p>
+                <p>Risk per Trade: <strong style="color:#fbbf24;">1%</strong></p>
+                <p>Eng yaxshi strategiya: <strong>Smart Money</strong></p>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <div class="footer">
-    © 2026 GOLD AI PRO • Risk boshqaruvini unutmang
+    © 2026 GOLD AI PRO v4.0 • Barcha ma’lumotlar real vaqt rejimida<br>
+    <strong style="color:#fbbf24;">Risk boshqaruvini birinchi o‘ringa qo‘ying</strong>
 </div>
 
 <canvas id="particles" class="particles"></canvas>
@@ -267,14 +316,12 @@ setInterval(updateLivePrice, 2500);
 // Time
 function updateTime() {
     const now = new Date();
-    document.getElementById("currentTime").textContent = now.toLocaleTimeString('uz-UZ', {
-        hour: '2-digit', minute: '2-digit'
-    });
+    document.getElementById("currentTime").textContent = now.toLocaleTimeString('uz-UZ', { hour:'2-digit', minute:'2-digit' });
 }
 setInterval(updateTime, 10000);
 updateTime();
 
-// Yaxshilangan Particles Animatsiyasi (Mobil uchun optimallashtirilgan)
+// Particles (Mobil uchun optimallashtirilgan)
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
 
@@ -292,19 +339,17 @@ class Particle {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.size = Math.random() * 3.5 + 1.2;
-        this.speedX = Math.random() * 0.8 - 0.4;
-        this.speedY = Math.random() * 0.8 - 0.4;
+        this.speedX = Math.random() * 0.7 - 0.35;
+        this.speedY = Math.random() * 0.7 - 0.35;
     }
     update() {
         this.x += this.speedX;
         this.y += this.speedY;
-        
-        // Chegaradan chiqmasligi uchun
         if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
         if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
     }
     draw() {
-        ctx.fillStyle = "rgba(251, 191, 36, 0.75)";
+        ctx.fillStyle = "rgba(251, 191, 36, 0.8)";
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -313,7 +358,7 @@ class Particle {
 
 function initParticles() {
     particlesArray = [];
-    const count = window.innerWidth < 768 ? 80 : 140; // Mobil uchun kamroq
+    const count = window.innerWidth < 768 ? 75 : 130;
     for (let i = 0; i < count; i++) {
         particlesArray.push(new Particle());
     }
@@ -321,9 +366,9 @@ function initParticles() {
 
 function animateParticles() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
-        particlesArray[i].draw();
+    for (let p of particlesArray) {
+        p.update();
+        p.draw();
     }
     requestAnimationFrame(animateParticles);
 }
@@ -331,17 +376,13 @@ function animateParticles() {
 initParticles();
 animateParticles();
 
-// Card click visual effect
+// Card touch effect
 document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('touchstart', () => {
-        card.style.transform = 'scale(0.95)';
-    });
-    card.addEventListener('touchend', () => {
-        card.style.transform = 'scale(1)';
-    });
+    card.addEventListener('touchstart', () => card.style.transform = 'scale(0.96)');
+    card.addEventListener('touchend', () => card.style.transform = 'scale(1)');
 });
 
-console.log("%c💎 GOLD AI PRO v3.1 — Mobil versiya va yaxshilangan animatsiya tayyor!", "color:#fbbf24; font-size:18px");
+console.log("%c💎 GOLD AI PRO v4.0 — Yangi bo‘limlar (Sentiment, Signal Strength, Trade History) qo‘shildi!", "color:#fbbf24; font-size:18px");
 </script>
 </body>
 </html>
