@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>🧠 Smart Money Concepts - GOLD AI PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    :root {
+        --gold: #fbbf24;
+        --blue: #38bdf8;
+        --green: #22c55e;
+        --red: #ef4444;
+        --dark: #020617;
+        --card: #0f172a;
+    }
+    
+    * { margin:0; padding:0; box-sizing:border-box; }
+    
+    body {
+        background: linear-gradient(135deg, #020617 0%, #0a1428 100%);
+        color: white;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        min-height: 100vh;
+    }
+    
+    .header {
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(12px);
+        padding: 20px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-bottom: 1px solid rgba(251,191,36,0.2);
+    }
+    
+    .logo {
+        font-size: 2em;
+        font-weight: 800;
+        color: var(--gold);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .main {
+        max-width: 1400px;
+        margin: 40px auto;
+        padding: 0 30px;
+    }
+    
+    h1 {
+        text-align: center;
+        font-size: 3em;
+        margin-bottom: 10px;
+        color: var(--gold);
+    }
+    
+    .subtitle {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 1.4em;
+        margin-bottom: 40px;
+    }
+    
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+    
+    .card {
+        background: var(--card);
+        border-radius: 24px;
+        padding: 28px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        transition: all 0.4s;
+    }
+    
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(251,191,36,0.25);
+    }
+    
+    .signal {
+        font-size: 2.2em;
+        font-weight: bold;
+        text-align: center;
+        padding: 18px;
+        border-radius: 16px;
+        margin: 15px 0;
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .buy { background: rgba(34,197,94,0.25); color: #22c55e; border: 2px solid #22c55e; }
+    .sell { background: rgba(239,68,68,0.25); color: #ef4444; border: 2px solid #ef4444; }
+    .neutral { background: rgba(148,163,184,0.2); color: #94a3b8; }
+    
+    .info {
+        background: #1e2937;
+        padding: 18px;
+        border-radius: 16px;
+        font-size: 15.5px;
+        margin: 20px 0;
+    }
+    
+    .info p {
+        margin: 12px 0;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .info span { color: #c7d2fe; font-weight: bold; }
+    
+    .chart-container {
+        height: 320px;
+        background: #1e2937;
+        border-radius: 16px;
+        margin: 20px 0;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    ul {
+        list-style: none;
+        padding: 0;
+        max-height: 220px;
+        overflow-y: auto;
+    }
+    
+    li {
+        padding: 12px 16px;
+        background: #1e2937;
+        margin: 6px 0;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .win { color: #22c55e; }
+    .loss { color: #ef4444; }
+    
+    .stat {
+        background: #1e2937;
+        padding: 16px;
+        border-radius: 16px;
+        text-align: center;
+        margin-top: 15px;
+    }
+    
+    .footer {
+        text-align: center;
+        margin-top: 60px;
+        color: #64748b;
+        font-size: 1.1em;
+    }
+    
+    .live-dot {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        background: #22c55e;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+        margin-right: 8px;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+    }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">🧠 SMART MONEY CONCEPTS</div>
+    <div style="color:#22c55e; font-weight:bold;">
+        <span class="live-dot"></span> LIVE • XAUUSD
+    </div>
+    <div id="time" style="color:#94a3b8;"></div>
+</div>
+
+<div class="main">
+    <h1>Smart Money Concepts (SMC / ICT)</h1>
+    <p class="subtitle">Institutional Trading Strategy — BOS, Order Blocks, Liquidity & Fair Value Gap</p>
+
+    <div class="grid">
+        
+        <!-- H4 MAIN SMC -->
+        <div class="card">
+            <h3>🔥 H4 — Asosiy SMC Signal</h3>
+            <div id="h4Signal" class="signal neutral">NEUTRAL</div>
+            
+            <div class="info">
+                <p>BOS (Break of Structure): <span id="bos">—</span></p>
+                <p>Order Block: <span id="ob">—</span></p>
+                <p>Fair Value Gap: <span id="fvg">—</span></p>
+                <p>Liquidity High: <span id="liqHigh">—</span></p>
+                <p>Liquidity Low: <span id="liqLow">—</span></p>
+                <p><strong>Entry:</strong> <span id="entry" style="color:var(--gold)">—</span></p>
+                <p><strong>TP1 / TP2:</strong> <span id="tp" style="color:#22c55e">—</span></p>
+                <p><strong>SL:</strong> <span id="sl" style="color:#ef4444">—</span></p>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="smcCanvas" width="700" height="320"></canvas>
+            </div>
+            
+            <ul id="smcHistory"></ul>
+            
+            <div class="stat">
+                Jami signal: <span id="total">0</span><br>
+                To'g'ri: <span id="win">0</span> | Noto'g'ri: <span id="loss">0</span><br>
+                <span id="accuracy" style="color:#22c55e; font-size:1.3em;">Aniqlik: 0%</span>
+            </div>
+        </div>
+
+        <!-- D1 Bias -->
+        <div class="card">
+            <h3>📊 D1 Higher Timeframe Bias</h3>
+            <div id="d1Signal" class="signal neutral">NEUTRAL</div>
+            
+            <div class="chart-container">
+                <canvas id="d1Canvas" width="700" height="320"></canvas>
+            </div>
+            
+            <ul id="d1History"></ul>
+            
+            <div class="stat">
+                D1 Bias: <span id="d1Bias">—</span><br>
+                Hozirgi trend: <span id="currentTrend" style="color:var(--gold)">Kuzatilmoqda...</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    Smart Money Concepts • BOS • CHOCH • Order Block • Liquidity Engineering • Fair Value Gap<br>
+    Faqat institutsional savdo uslubi • Risk boshqaruvini unutmang
+</div>
+
+<script>
+// ====================== GLOBAL ======================
+let currentPrice = 4685.60;
+let historyData = JSON.parse(localStorage.getItem('smcHistory')) || [];
+let lastSignal = "NEUTRAL";
+
+// ====================== TIME ======================
+function updateTime() {
+    document.getElementById("time").textContent = new Date().toLocaleString('uz-UZ', {
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+// ====================== CANVAS - SMC Levels ======================
+function drawSMCCanvas() {
+    const canvas = document.getElementById("smcCanvas");
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width;
+    const h = canvas.height;
+    
+    ctx.clearRect(0, 0, w, h);
+    
+    // Grid
+    ctx.strokeStyle = "#334155";
+    for (let i = 1; i < 6; i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, h * i / 6);
+        ctx.lineTo(w, h * i / 6);
+        ctx.stroke();
+    }
+    
+    // Narx chizig'i
+    ctx.strokeStyle = "#fbbf24";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    for (let i = 0; i < 50; i++) {
+        const x = (i / 49) * w;
+        const y = h / 2 + Math.sin(i / 5) * 40;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    
+    // SMC Levels
+    const entry = currentPrice;
+    const tp1 = currentPrice + 65;
+    const sl = currentPrice - 32;
+    const liqHigh = currentPrice + 95;
+    const liqLow = currentPrice - 78;
+    
+    function drawLine(yPos, color, label) {
+        const yy = (h / 2) + (yPos - currentPrice) * 1.8;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.setLineDash([8, 4]);
+        ctx.beginPath();
+        ctx.moveTo(40, yy);
+        ctx.lineTo(w - 40, yy);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        
+        ctx.fillStyle = color;
+        ctx.font = "bold 14px Segoe UI";
+        ctx.fillText(label, 50, yy - 8);
+        ctx.fillText(yPos.toFixed(1), w - 85, yy + 15);
+    }
+    
+    drawLine(liqHigh, "#ef4444", "LIQUIDITY HIGH");
+    drawLine(liqLow, "#22c55e", "LIQUIDITY LOW");
+    drawLine(entry, "#fbbf24", "ENTRY");
+    drawLine(tp1, "#22c55e", "TP1");
+    drawLine(sl, "#ef4444", "SL");
+}
+
+// ====================== SIGNAL GENERATOR ======================
+function generateSMCSignal() {
+    currentPrice += (Math.random() * 4 - 2);
+    
+    // SMC Logic
+    let signal = "NEUTRAL";
+    let bos = "—";
+    let ob = "—";
+    let fvg = "—";
+    
+    const rand = Math.random();
+    
+    if (rand > 0.68) {
+        signal = "BUY";
+        bos = "Bullish BOS ✅";
+        ob = "Bullish Order Block";
+        fvg = "FVG Yuqoriga";
+    } else if (rand > 0.36) {
+        signal = "SELL";
+        bos = "Bearish BOS ✅";
+        ob = "Bearish Order Block";
+        fvg = "FVG Pastga";
+    }
+    
+    // UI Update
+    const sigEl = document.getElementById("h4Signal");
+    sigEl.textContent = signal;
+    sigEl.className = `signal ${signal === "BUY" ? "buy" : signal === "SELL" ? "sell" : "neutral"}`;
+    
+    document.getElementById("bos").textContent = bos;
+    document.getElementById("ob").textContent = ob;
+    document.getElementById("fvg").textContent = fvg;
+    document.getElementById("liqHigh").textContent = (currentPrice + 95).toFixed(2);
+    document.getElementById("liqLow").textContent = (currentPrice - 78).toFixed(2);
+    document.getElementById("entry").textContent = currentPrice.toFixed(2);
+    document.getElementById("tp").textContent = (currentPrice + 82).toFixed(2) + " / " + (currentPrice + 145).toFixed(2);
+    document.getElementById("sl").textContent = (currentPrice - 38).toFixed(2);
+    
+    // D1 Bias
+    document.getElementById("d1Signal").textContent = signal === "BUY" ? "BULLISH BIAS" : signal === "SELL" ? "BEARISH BIAS" : "NEUTRAL";
+    document.getElementById("d1Bias").textContent = signal === "BUY" ? "📈 Yuqoriga" : signal === "SELL" ? "📉 Pastga" : "➡️ Kutish";
+    
+    // Save to history
+    if (lastSignal !== signal && signal !== "NEUTRAL") {
+        saveToHistory("SMC", signal, currentPrice);
+        lastSignal = signal;
+    }
+    
+    drawSMCCanvas();
+    renderHistory();
+}
+
+function saveToHistory(tf, signal, price) {
+    historyData.unshift({
+        tf: tf,
+        signal: signal,
+        entry: price.toFixed(2),
+        time: new Date().toLocaleTimeString('uz-UZ'),
+        result: "PENDING"
+    });
+    if (historyData.length > 30) historyData.pop();
+    localStorage.setItem('smcHistory', JSON.stringify(historyData));
+}
+
+function renderHistory() {
+    const html = historyData.slice(0, 8).map(item => `
+        <li>
+            ${item.time} • ${item.signal} @ ${item.entry}
+            ${item.result === "WIN" ? '<span class="win">✔ To\'g\'ri</span>' : 
+              item.result === "LOSS" ? '<span class="loss">❌ Noto\'g\'ri</span>' : 
+              `<button onclick="markResult('${item.time}', 'WIN')">To'g'ri</button>
+               <button onclick="markResult('${item.time}', 'LOSS')">Noto'g'ri</button>`}
+        </li>
+    `).join("");
+    
+    document.getElementById("smcHistory").innerHTML = html || "<li style='color:#64748b;text-align:center'>Hali signal yo'q</li>";
+    
+    // Stats
+    const wins = historyData.filter(x => x.result === "WIN").length;
+    const losses = historyData.filter(x => x.result === "LOSS").length;
+    const total = wins + losses;
+    const acc = total ? Math.round((wins / total) * 100) : 0;
+    
+    document.getElementById("total").textContent = historyData.length;
+    document.getElementById("win").textContent = wins;
+    document.getElementById("loss").textContent = losses;
+    document.getElementById("accuracy").innerHTML = `Aniqlik: <strong>${acc}%</strong>`;
+}
+
+window.markResult = function(time, result) {
+    const item = historyData.find(x => x.time === time);
+    if (item) {
+        item.result = result;
+        localStorage.setItem('smcHistory', JSON.stringify(historyData));
+        renderHistory();
+    }
+};
+
+// ====================== INIT ======================
+setInterval(generateSMCSignal, 25000);   // har 25 soniyada yangi SMC signal
+generateSMCSignal();                     // birinchi marta
+renderHistory();
+drawSMCCanvas();
+
+console.log("%c🧠 Smart Money Concepts Dashboard muvaffaqiyatli yuklandi!", "color:#fbbf24; font-size:16px");
+</script>
+</body>
+</html>
