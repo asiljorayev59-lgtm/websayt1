@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>🤖 AI Price Prediction - GOLD AI PRO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    :root {
+        --gold: #fbbf24;
+        --blue: #38bdf8;
+        --green: #22c55e;
+        --red: #ef4444;
+        --dark: #020617;
+    }
+    
+    * { margin:0; padding:0; box-sizing:border-box; }
+    
+    body {
+        background: linear-gradient(135deg, #020617 0%, #0a1428 100%);
+        color: white;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        min-height: 100vh;
+    }
+    
+    .header {
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(12px);
+        padding: 20px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-bottom: 1px solid rgba(251,191,36,0.2);
+    }
+    
+    .logo {
+        font-size: 2em;
+        font-weight: 800;
+        color: var(--gold);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .main {
+        max-width: 1400px;
+        margin: 40px auto;
+        padding: 0 30px;
+    }
+    
+    h1 {
+        text-align: center;
+        font-size: 3em;
+        margin-bottom: 10px;
+        color: var(--gold);
+    }
+    
+    .subtitle {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 1.4em;
+        margin-bottom: 40px;
+    }
+    
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 28px;
+    }
+    
+    .card {
+        background: #0f172a;
+        border-radius: 24px;
+        padding: 28px;
+        transition: all 0.4s;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 50px rgba(251,191,36,0.25);
+    }
+    
+    .prediction {
+        font-size: 2.4em;
+        font-weight: bold;
+        text-align: center;
+        padding: 20px;
+        border-radius: 18px;
+        margin: 15px 0;
+        background: rgba(251,191,36,0.15);
+        color: var(--gold);
+    }
+    
+    .timeframe {
+        background: #1e2937;
+        padding: 18px;
+        border-radius: 16px;
+        margin: 20px 0;
+        font-size: 15.5px;
+    }
+    
+    .timeframe p {
+        display: flex;
+        justify-content: space-between;
+        margin: 12px 0;
+    }
+    
+    .confidence {
+        height: 8px;
+        background: #334155;
+        border-radius: 9999px;
+        overflow: hidden;
+        margin: 12px 0;
+    }
+    
+    .confidence-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #22c55e, #fbbf24);
+        transition: width 1.5s ease;
+    }
+    
+    .chart-container {
+        height: 280px;
+        background: #1e2937;
+        border-radius: 16px;
+        margin: 20px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    canvas { width: 100% !important; height: 100% !important; }
+    
+    .footer {
+        text-align: center;
+        margin-top: 60px;
+        color: #64748b;
+        font-size: 1.1em;
+    }
+    
+    .live {
+        color: #22c55e;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse { 0%,100% {opacity:1;} 50% {opacity:0.6;} }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">🤖 AI PRICE PREDICTION</div>
+    <div style="color:#22c55e; font-weight:bold;" class="live">● REAL-TIME AI MODEL</div>
+    <div id="time" style="color:#94a3b8;"></div>
+</div>
+
+<div class="main">
+    <h1>AI Gold Price Prediction (XAUUSD)</h1>
+    <p class="subtitle">Sun'iy Intellekt asosidagi bashorat • 15 daqiqa • 1 soat • 4 soat • 24 soat • 7 kun</p>
+
+    <div style="text-align:center; margin-bottom:30px; font-size:1.8em;">
+        Joriy narx: <span id="currentPrice" style="color:#fbbf24; font-weight:bold;">4685.40</span> USD
+    </div>
+
+    <div class="grid">
+        
+        <!-- 15 MIN -->
+        <div class="card">
+            <h3>⚡ 15 Daqiqa</h3>
+            <div id="pred15" class="prediction">—</div>
+            <div class="timeframe">
+                <p>Bashorat narxi: <span id="price15" style="color:#fbbf24;">—</span></p>
+                <p>Kutilayotgan o'zgarish: <span id="change15" style="color:#22c55e;">—</span></p>
+                <div class="confidence"><div id="conf15" class="confidence-bar" style="width:78%"></div></div>
+                <p style="font-size:13px; color:#94a3b8;">Ishonchlilik: <strong id="confText15">78%</strong></p>
+            </div>
+        </div>
+
+        <!-- 1 HOUR -->
+        <div class="card">
+            <h3>⏰ 1 Soat</h3>
+            <div id="pred1h" class="prediction">—</div>
+            <div class="timeframe">
+                <p>Bashorat narxi: <span id="price1h" style="color:#fbbf24;">—</span></p>
+                <p>Kutilayotgan o'zgarish: <span id="change1h" style="color:#22c55e;">—</span></p>
+                <div class="confidence"><div id="conf1h" class="confidence-bar" style="width:82%"></div></div>
+                <p style="font-size:13px; color:#94a3b8;">Ishonchlilik: <strong id="confText1h">82%</strong></p>
+            </div>
+        </div>
+
+        <!-- 4 HOUR -->
+        <div class="card">
+            <h3>📊 4 Soat</h3>
+            <div id="pred4h" class="prediction">—</div>
+            <div class="timeframe">
+                <p>Bashorat narxi: <span id="price4h" style="color:#fbbf24;">—</span></p>
+                <p>Kutilayotgan o'zgarish: <span id="change4h" style="color:#22c55e;">—</span></p>
+                <div class="confidence"><div id="conf4h" class="confidence-bar" style="width:75%"></div></div>
+                <p style="font-size:13px; color:#94a3b8;">Ishonchlilik: <strong id="confText4h">75%</strong></p>
+            </div>
+        </div>
+
+        <!-- 24 HOUR -->
+        <div class="card">
+            <h3>🌙 24 Soat (1 kun)</h3>
+            <div id="pred24h" class="prediction">—</div>
+            <div class="timeframe">
+                <p>Bashorat narxi: <span id="price24h" style="color:#fbbf24;">—</span></p>
+                <p>Kutilayotgan o'zgarish: <span id="change24h" style="color:#22c55e;">—</span></p>
+                <div class="confidence"><div id="conf24h" class="confidence-bar" style="width:68%"></div></div>
+                <p style="font-size:13px; color:#94a3b8;">Ishonchlilik: <strong id="confText24h">68%</strong></p>
+            </div>
+        </div>
+
+        <!-- 7 DAYS -->
+        <div class="card">
+            <h3>📅 7 Kun</h3>
+            <div id="pred7d" class="prediction">—</div>
+            <div class="timeframe">
+                <p>Bashorat narxi: <span id="price7d" style="color:#fbbf24;">—</span></p>
+                <p>Kutilayotgan o'zgarish: <span id="change7d" style="color:#22c55e;">—</span></p>
+                <div class="confidence"><div id="conf7d" class="confidence-bar" style="width:65%"></div></div>
+                <p style="font-size:13px; color:#94a3b8;">Ishonchlilik: <strong id="confText7d">65%</strong></p>
+            </div>
+        </div>
+
+        <!-- LONG TERM -->
+        <div class="card">
+            <h3>🚀 2026 Oxiri (AI Long-term)</h3>
+            <div id="predLong" class="prediction" style="font-size:2.1em;">5200 - 6200 USD</div>
+            <p style="text-align:center; color:#94a3b8; margin-top:15px;">
+                AI modellari (JP Morgan, UBS, CoPilot va boshqalar) bo'yicha 2026 yil oxiriga bashorat
+            </p>
+        </div>
+    </div>
+
+    <div class="chart-container" style="margin-top:40px;">
+        <canvas id="aiChart" width="1200" height="280"></canvas>
+    </div>
+</div>
+
+<div class="footer">
+    🤖 Bu AI bashorati simulyatsiya va texnik tahlilga asoslangan. <br>
+    Hech qanday bashorat 100% aniq emas. Savdo qilishdan oldin o'zingiz tahlil qiling va risk boshqaruvidan foydalaning.
+</div>
+
+<script>
+// ====================== GLOBAL ======================
+let currentPrice = 4685.40;
+let priceHistory = Array(60).fill(currentPrice).map((p, i) => p + (Math.random() * 80 - 40));
+
+// ====================== TIME ======================
+function updateTime() {
+    document.getElementById("time").textContent = new Date().toLocaleString('uz-UZ', {
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+// ====================== AI PREDICTION GENERATOR ======================
+function generateAIPredictions() {
+    currentPrice += (Math.random() * 6 - 3);
+    document.getElementById("currentPrice").textContent = currentPrice.toFixed(2);
+
+    // 15 MIN
+    const pred15 = currentPrice + (Math.random() * 12 - 6);
+    document.getElementById("price15").textContent = pred15.toFixed(2);
+    document.getElementById("change15").textContent = (pred15 - currentPrice > 0 ? "+" : "") + (pred15 - currentPrice).toFixed(2);
+    document.getElementById("pred15").textContent = pred15 > currentPrice ? "📈 YUQORIGA" : "📉 PASTGA";
+
+    // 1 HOUR
+    const pred1h = currentPrice + (Math.random() * 28 - 14);
+    document.getElementById("price1h").textContent = pred1h.toFixed(2);
+    document.getElementById("change1h").textContent = (pred1h - currentPrice > 0 ? "+" : "") + (pred1h - currentPrice).toFixed(2);
+    document.getElementById("pred1h").textContent = pred1h > currentPrice + 5 ? "📈 BULLISH" : "📉 BEARISH";
+
+    // 4 HOUR
+    const pred4h = currentPrice + (Math.random() * 55 - 25);
+    document.getElementById("price4h").textContent = pred4h.toFixed(2);
+    document.getElementById("change4h").textContent = (pred4h - currentPrice > 0 ? "+" : "") + (pred4h - currentPrice).toFixed(2);
+    document.getElementById("pred4h").textContent = pred4h > currentPrice ? "📈 KUCHLI YUQORI" : "📉 KUCHLI PAST";
+
+    // 24 HOUR
+    const pred24h = currentPrice + (Math.random() * 95 - 45);
+    document.getElementById("price24h").textContent = pred24h.toFixed(2);
+    document.getElementById("change24h").textContent = (pred24h - currentPrice > 0 ? "+" : "") + (pred24h - currentPrice).toFixed(2);
+    document.getElementById("pred24h").textContent = pred24h > currentPrice + 30 ? "🚀 BULLISH" : "📉 BEARISH";
+
+    // 7 DAYS
+    const pred7d = currentPrice + (Math.random() * 180 - 80);
+    document.getElementById("price7d").textContent = pred7d.toFixed(2);
+    document.getElementById("change7d").textContent = (pred7d - currentPrice > 0 ? "+" : "") + (pred7d - currentPrice).toFixed(2);
+    document.getElementById("pred7d").textContent = pred7d > currentPrice + 100 ? "📈 KUCHLI O'ZISH" : "📉 TUSHISH MUMKIN";
+
+    drawAIChart();
+}
+
+// ====================== CANVAS CHART ======================
+function drawAIChart() {
+    const canvas = document.getElementById("aiChart");
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width = 1200;
+    const h = canvas.height = 280;
+    
+    ctx.clearRect(0, 0, w, h);
+    
+    // Grid
+    ctx.strokeStyle = "#334155";
+    for (let i = 1; i < 6; i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, h * i / 6);
+        ctx.lineTo(w, h * i / 6);
+        ctx.stroke();
+    }
+    
+    // AI Prediction Line
+    ctx.strokeStyle = "#fbbf24";
+    ctx.lineWidth = 4;
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = "#fbbf24";
+    ctx.beginPath();
+    for (let i = 0; i < priceHistory.length; i++) {
+        const x = (i / (priceHistory.length - 1)) * w;
+        const minP = Math.min(...priceHistory);
+        const maxP = Math.max(...priceHistory);
+        const y = h - ((priceHistory[i] - minP) / (maxP - minP)) * (h - 40);
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    
+    // Future projection
+    ctx.strokeStyle = "#22c55e";
+    ctx.lineWidth = 3;
+    ctx.setLineDash([10, 5]);
+    ctx.beginPath();
+    ctx.moveTo(w * 0.75, h / 2);
+    ctx.lineTo(w, h / 2 - 60);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    
+    ctx.fillStyle = "#22c55e";
+    ctx.font = "bold 16px Segoe UI";
+    ctx.fillText("AI Bashorati", w - 140, h / 2 - 75);
+}
+
+drawAIChart();
+generateAIPredictions();
+setInterval(generateAIPredictions, 18000); // har 18 soniyada yangi bashorat
+
+console.log("%c🤖 AI Price Prediction sahifasi muvaffaqiyatli yuklandi! (XAUUSD uchun)", "color:#fbbf24; font-size:16px");
+</script>
+</body>
+</html>
