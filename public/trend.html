@@ -56,8 +56,7 @@ margin-top:10px;
 font-size:14px;
 }
 
-iframe{
-border-radius:10px;
+.chart{
 margin-top:10px;
 }
 
@@ -83,8 +82,7 @@ margin-top:10px;
 <p>Liquidity: <span id="l1"></span></p>
 </div>
 
-<iframe src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=60&theme=dark"
-width="100%" height="200"></iframe>
+<div id="chart_h1" class="chart"></div>
 
 <ul id="h1History"></ul>
 <p id="h1Stats" class="stat"></p>
@@ -102,10 +100,13 @@ width="100%" height="200"></iframe>
 <p>Liquidity: <span id="l4"></span></p>
 <p>Resistance: <span id="res"></span></p>
 <p>Support: <span id="sup"></span></p>
+
+<p>BOS: <span id="bos4"></span></p>
+<p>Order Block: <span id="ob4"></span></p>
+<p>FVG: <span id="fvg4"></span></p>
 </div>
 
-<iframe src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=240&theme=dark"
-width="100%" height="200"></iframe>
+<div id="chart_h4" class="chart"></div>
 
 <ul id="h4History"></ul>
 <p id="h4Stats" class="stat"></p>
@@ -123,8 +124,7 @@ width="100%" height="200"></iframe>
 <p>Liquidity: <span id="lD"></span></p>
 </div>
 
-<iframe src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=D&theme=dark"
-width="100%" height="200"></iframe>
+<div id="chart_d1" class="chart"></div>
 
 <ul id="d1History"></ul>
 <p id="d1Stats" class="stat"></p>
@@ -134,7 +134,45 @@ width="100%" height="200"></iframe>
 </div>
 </div>
 
+<!-- 🔥 TRADINGVIEW -->
+<script src="https://s3.tradingview.com/tv.js"></script>
+
 <script>
+
+// 🔥 CHART INIT
+function loadCharts(){
+
+new TradingView.widget({
+  "container_id": "chart_h1",
+  "width": "100%",
+  "height": 200,
+  "symbol": "OANDA:XAUUSD",
+  "interval": "60",
+  "theme": "dark",
+  "style": "1"
+});
+
+new TradingView.widget({
+  "container_id": "chart_h4",
+  "width": "100%",
+  "height": 200,
+  "symbol": "OANDA:XAUUSD",
+  "interval": "240",
+  "theme": "dark",
+  "style": "1"
+});
+
+new TradingView.widget({
+  "container_id": "chart_d1",
+  "width": "100%",
+  "height": 200,
+  "symbol": "OANDA:XAUUSD",
+  "interval": "D",
+  "theme": "dark",
+  "style": "1"
+});
+
+}
 
 async function load(){
 
@@ -148,12 +186,11 @@ el.innerText = val
 el.className = val=="BUY"?"buy":val=="SELL"?"sell":""
 }
 
-// SIGNAL
 set(h1,s.h1)
 set(h4,s.h4)
 set(d1,s.d1)
 
-// 🔥 SMC DATA
+// 🔥 SMC
 b1.innerText = s.breakout_h1
 b4.innerText = s.breakout_h4
 bD.innerText = s.breakout_d1
@@ -165,12 +202,17 @@ lD.innerText = s.liquidity_d1
 res.innerText = s.resistance
 sup.innerText = s.support
 
-// SAVE HISTORY
+// 🔥 NEW SMC PRO
+bos4.innerText = s.bos_h4
+ob4.innerText = s.ob_h4
+fvg4.innerText = s.fvg_h4
+
+// SAVE
 await fetch("/save",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tf:"H1",signal:s.h1,entry:s.price})})
 await fetch("/save",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tf:"H4",signal:s.h4,entry:s.price})})
 await fetch("/save",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tf:"D1",signal:s.d1,entry:s.price})})
 
-// HISTORY LOAD
+// HISTORY
 let h = await fetch("/history").then(r=>r.json())
 
 function render(tf){
@@ -191,7 +233,8 @@ d1Stats.innerText=`✔ ${stats.D1.win} | ❌ ${stats.D1.loss}`
 
 }
 
-// 🔁 UPDATE
+// INIT
+loadCharts()
 setInterval(load,60000)
 load()
 
