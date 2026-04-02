@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>SCALPING AI</title>
+
+<style>
+body{background:#020617;color:white;font-family:Segoe UI}
+.container{padding:20px}
+.card{background:#111;padding:15px;margin-bottom:15px;border-radius:10px}
+.buy{color:#22c55e}
+.sell{color:#ef4444}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>⚡ SCALPING (M1 / M5)</h2>
+
+<div class="card">
+<h3>M1 Signal</h3>
+<p id="m1"></p>
+</div>
+
+<div class="card">
+<h3>M5 Signal</h3>
+<p id="m5"></p>
+
+<p>Entry: <span id="entry"></span></p>
+<p>TP: <span id="tp"></span></p>
+<p>SL: <span id="sl"></span></p>
+</div>
+
+<div class="card">
+<div id="chart"></div>
+</div>
+
+<ul id="history"></ul>
+<p id="stats"></p>
+
+</div>
+
+<script src="https://s3.tradingview.com/tv.js"></script>
+
+<script>
+
+new TradingView.widget({
+container_id:"chart",
+width:"100%",
+height:300,
+symbol:"OANDA:XAUUSD",
+interval:"5",
+theme:"dark"
+})
+
+async function load(){
+
+let s = await fetch("/signal").then(r=>r.json())
+
+m1.innerText = s.scalp_m1
+m5.innerText = s.scalp_m5
+
+entry.innerText = s.scalp_entry
+tp.innerText = s.scalp_tp
+sl.innerText = s.scalp_sl
+
+m1.className = s.scalp_m1=="BUY"?"buy":"sell"
+m5.className = s.scalp_m5=="BUY"?"buy":"sell"
+
+// SAVE
+await fetch("/save",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+tf:"SCALP",
+signal:s.scalp_m5,
+entry:s.scalp_entry
+})
+})
+
+// HISTORY
+let h = await fetch("/history").then(r=>r.json())
+
+let f = h.filter(x=>x.tf=="SCALP")
+
+history.innerHTML = f.slice(0,10)
+.map(x=>`<li>${x.signal} ${x.result=="WIN"?"✔":"❌"}</li>`).join("")
+
+let win = f.filter(x=>x.result=="WIN").length
+let loss = f.filter(x=>x.result=="LOSS").length
+
+stats.innerText = `✔ ${win} | ❌ ${loss}`
+
+}
+
+setInterval(load,10000)
+load()
+
+</script>
+
+</body>
+</html>
