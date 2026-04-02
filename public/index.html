@@ -2,270 +2,288 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<title>🚀 GOLD AI PRO - Ultimate Trading Dashboard</title>
+<title>🚀 GOLD AI PRO v2.0 - Premium Trading Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
     :root {
         --gold: #fbbf24;
+        --gold-dark: #d97706;
         --blue: #38bdf8;
         --green: #22c55e;
-        --red: #ef4444;
         --dark: #020617;
-        --card-bg: #0f172a;
+        --card: #0f172a;
     }
     
-    * { margin:0; padding:0; box-sizing:border-box; }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
     
     body {
-        background: linear-gradient(135deg, #020617 0%, #0a1428 100%);
+        background: linear-gradient(135deg, #020617 0%, #0a1428 50%, #020617 100%);
         color: white;
         font-family: 'Segoe UI', system-ui, sans-serif;
         min-height: 100vh;
         overflow-x: hidden;
+        position: relative;
     }
     
+    /* Header */
     .header {
-        background: rgba(15, 23, 42, 0.96);
-        backdrop-filter: blur(16px);
-        padding: 22px 50px;
+        background: rgba(15, 23, 42, 0.98);
+        backdrop-filter: blur(20px);
+        padding: 24px 60px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         position: sticky;
         top: 0;
         z-index: 1000;
-        border-bottom: 1px solid rgba(251, 191, 36, 0.25);
+        border-bottom: 1px solid rgba(251, 191, 36, 0.3);
     }
     
     .logo {
-        font-size: 2.4em;
+        font-size: 2.6em;
         font-weight: 900;
+        letter-spacing: -2px;
         background: linear-gradient(90deg, #fbbf24, #f59e0b, #e0f2fe);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 15px;
     }
     
     .live {
         background: linear-gradient(90deg, #22c55e, #86efac);
         color: #020617;
-        padding: 10px 26px;
+        padding: 12px 32px;
         border-radius: 50px;
-        font-weight: bold;
+        font-weight: 700;
+        font-size: 1.2em;
+        box-shadow: 0 0 35px rgba(34, 197, 94, 0.7);
+        animation: livePulse 2.5s infinite;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    @keyframes livePulse {
+        0%, 100% { box-shadow: 0 0 35px rgba(34, 197, 94, 0.7); }
+        50% { box-shadow: 0 0 50px rgba(34, 197, 94, 1); }
+    }
+    
+    .time {
+        color: #94a3b8;
         font-size: 1.15em;
-        box-shadow: 0 0 30px rgba(34, 197, 94, 0.6);
-        animation: pulse 2.2s infinite;
     }
     
-    @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.88; }
-    }
-    
+    /* Main Content */
     .main {
-        max-width: 1480px;
-        margin: 50px auto;
-        padding: 0 40px;
+        max-width: 1520px;
+        margin: 60px auto;
+        padding: 0 50px;
     }
     
     h1 {
         text-align: center;
-        font-size: 3.4em;
+        font-size: 3.8em;
         font-weight: 900;
-        margin-bottom: 8px;
-        background: linear-gradient(90deg, #fbbf24, #e0f2fe);
+        margin-bottom: 12px;
+        background: linear-gradient(90deg, #fbbf24, #bae6fd, #fbbf24);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+        letter-spacing: -1px;
     }
     
     .subtitle {
         text-align: center;
-        color: #94a3b8;
-        font-size: 1.45em;
-        margin-bottom: 50px;
+        color: #cbd5e1;
+        font-size: 1.5em;
+        margin-bottom: 60px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
     }
     
+    /* Live Price */
     .price-ticker {
-        background: rgba(15, 23, 42, 0.85);
-        padding: 16px 40px;
+        background: linear-gradient(90deg, rgba(15,23,42,0.95), rgba(30,41,59,0.95));
+        border: 2px solid var(--gold);
         border-radius: 9999px;
-        display: inline-flex;
+        padding: 18px 50px;
+        display: flex;
         align-items: center;
-        gap: 20px;
-        font-size: 1.55em;
-        margin: 0 auto 50px;
-        border: 2px solid rgba(251, 191, 36, 0.3);
-        box-shadow: 0 0 25px rgba(251, 191, 36, 0.2);
+        justify-content: center;
+        gap: 30px;
+        font-size: 1.75em;
+        margin: 0 auto 70px;
+        box-shadow: 0 15px 40px rgba(251, 191, 36, 0.25);
+        max-width: 620px;
     }
     
+    /* Grid */
     .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-        gap: 32px;
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        gap: 35px;
     }
     
     .card {
-        background: var(--card-bg);
-        border-radius: 28px;
-        padding: 34px 28px;
-        transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        background: var(--card);
+        border-radius: 32px;
+        padding: 38px 32px;
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         position: relative;
         overflow: hidden;
-        border: 1px solid rgba(251, 191, 36, 0.18);
+        border: 1px solid rgba(251, 191, 36, 0.2);
         cursor: pointer;
     }
     
     .card::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 5px;
-        background: linear-gradient(90deg, var(--gold), #60a5fa, var(--green));
-        transform: scaleX(0);
-        transition: transform 0.5s;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(251,191,36,0.08), transparent);
+        opacity: 0;
+        transition: opacity 0.4s;
     }
     
     .card:hover {
-        transform: translateY(-15px) scale(1.04);
-        box-shadow: 0 30px 60px -15px rgba(251, 191, 36, 0.35);
+        transform: translateY(-18px) scale(1.06);
+        box-shadow: 0 35px 70px -15px rgba(251, 191, 36, 0.4);
         border-color: var(--gold);
     }
     
     .card:hover::before {
-        transform: scaleX(1);
+        opacity: 1;
     }
     
     .card-icon {
-        font-size: 4.2em;
-        margin-bottom: 22px;
-        transition: all 0.4s;
+        font-size: 4.8em;
+        margin-bottom: 24px;
+        display: block;
+        transition: transform 0.6s ease;
     }
     
     .card:hover .card-icon {
-        transform: scale(1.18) rotate(10deg);
+        transform: scale(1.25) rotate(12deg);
     }
     
     .card h3 {
-        font-size: 1.95em;
-        margin-bottom: 14px;
+        font-size: 2.1em;
+        margin-bottom: 16px;
         color: var(--gold);
+        font-weight: 700;
     }
     
     .card p {
         color: #cbd5e1;
-        line-height: 1.65;
-        font-size: 1.08em;
+        line-height: 1.7;
+        font-size: 1.12em;
     }
     
-    .status {
+    .badge {
         position: absolute;
         top: 28px;
         right: 28px;
-        font-size: 0.95em;
-        padding: 7px 18px;
-        border-radius: 9999px;
-        font-weight: 700;
         background: rgba(34, 197, 94, 0.25);
         color: #22c55e;
+        padding: 6px 20px;
+        border-radius: 9999px;
+        font-size: 0.95em;
+        font-weight: 700;
     }
     
+    /* Footer */
     .footer {
         text-align: center;
-        padding: 70px 20px 50px;
+        padding: 80px 20px 60px;
         color: #64748b;
-        font-size: 1.15em;
+        font-size: 1.2em;
+        line-height: 1.8;
     }
     
+    /* Particles Background */
     .particles {
         position: fixed;
         top: 0; left: 0;
         width: 100%; height: 100%;
         pointer-events: none;
         z-index: -1;
-        opacity: 0.12;
+        opacity: 0.18;
     }
 </style>
 </head>
 <body>
 
 <div class="header">
-    <div class="logo">💰 GOLD AI PRO</div>
-    <div class="live">🟢 LIVE MARKET • XAUUSD</div>
-    <div style="color:#94a3b8; font-size:1.15em;">
-        Tashkent • <span id="currentTime"></span>
-    </div>
+    <div class="logo">💎 GOLD AI PRO</div>
+    <div class="live">🟢 LIVE • XAUUSD MARKET</div>
+    <div class="time" id="currentTime"></div>
 </div>
 
 <div class="main">
     <h1>GOLD AI PRO DASHBOARD</h1>
-    <p class="subtitle">Professional strategiyalar to‘plami — Trend, Scalping, Smart Money va AI bashoratlari</p>
+    <p class="subtitle">Premium savdo strategiyalari • Real vaqt rejimida • Smart Money, Trend, Scalping va AI bashoratlari</p>
     
     <div class="price-ticker">
-        <span style="color:#fbbf24; font-weight:600;">XAUUSD</span>
-        <span id="livePrice" style="font-weight:bold; color:#22c55e;">4685.75</span>
-        <span id="priceChange" style="color:#22c55e;">+22.40 (+0.48%)</span>
+        <span style="color:#fbbf24; font-weight:700;">XAUUSD</span>
+        <span id="livePrice" style="font-weight:bold; color:#22c55e;">4687.35</span>
+        <span id="priceChange" style="color:#22c55e; font-size:1.1em;">+24.60 (+0.53%)</span>
     </div>
 
     <div class="grid">
         
-        <!-- Trend Strategy -->
         <div class="card" onclick="window.location.href='trend.html'">
             <span class="card-icon">📈</span>
             <h3>Trend Strategy</h3>
-            <p>H1 • H4 • D1 timeframe’da kuchli trend tahlili. BOS, Order Block va Liquidity bilan birgalikda aniq signallar.</p>
-            <div class="status">RECOMMENDED</div>
+            <p>H1, H4 va D1 timeframe’da kuchli trend tahlili. BOS, Order Block va Liquidity bilan birgalikda yuqori aniqlikdagi signallar.</p>
+            <div class="badge">ENG YAXSHI</div>
         </div>
 
-        <!-- Scalping Strategy -->
         <div class="card" onclick="window.location.href='scalping.html'">
             <span class="card-icon">⚡</span>
             <h3>Scalping AI</h3>
-            <p>M1 va M5 da tezkor scalping. EMA + RSI asosida real vaqt grafikda chiziladigan Entry, TP, SL.</p>
+            <p>M1 va M5 da tezkor scalping. EMA + RSI asosida real vaqt grafikda chiziladigan Entry, TP va SL.</p>
         </div>
 
-        <!-- Smart Money Concepts -->
         <div class="card" onclick="window.location.href='smartmoney.html'">
             <span class="card-icon">🧠</span>
             <h3>Smart Money Concepts</h3>
-            <p>BOS, CHOCH, Order Blocks, Fair Value Gap, Liquidity Grab — institutsional savdo uslubi.</p>
+            <p>BOS, CHOCH, Order Blocks, Fair Value Gap va Liquidity Grab — professional institutsional savdo uslubi.</p>
         </div>
 
-        <!-- AI Price Prediction -->
         <div class="card" onclick="window.location.href='ai.html'">
             <span class="card-icon">🤖</span>
             <h3>AI Price Prediction</h3>
-            <p>Sun'iy intellekt asosidagi bashorat. 15 daqiqa, 1 soat, 4 soat, 24 soat va 7 kunlik prognozlar.</p>
+            <p>Sun'iy intellekt asosidagi aniq bashorat. 15 daqiqa, 1 soat, 4 soat, 24 soat va 7 kunlik prognozlar.</p>
         </div>
 
     </div>
 </div>
 
 <div class="footer">
-    © 2026 GOLD AI PRO • Barcha strategiyalar real vaqt rejimida ishlaydi • 
-    <strong style="color:#fbbf24;">Risk boshqaruvini doimiy ravishda qo‘llang!</strong><br>
-    Faqat o‘zingizning mablag‘ingiz bilan savdo qiling.
+    © 2026 GOLD AI PRO • Barcha ma'lumotlar real vaqt rejimida ishlaydi<br>
+    <strong style="color:#fbbf24;">Risk boshqaruvini unutmaslik — muvaffaqiyat kaliti!</strong>
 </div>
 
-<!-- Background particles -->
 <canvas id="particles" class="particles"></canvas>
 
 <script>
-// Live Price Simulation
-let price = 4685.75;
+// Live Price
+let price = 4687.35;
 function updateLivePrice() {
-    price += (Math.random() * 1.8 - 0.9);
+    price += (Math.random() * 2.2 - 1.1);
     document.getElementById("livePrice").textContent = price.toFixed(2);
     
-    const change = (Math.random() * 0.9 + 0.2).toFixed(2);
-    document.getElementById("priceChange").textContent = `+${change} (+0.${Math.floor(Math.random()*45 + 35)}%)`;
+    const changeVal = (Math.random() * 1.2 + 0.3).toFixed(2);
+    document.getElementById("priceChange").textContent = `+${changeVal} (+0.${Math.floor(Math.random()*6 + 45)}%)`;
 }
-setInterval(updateLivePrice, 3200);
+setInterval(updateLivePrice, 2800);
 
-// Real Time
+// Time
 function updateTime() {
     const now = new Date();
     document.getElementById("currentTime").textContent = now.toLocaleTimeString('uz-UZ', {
@@ -275,25 +293,25 @@ function updateTime() {
 setInterval(updateTime, 1000);
 updateTime();
 
-// Background Particles Effect
+// Particles Background
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
 
-function resizeCanvas() {
+function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
+resize();
+window.addEventListener('resize', resize);
 
-let particlesArray = [];
+let particles = [];
 class Particle {
     constructor() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2.8 + 1;
-        this.speedX = Math.random() * 0.7 - 0.35;
-        this.speedY = Math.random() * 0.7 - 0.35;
+        this.size = Math.random() * 3 + 1.2;
+        this.speedX = Math.random() * 0.8 - 0.4;
+        this.speedY = Math.random() * 0.8 - 0.4;
     }
     update() {
         this.x += this.speedX;
@@ -302,7 +320,7 @@ class Particle {
         if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
     }
     draw() {
-        ctx.fillStyle = "rgba(251, 191, 36, 0.75)";
+        ctx.fillStyle = "rgba(251, 191, 36, 0.85)";
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -310,31 +328,30 @@ class Particle {
 }
 
 function initParticles() {
-    particlesArray = [];
-    for (let i = 0; i < 95; i++) {
-        particlesArray.push(new Particle());
+    particles = [];
+    for (let i = 0; i < 110; i++) {
+        particles.push(new Particle());
     }
 }
 
-function animateParticles() {
+function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
-        particlesArray[i].draw();
+    for (let p of particles) {
+        p.update();
+        p.draw();
     }
-    requestAnimationFrame(animateParticles);
+    requestAnimationFrame(animate);
 }
 
 initParticles();
-animateParticles();
+animate();
 
-// Card click effect
-document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('mousedown', () => card.style.transform = 'scale(0.96)');
-    card.addEventListener('mouseup', () => card.style.transform = 'scale(1.04)');
+// Hover effect
+document.querySelectorAll('.card').forEach((card, index) => {
+    card.style.transitionDelay = `${index * 50}ms`;
 });
 
-console.log("%c🚀 GOLD AI PRO DASHBOARD yangilandi va yanada chiroyli bo‘ldi!", "color:#fbbf24; font-size:18px; font-weight:bold");
+console.log("%c✅ GOLD AI PRO v2.0 — Dizayn yangilandi va yanada premium bo‘ldi!", "color:#fbbf24; font-size:19px; font-weight:bold");
 </script>
 </body>
 </html>
