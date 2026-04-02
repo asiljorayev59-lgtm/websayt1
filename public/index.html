@@ -2,68 +2,353 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<title>AI TRADING DASHBOARD</title>
-
+<title>🚀 GOLD AI PRO DASHBOARD - Ultimate Trading Hub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-body{
-background:#020617;
-color:white;
-font-family:Segoe UI;
-text-align:center;
-}
-
-.container{padding:30px}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
-max-width:600px;
-margin:auto;
-}
-
-.card{
-background:#111;
-padding:20px;
-border-radius:12px;
-cursor:pointer;
-transition:0.3s;
-}
-
-.card:hover{
-transform:scale(1.05);
-background:#1e293b;
-}
+    :root {
+        --gold: #fbbf24;
+        --blue: #38bdf8;
+        --green: #22c55e;
+        --red: #ef4444;
+        --dark: #020617;
+        --card: #0f172a;
+    }
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        background: linear-gradient(135deg, #020617 0%, #0a1428 100%);
+        color: white;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+    
+    .header {
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(12px);
+        padding: 25px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+    }
+    
+    .logo {
+        font-size: 2.2em;
+        font-weight: 800;
+        background: linear-gradient(90deg, #fbbf24, #f59e0b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .live {
+        background: linear-gradient(90deg, #22c55e, #86efac);
+        color: #020617;
+        padding: 10px 24px;
+        border-radius: 50px;
+        font-weight: bold;
+        font-size: 1.1em;
+        box-shadow: 0 0 25px rgba(34, 197, 94, 0.5);
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.85; }
+    }
+    
+    .main {
+        max-width: 1480px;
+        margin: 40px auto;
+        padding: 0 30px;
+    }
+    
+    h1 {
+        text-align: center;
+        font-size: 3.2em;
+        margin-bottom: 12px;
+        background: linear-gradient(90deg, #fbbf24, #e0f2fe);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 900;
+    }
+    
+    .subtitle {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 1.35em;
+        margin-bottom: 50px;
+    }
+    
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        gap: 28px;
+    }
+    
+    .card {
+        background: var(--card);
+        border-radius: 24px;
+        padding: 32px 28px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(251, 191, 36, 0.15);
+        cursor: pointer;
+    }
+    
+    .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--gold), #60a5fa);
+        transform: scaleX(0);
+        transition: transform 0.4s;
+    }
+    
+    .card:hover {
+        transform: translateY(-12px) scale(1.03);
+        box-shadow: 0 25px 50px -12px rgba(251, 191, 36, 0.25);
+        border-color: rgba(251, 191, 36, 0.4);
+    }
+    
+    .card:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .card-icon {
+        font-size: 3.8em;
+        margin-bottom: 20px;
+        display: block;
+        transition: transform 0.4s;
+    }
+    
+    .card:hover .card-icon {
+        transform: scale(1.15) rotate(8deg);
+    }
+    
+    .card h3 {
+        font-size: 1.85em;
+        margin-bottom: 12px;
+        color: var(--gold);
+    }
+    
+    .card p {
+        color: #94a3b8;
+        line-height: 1.6;
+        font-size: 1.05em;
+    }
+    
+    .status {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        font-size: 0.95em;
+        padding: 6px 14px;
+        border-radius: 9999px;
+        font-weight: 600;
+    }
+    
+    .gold-status { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+    
+    .footer {
+        text-align: center;
+        padding: 60px 20px 40px;
+        color: #64748b;
+        font-size: 1.05em;
+    }
+    
+    .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+        opacity: 0.15;
+    }
+    
+    .price-ticker {
+        background: rgba(15, 23, 42, 0.8);
+        padding: 12px 30px;
+        border-radius: 9999px;
+        display: inline-flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 1.3em;
+        margin: 20px auto;
+        border: 1px solid rgba(251, 191, 36, 0.3);
+    }
 </style>
 </head>
-
 <body>
 
-<div class="container">
-
-<h1>🚀 AI TRADING SYSTEM</h1>
-
-<div class="grid">
-
-<a href="/trend.html" class="card">
-📈 Trend Strategy
-</a>
-
-<a href="/scalping.html" class="card">
-⚡ Scalping Strategy
-</a>
-
-<a href="/smartmoney.html" class="card">
-🧠 Smart Money
-</a>
-
-<a href="/ai.html" class="card">
-🤖 AI Prediction
-</a>
-
+<div class="header">
+    <div class="logo">
+        💰 GOLD AI PRO
+    </div>
+    <div class="live">🟢 LIVE MARKET • XAUUSD</div>
+    <div style="color:#64748b; font-size:1.1em;">
+        Tashkent • <span id="currentTime"></span>
+    </div>
 </div>
 
+<div class="main">
+    <h1>ULTIMATE AI TRADING DASHBOARD</h1>
+    <p class="subtitle">Professional Gold Trading Strategies — Trend, Scalping, SMC va AI bashoratlari</p>
+    
+    <div class="price-ticker">
+        <span style="color:#fbbf24;">XAUUSD</span>
+        <span id="livePrice" style="font-weight:bold; color:#22c55e;">4682.75</span>
+        <span id="priceChange" style="color:#22c55e; font-size:0.95em;">+18.40 (+0.39%)</span>
+    </div>
+
+    <div class="grid">
+        
+        <!-- Trend Strategy -->
+        <div class="card" onclick="window.location.href='trend.html'">
+            <span class="card-icon">📈</span>
+            <h3>Trend Strategy</h3>
+            <p>H1 • H4 • D1 timeframe bo‘yicha kuchli trend tahlili. BOS, Order Block va Liquidity bilan birgalikda.</p>
+            <div class="status gold-status">RECOMMENDED</div>
+        </div>
+
+        <!-- Scalping Strategy -->
+        <div class="card" onclick="window.location.href='scalping.html'">
+            <span class="card-icon">⚡</span>
+            <h3>Scalping AI</h3>
+            <p>M1 va M5 da tezkor scalping. EMA crossover + RSI + real vaqt grafikda chiziladigan Entry/TP/SL.</p>
+        </div>
+
+        <!-- Smart Money (SMC/ICT) -->
+        <div class="card" onclick="window.location.href='smartmoney.html'">
+            <span class="card-icon">🧠</span>
+            <h3>Smart Money Concepts</h3>
+            <p>BOS, CHOCH, Order Blocks, Fair Value Gap, Liquidity Grab — professional institutional uslubi.</p>
+        </div>
+
+        <!-- AI Prediction -->
+        <div class="card" onclick="window.location.href='ai.html'">
+            <span class="card-icon">🤖</span>
+            <h3>AI Price Prediction</h3>
+            <p>Sun'iy intellekt asosidagi narx bashorati. 15 daqiqa, 1 soat va 4 soatlik prognozlar.</p>
+        </div>
+
+    </div>
 </div>
 
+<div class="footer">
+    © 2026 GOLD AI PRO • Barcha strategiyalar real vaqt rejimida ishlaydi • 
+    <strong style="color:#fbbf24;">Risk boshqaruvini unutmang!</strong><br>
+    Faqat o‘zingizning kapitalingiz bilan savdo qiling.
+</div>
+
+<!-- Background particles effect -->
+<canvas id="particles" class="particles"></canvas>
+
+<script>
+// Live price simulation
+let price = 4682.75;
+function updateLivePrice() {
+    price += (Math.random() * 1.2 - 0.6);
+    document.getElementById("livePrice").textContent = price.toFixed(2);
+    
+    const change = (Math.random() * 0.8 + 0.1).toFixed(2);
+    const changeEl = document.getElementById("priceChange");
+    changeEl.textContent = `+${change} (+0.${Math.floor(Math.random()*45 + 25)}%)`;
+    changeEl.style.color = "#22c55e";
+}
+setInterval(updateLivePrice, 2800);
+
+// Real time
+function updateTime() {
+    const now = new Date();
+    document.getElementById("currentTime").textContent = now.toLocaleTimeString('uz-UZ', {
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+// Background subtle particles
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+let particlesArray = [];
+class Particle {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2.5 + 0.8;
+        this.speedX = Math.random() * 0.6 - 0.3;
+        this.speedY = Math.random() * 0.6 - 0.3;
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+    }
+    draw() {
+        ctx.fillStyle = "rgba(251, 191, 36, 0.6)";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+function initParticles() {
+    particlesArray = [];
+    for (let i = 0; i < 80; i++) {
+        particlesArray.push(new Particle());
+    }
+}
+
+function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+        particlesArray[i].draw();
+    }
+    requestAnimationFrame(animateParticles);
+}
+
+initParticles();
+animateParticles();
+
+// Click effect on cards
+document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mousedown', () => {
+        card.style.transform = 'scale(0.96)';
+    });
+    card.addEventListener('mouseup', () => {
+        card.style.transform = 'scale(1.03)';
+    });
+});
+
+console.log("%c🚀 GOLD AI PRO DASHBOARD — Modern va professional dizayn bilan ishga tushdi!", "color:#fbbf24; font-size:18px; font-weight:bold");
+</script>
 </body>
 </html>
