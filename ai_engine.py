@@ -2,8 +2,12 @@ import requests
 import pandas as pd
 import json
 
+# 🔥 REAL GOLD PRICE
 price = requests.get("https://api.gold-api.com/price/XAU").json()["price"]
 
+# =========================
+# 📊 TREND ANALYSIS (H1/H4/D1)
+# =========================
 def analyze(tf):
 
     url = f"https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval={tf}&limit=200"
@@ -12,14 +16,11 @@ def analyze(tf):
     df = pd.DataFrame(data)
     df = df.iloc[:,0:6]
     df.columns = ["time","open","high","low","close","volume"]
-
     df = df.astype(float)
 
-    # EMA
     df["ema50"] = df["close"].ewm(span=50).mean()
     df["ema200"] = df["close"].ewm(span=200).mean()
 
-    # RSI
     delta = df["close"].diff()
     gain = delta.clip(lower=0)
     loss = -delta.clip(upper=0)
@@ -29,75 +30,96 @@ def analyze(tf):
 
     last = df.iloc[-1]
 
-    # 🔥 BOS
     bos = "NONE"
     if last["high"] > df["high"].iloc[-5]:
         bos = "BOS UP"
     elif last["low"] < df["low"].iloc[-5]:
         bos = "BOS DOWN"
 
-    # 🔥 ORDER BLOCK (eng kuchli candle)
-    ob_price = df["close"].iloc[-3]
-
-    # 🔥 LIQUIDITY ZONE
     resistance = df["high"].tail(20).max()
     support = df["low"].tail(20).min()
 
-    # 🔥 ENTRY LOGIC (AI)
     signal = "WAIT"
-    entry = price
-    tp = 0
-    sl = 0
 
-    if (
-        bos == "BOS UP" and
-        last["ema50"] > last["ema200"] and
-        last["rsi"] > 55
-    ):
+    if bos=="BOS UP" and last["ema50"]>last["ema200"] and last["rsi"]>55:
         signal = "BUY"
-        tp = entry + 50
-        sl = entry - 30
-
-    elif (
-        bos == "BOS DOWN" and
-        last["ema50"] < last["ema200"] and
-        last["rsi"] < 45
-    ):
+    elif bos=="BOS DOWN" and last["ema50"]<last["ema200"] and last["rsi"]<45:
         signal = "SELL"
-        tp = entry - 50
-        sl = entry + 30
 
-    return {
-        "signal": signal,
-        "bos": bos,
-        "ob": round(ob_price,2),
-        "res": round(resistance,2),
-        "sup": round(support,2),
-        "entry": round(entry,2),
-        "tp": round(tp,2),
-        "sl": round(sl,2)
-    }
+    return signal, bos, resistance, support
 
-h1 = analyze("1h")
-h4 = analyze("4h")
-d1 = analyze("1d")
+h1,_,_,_ = analyze("1h")
+h4,bos,res,sup = analyze("4h")
+d1,_,_,_ = analyze("1d")
 
+# =========================
+# ⚡ SCALPING (M1/M5)
+# =========================
+def scalp(tf):
+
+    url = f"https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval={tf}&limit=100"
+    data = requests.get(url).json()
+
+    df = pd.DataFrame(data)
+    df = df.iloc[:,0:6]
+    df.columns = ["time","open","high","low","close","volume"]
+    df = df.astype(float)
+
+    df["ema9"] = df["close"].ewm(span=9).mean()
+    df["ema21"] = df["close"].ewm(span=21).mean()
+
+    delta = df["close"].diff()
+    gain = delta.clip(lower=0)
+    loss = -delta.clip(upper=0)
+
+    rs = gain.rolling(14).mean() / loss.rolling(14).mean()
+    df["rsi"] = 100 - (100/(1+rs))
+
+    last = df.iloc[-1]
+    prev = df.iloc[-2]
+
+    signal = "WAIT"
+
+    if last["ema9"] > last["ema21"] and prev["ema9"] <= prev["ema21"] and last["rsi"] > 55:
+        signal = "BUY"
+    elif last["ema9"] < last["ema21"] and prev["ema9"] >= prev["ema21"] and last["rsi"] < 45:
+        signal = "SELL"
+
+    entry = price
+    tp = entry + 10 if signal=="BUY" else entry - 10
+    sl = entry - 7 if signal=="BUY" else entry + 7
+
+    return signal, entry, tp, sl
+
+m1,_,_,_ = scalp("1m")
+m5,entry,tp,sl = scalp("5m")
+
+# =========================
+# 💾 SAVE JSON
+# =========================
 signals = {
     "price": round(price,2),
 
-    "h1": h1["signal"],
-    "h4": h4["signal"],
-    "d1": d1["signal"],
+    "h1": h1,
+    "h4": h4,
+    "d1": d1,
 
-    "bos_h4": h4["bos"],
-    "ob_h4": h4["ob"],
-    "resistance": h4["res"],
-    "support": h4["sup"],
+    "bos_h4": bos,
+    "resistance": round(res,2),
+    "support": round(sup,2),
 
-    "entry": h4["entry"],
-    "tp": h4["tp"],
-    "sl": h4["sl"]
+    "entry": round(price,2),
+    "tp": round(price+50,2),
+    "sl": round(price-30,2),
+
+    "scalp_m1": m1,
+    "scalp_m5": m5,
+    "scalp_entry": round(entry,2),
+    "scalp_tp": round(tp,2),
+    "scalp_sl": round(sl,2)
 }
 
 with open("signals.json","w") as f:
     json.dump(signals,f,indent=2)
+
+print(signals)
