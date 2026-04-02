@@ -2,10 +2,9 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<title>PRO GOLD AI</title>
+<title>PRO GOLD AI ULTIMATE</title>
 
 <style>
-
 body{
 background:linear-gradient(135deg,#020617,#020c1b);
 color:white;
@@ -33,14 +32,9 @@ box-shadow:0 0 15px rgba(0,0,0,0.5);
 transition:0.3s;
 }
 
-.card:hover{
-transform:scale(1.02);
-}
+.card:hover{transform:scale(1.02)}
 
-h3{
-margin-top:0;
-color:#38bdf8;
-}
+h3{color:#38bdf8;margin-top:0}
 
 .buy{color:#22c55e;font-weight:bold}
 .sell{color:#ef4444;font-weight:bold}
@@ -48,18 +42,11 @@ color:#38bdf8;
 .info{
 font-size:13px;
 color:#94a3b8;
-margin-top:5px;
 }
 
-.stat{
-margin-top:10px;
-font-size:14px;
-}
+.stat{margin-top:10px}
 
-.chart{
-margin-top:10px;
-}
-
+.chart{margin-top:10px}
 </style>
 </head>
 
@@ -67,110 +54,91 @@ margin-top:10px;
 
 <div class="container">
 
-<h2>💰 GOLD PRICE: <span id="price"></span></h2>
+<h2>💰 GOLD: <span id="price"></span></h2>
 
 <div class="grid">
 
 <!-- H1 -->
 <div class="card">
 <h3>⚡ H1</h3>
-
 <p id="h1"></p>
-
-<div class="info">
-<p>Breakout: <span id="b1"></span></p>
-<p>Liquidity: <span id="l1"></span></p>
-</div>
 
 <div id="chart_h1" class="chart"></div>
 
 <ul id="h1History"></ul>
 <p id="h1Stats" class="stat"></p>
-
 </div>
 
 <!-- H4 -->
 <div class="card">
-<h3>🔥 H4 (BEST)</h3>
+<h3>🔥 H4 (MAIN)</h3>
 
 <p id="h4"></p>
 
 <div class="info">
-<p>Breakout: <span id="b4"></span></p>
-<p>Liquidity: <span id="l4"></span></p>
-<p>Resistance: <span id="res"></span></p>
-<p>Support: <span id="sup"></span></p>
-
 <p>BOS: <span id="bos4"></span></p>
-<p>Order Block: <span id="ob4"></span></p>
-<p>FVG: <span id="fvg4"></span></p>
+<p>Order Block: <span id="ob"></span></p>
+<p>Liquidity High: <span id="res"></span></p>
+<p>Liquidity Low: <span id="sup"></span></p>
+
+<p>Entry: <span id="entry"></span></p>
+<p>TP: <span id="tp"></span></p>
+<p>SL: <span id="sl"></span></p>
 </div>
 
 <div id="chart_h4" class="chart"></div>
 
 <ul id="h4History"></ul>
 <p id="h4Stats" class="stat"></p>
-
 </div>
 
 <!-- D1 -->
 <div class="card">
 <h3>📊 D1</h3>
-
 <p id="d1"></p>
-
-<div class="info">
-<p>Breakout: <span id="bD"></span></p>
-<p>Liquidity: <span id="lD"></span></p>
-</div>
 
 <div id="chart_d1" class="chart"></div>
 
 <ul id="d1History"></ul>
 <p id="d1Stats" class="stat"></p>
-
 </div>
 
 </div>
 </div>
 
-<!-- 🔥 TRADINGVIEW -->
+<!-- TradingView -->
 <script src="https://s3.tradingview.com/tv.js"></script>
 
 <script>
 
-// 🔥 CHART INIT
 function loadCharts(){
 
 new TradingView.widget({
-  "container_id": "chart_h1",
-  "width": "100%",
-  "height": 200,
-  "symbol": "OANDA:XAUUSD",
-  "interval": "60",
-  "theme": "dark",
-  "style": "1"
-});
+  container_id:"chart_h1",
+  width:"100%",
+  height:200,
+  symbol:"OANDA:XAUUSD",
+  interval:"60",
+  theme:"dark"
+})
 
 new TradingView.widget({
-  "container_id": "chart_h4",
-  "width": "100%",
-  "height": 200,
-  "symbol": "OANDA:XAUUSD",
-  "interval": "240",
-  "theme": "dark",
-  "style": "1"
-});
+  container_id:"chart_h4",
+  width:"100%",
+  height:200,
+  symbol:"OANDA:XAUUSD",
+  interval:"240",
+  theme:"dark"
+})
 
 new TradingView.widget({
-  "container_id": "chart_d1",
-  "width": "100%",
-  "height": 200,
-  "symbol": "OANDA:XAUUSD",
-  "interval": "D",
-  "theme": "dark",
-  "style": "1"
-});
+  container_id:"chart_d1",
+  width:"100%",
+  height:200,
+  symbol:"OANDA:XAUUSD",
+  interval:"D",
+  theme:"dark"
+})
 
 }
 
@@ -180,7 +148,6 @@ let s = await fetch("/signal").then(r=>r.json())
 
 price.innerText = s.price + " USD"
 
-// SIGNAL STYLE
 function set(el,val){
 el.innerText = val
 el.className = val=="BUY"?"buy":val=="SELL"?"sell":""
@@ -190,22 +157,16 @@ set(h1,s.h1)
 set(h4,s.h4)
 set(d1,s.d1)
 
-// 🔥 SMC
-b1.innerText = s.breakout_h1
-b4.innerText = s.breakout_h4
-bD.innerText = s.breakout_d1
-
-l1.innerText = s.liquidity_h1
-l4.innerText = s.liquidity_h4
-lD.innerText = s.liquidity_d1
-
+// 🔥 SMC DATA
+bos4.innerText = s.bos_h4
+ob.innerText = s.ob_h4
 res.innerText = s.resistance
 sup.innerText = s.support
 
-// 🔥 NEW SMC PRO
-bos4.innerText = s.bos_h4
-ob4.innerText = s.ob_h4
-fvg4.innerText = s.fvg_h4
+// 🔥 ENTRY SYSTEM
+entry.innerText = s.entry
+tp.innerText = s.tp
+sl.innerText = s.sl
 
 // SAVE
 await fetch("/save",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tf:"H1",signal:s.h1,entry:s.price})})
@@ -233,7 +194,6 @@ d1Stats.innerText=`✔ ${stats.D1.win} | ❌ ${stats.D1.loss}`
 
 }
 
-// INIT
 loadCharts()
 setInterval(load,60000)
 load()
@@ -242,3 +202,4 @@ load()
 
 </body>
 </html>
+
