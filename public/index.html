@@ -13,9 +13,9 @@
         --orange: #fb923c;
         --rose: #fb7185;
     }
-    
+   
     * { margin:0; padding:0; box-sizing:border-box; }
-    
+   
     body {
         background: linear-gradient(135deg, #020617 0%, #0a1428 100%);
         color: white;
@@ -23,7 +23,7 @@
         min-height: 100vh;
         position: relative;
     }
-    
+   
     .header {
         background: rgba(15,23,42,0.95);
         backdrop-filter: blur(16px);
@@ -36,14 +36,14 @@
         z-index: 1000;
         border-bottom: 1px solid rgba(251,191,36,0.25);
     }
-    
+   
     .logo { font-size: 2em; font-weight: 900; color: var(--gold); }
-    
+   
     .nav {
         display: flex;
         gap: 12px;
     }
-    
+   
     .nav a {
         color: #cbd5e1;
         text-decoration: none;
@@ -52,14 +52,14 @@
         font-size: 0.98em;
         transition: all 0.3s;
     }
-    
+   
     .nav a:hover, .nav a.active {
         background: rgba(251,191,36,0.2);
         color: var(--gold);
     }
-    
+   
     .main { padding: 30px 20px 80px; }
-    
+   
     h1 {
         text-align: center;
         font-size: 2.8em;
@@ -68,14 +68,14 @@
         -webkit-text-fill-color: transparent;
         margin-bottom: 10px;
     }
-    
+   
     .subtitle {
         text-align: center;
         color: #94a3b8;
         font-size: 1.3em;
         margin-bottom: 50px;
     }
-    
+   
     .price-ticker {
         background: rgba(15,23,42,0.9);
         border: 2px solid var(--gold);
@@ -86,17 +86,17 @@
         text-align: center;
         box-shadow: 0 10px 30px rgba(251,191,36,0.25);
     }
-    
+   
     .grid {
         display: grid;
         grid-template-columns: 1fr;
         gap: 22px;
     }
-    
+   
     @media (min-width: 768px) {
         .grid { grid-template-columns: repeat(2, 1fr); }
     }
-    
+   
     .card {
         background: #0f172a;
         border-radius: 24px;
@@ -105,23 +105,23 @@
         border: 1px solid rgba(251,191,36,0.15);
         cursor: pointer;
     }
-    
+   
     .card:hover {
         transform: translateY(-8px);
         box-shadow: 0 20px 35px rgba(251,191,36,0.25);
     }
-    
+   
     .card-icon {
         font-size: 3.8em;
         margin-bottom: 16px;
         transition: transform 0.5s;
     }
-    
+   
     .card:hover .card-icon { transform: scale(1.15); }
-    
+   
     .card h3 { font-size: 1.7em; margin-bottom: 10px; color: var(--gold); }
     .card p { color: #cbd5e1; font-size: 1.05em; line-height: 1.55; }
-    
+
     .footer {
         text-align: center;
         padding: 60px 20px;
@@ -131,19 +131,19 @@
 </style>
 </head>
 <body>
-
 <div class="header">
     <div class="logo">GOLD AI PRO</div>
     <div class="nav">
         <a href="index.html" class="active">Asosiy</a>
+        <a href="demo.html">Demo Hisob</a>
         <a href="risk.html">Risk</a>
     </div>
 </div>
 
 <div class="main">
     <h1>GOLD AI PRO</h1>
-    <p class="subtitle">Eng yaxshi savdo vositalari bir joyda</p>
-    
+    <p class="subtitle">Eng yaxshi savdo vositalari bir joyda • Professional AI Trading</p>
+   
     <div class="price-ticker">
         <span style="color:var(--gold);">XAUUSD</span>
         <span id="livePrice" style="font-size:2.2em; font-weight:800; color:#4ade80;">4689.65</span>
@@ -151,14 +151,53 @@
     </div>
 
     <div class="grid">
-        <div class="card" onclick="window.location.href='trend.html'"><span class="card-icon">📈</span><h3>Trend Strategy</h3><p>H1 • H4 • D1 trend tahlili</p></div>
-        <div class="card" onclick="window.location.href='scalping.html'"><span class="card-icon">⚡</span><h3>Scalping AI</h3><p>M1 va M5 tezkor savdo</p></div>
-        <div class="card" onclick="window.location.href='smartmoney.html'"><span class="card-icon">🧠</span><h3>Smart Money</h3><p>BOS, Order Block, Liquidity</p></div>
-        <div class="card" onclick="window.location.href='ai.html'"><span class="card-icon">🤖</span><h3>AI Prediction</h3><p>Bashoratlar 15 daqiqadan 7 kungacha</p></div>
-        <div class="card" onclick="window.location.href='sentiment.html'"><span class="card-icon">📊</span><h3>Market Sentiment</h3><p>Traderlarning umumiy fikri</p></div>
-        <div class="card" onclick="window.location.href='strength.html'"><span class="card-icon">🔥</span><h3>Signal Strength</h3><p>AI balli bilan kuchlilik</p></div>
-        <div class="card" onclick="window.location.href='history.html'"><span class="card-icon">📜</span><h3>Trade History</h3><p>Statistika va natijalar</p></div>
-        <div class="card" onclick="window.location.href='risk.html'"><span class="card-icon">🛡️</span><h3>Risk Boshqaruvi</h3><p>Balance, Risk %, Lot hisoblash</p></div>
+        <div class="card" onclick="window.location.href='trend.html'">
+            <span class="card-icon">📈</span>
+            <h3>Trend Strategy</h3>
+            <p>H1 • H4 • D1 trend tahlili</p>
+        </div>
+        <div class="card" onclick="window.location.href='scalping.html'">
+            <span class="card-icon">⚡</span>
+            <h3>Scalping AI</h3>
+            <p>M1 va M5 tezkor savdo</p>
+        </div>
+        <div class="card" onclick="window.location.href='smartmoney.html'">
+            <span class="card-icon">🧠</span>
+            <h3>Smart Money</h3>
+            <p>BOS, Order Block, Liquidity</p>
+        </div>
+        <div class="card" onclick="window.location.href='ai.html'">
+            <span class="card-icon">🤖</span>
+            <h3>AI Prediction</h3>
+            <p>Bashoratlar 15 daqiqadan 7 kungacha</p>
+        </div>
+        <div class="card" onclick="window.location.href='sentiment.html'">
+            <span class="card-icon">📊</span>
+            <h3>Market Sentiment</h3>
+            <p>Traderlarning umumiy fikri</p>
+        </div>
+        <div class="card" onclick="window.location.href='strength.html'">
+            <span class="card-icon">🔥</span>
+            <h3>Signal Strength</h3>
+            <p>AI balli bilan kuchlilik</p>
+        </div>
+        <div class="card" onclick="window.location.href='history.html'">
+            <span class="card-icon">📜</span>
+            <h3>Trade History</h3>
+            <p>Statistika va natijalar</p>
+        </div>
+        <div class="card" onclick="window.location.href='risk.html'">
+            <span class="card-icon">🛡️</span>
+            <h3>Risk Boshqaruvi</h3>
+            <p>Balance, Risk %, Lot hisoblash</p>
+        </div>
+        
+        <!-- YANGI QO‘SHILGAN KARTA -->
+        <div class="card" onclick="window.location.href='demo.html'">
+            <span class="card-icon">💰</span>
+            <h3>Demo Hisob</h3>
+            <p>AI avtomatik savdo • Real bozor simulyatsiyasi • 6 ta strategiya</p>
+        </div>
     </div>
 </div>
 
@@ -167,19 +206,16 @@
 </div>
 
 <script>
-// Live narx
+// Live narx simulyatsiyasi
 let price = 4689.65;
 setInterval(() => {
     price += (Math.random() * 3 - 1.5);
     document.getElementById("livePrice").textContent = price.toFixed(2);
-    document.getElementById("priceChange").textContent = `+${(Math.random()*1.8 + 0.3).toFixed(2)} (+0.${Math.floor(Math.random()*5 + 45)}%)`;
+    const change = (Math.random()*1.8 + 0.3).toFixed(2);
+    const percent = Math.floor(Math.random()*5 + 45);
+    document.getElementById("priceChange").textContent = `+${change} (+0.${percent}%)`;
+    document.getElementById("priceChange").style.color = "#4ade80";
 }, 3000);
-
-// Vaqt
-setInterval(() => {
-    const now = new Date();
-    document.getElementById("currentTime") ? document.getElementById("currentTime").textContent = now.toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'}) : null;
-}, 10000);
 </script>
 </body>
 </html>
