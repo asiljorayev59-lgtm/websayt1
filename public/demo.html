@@ -8,11 +8,14 @@
     :root {
         --gold: #fbbf24;
         --green: #4ade80;
+        --red: #fb7185;
         --cyan: #67e8f9;
+        --dark: #0f172a;
+        --card: #1e2937;
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-        background: #0a0f1c;
+        background: linear-gradient(135deg, #020617 0%, #0a1428 100%);
         color: white;
         font-family: 'Segoe UI', system-ui, sans-serif;
         min-height: 100vh;
@@ -20,14 +23,14 @@
     .header {
         background: rgba(15,23,42,0.98);
         backdrop-filter: blur(16px);
-        padding: 16px 24px;
+        padding: 18px 24px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         position: sticky; top: 0; z-index: 1000;
         border-bottom: 1px solid rgba(251,191,36,0.3);
     }
-    .logo { font-size: 2.1em; font-weight: 900; color: var(--gold); letter-spacing: -1px; }
+    .logo { font-size: 2.2em; font-weight: 900; color: var(--gold); }
     .nav a {
         color: #cbd5e1;
         text-decoration: none;
@@ -36,103 +39,122 @@
         font-size: 1.05em;
         transition: all 0.3s;
     }
-    .nav a:hover, .nav a.active {
-        background: rgba(251,191,36,0.25);
-        color: var(--gold);
-    }
+    .nav a:hover, .nav a.active { background: rgba(251,191,36,0.25); color: var(--gold); }
 
     .main { padding: 30px 24px 100px; }
-    h1 { text-align: center; font-size: 2.7em; color: var(--gold); margin-bottom: 8px; }
-    .subtitle { text-align: center; color: #94a3b8; font-size: 1.3em; margin-bottom: 20px; }
 
+    h1 { text-align: center; font-size: 2.8em; color: var(--gold); margin-bottom: 8px; }
+    .subtitle { text-align: center; color: #94a3b8; font-size: 1.35em; margin-bottom: 25px; }
+
+    /* Umumiy hisob */
     .account-box {
-        background: #111827;
+        background: var(--card);
         border: 2px solid var(--gold);
-        border-radius: 20px;
-        padding: 20px;
-        margin-bottom: 30px;
+        border-radius: 24px;
+        padding: 24px;
+        margin-bottom: 40px;
         text-align: center;
     }
-    .balance { font-size: 2.6em; font-weight: 800; color: var(--green); }
-    .equity { font-size: 1.3em; color: var(--cyan); }
+    .balance { font-size: 2.9em; font-weight: 800; color: var(--green); }
+    .equity { font-size: 1.35em; color: var(--cyan); margin-top: 8px; }
 
+    /* Narx ticker */
     .price-ticker {
         background: rgba(15,23,42,0.95);
         border: 2px solid var(--gold);
         border-radius: 9999px;
-        padding: 18px 32px;
-        margin: 0 auto 40px;
-        max-width: 460px;
+        padding: 20px 40px;
+        margin: 0 auto 45px;
+        max-width: 480px;
         text-align: center;
-        box-shadow: 0 0 30px rgba(251,191,36,0.3);
+        box-shadow: 0 10px 40px rgba(251,191,36,0.25);
     }
-    .price-ticker span:first-child { font-size: 1.1em; color: var(--gold); }
-    #livePrice { font-size: 2.8em; font-weight: 900; }
+    #livePrice { font-size: 3em; font-weight: 900; color: var(--green); }
 
+    /* Strategiya kartalari */
     .strategies {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 22px;
-        margin-bottom: 50px;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        gap: 24px;
+        margin-bottom: 60px;
     }
     .strat-card {
-        background: #111827;
+        background: var(--card);
         border-radius: 20px;
-        padding: 22px;
+        padding: 24px;
         border: 2px solid #334155;
         transition: all 0.4s;
-        position: relative;
     }
     .strat-card.active {
         border-color: var(--green);
-        box-shadow: 0 0 25px rgba(74,222,128,0.4);
+        box-shadow: 0 0 30px rgba(74,222,128,0.35);
     }
     .strat-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 14px;
+        margin-bottom: 16px;
     }
-    .strat-name { font-size: 1.45em; font-weight: 700; color: var(--gold); }
+    .strat-name { font-size: 1.5em; font-weight: 700; color: var(--gold); }
     .toggle {
-        width: 58px; height: 32px; background: #334155;
+        width: 62px; height: 34px; background: #475569;
         border-radius: 9999px; position: relative; cursor: pointer;
     }
-    .toggle.active { background: #4ade80; }
+    .toggle.active { background: var(--green); }
     .toggle::after {
-        content: ''; position: absolute; width: 26px; height: 26px;
+        content: ''; position: absolute; width: 28px; height: 28px;
         background: white; border-radius: 50%; top: 3px; left: 3px;
-        transition: 0.3s;
+        transition: 0.4s;
     }
-    .toggle.active::after { left: 29px; }
+    .toggle.active::after { left: 31px; }
 
-    .mini-info { font-size: 0.98em; color: #94a3b8; line-height: 1.6; }
-    .mini-info strong { color: white; }
-
+    /* Jadval dizayni — YAXSHILANGAN */
     table {
         width: 100%;
         border-collapse: collapse;
-        background: #111827;
-        border-radius: 16px;
+        background: var(--card);
+        border-radius: 20px;
         overflow: hidden;
-        margin-bottom: 60px;
-    }
-    th, td {
-        padding: 18px 16px;
-        text-align: left;
-        border-bottom: 1px solid #334155;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        margin-bottom: 70px;
     }
     th {
         background: #1e2937;
         color: var(--gold);
+        padding: 20px 16px;
+        text-align: left;
         font-weight: 600;
+        font-size: 1.05em;
     }
-    .profit { color: #4ade80; }
-    .loss { color: #fb7185; }
+    td {
+        padding: 18px 16px;
+        border-bottom: 1px solid #334155;
+        font-size: 1.02em;
+    }
+    tr:hover {
+        background: rgba(251,191,36,0.08);
+    }
+    .profit { color: var(--green); font-weight: 600; }
+    .loss { color: var(--red); font-weight: 600; }
+
+    .action-btn {
+        background: var(--red);
+        color: white;
+        border: none;
+        padding: 8px 18px;
+        border-radius: 9999px;
+        font-size: 0.95em;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .action-btn:hover {
+        background: #e11d48;
+        transform: scale(1.05);
+    }
 
     .footer {
         text-align: center;
-        padding: 40px 20px;
+        padding: 50px 20px;
         color: #64748b;
         font-size: 1.05em;
     }
@@ -151,29 +173,26 @@
 
 <div class="main">
     <h1>Demo Hisob</h1>
-    <p class="subtitle">6 ta AI strategiyasi • Har biri alohida demo hisob bilan boshqariladi</p>
+    <p class="subtitle">Har bir strategiya alohida balans bilan • To‘liq nazorat</p>
 
     <!-- Umumiy hisob -->
     <div class="account-box">
-        <div style="font-size:1.1em;color:#94a3b8;margin-bottom:8px;">Umumiy Demo Hisob</div>
+        <div style="font-size:1.15em; color:#94a3b8; margin-bottom:10px;">Umumiy Demo Hisob</div>
         <div id="totalBalance" class="balance">$50,000.00</div>
         <div id="totalEquity" class="equity">Equity: $48,733.04 • Floating P&L: <span id="totalFloat" style="color:#fb7185;">-$1,266.96</span></div>
-        <div style="margin-top:12px;font-size:0.95em;color:#64748b;">
-            Boshlang‘ich balans: $50,000 • 6 strategiya
-        </div>
     </div>
 
     <!-- Narx -->
     <div class="price-ticker">
-        <span>XAUUSD</span><br>
-        <span id="livePrice" style="color:#4ade80;">4754.24</span>
-        <span id="priceChange" style="color:#4ade80;">+0.85 (+0.02%)</span>
+        <span style="color:var(--gold); font-size:1.2em;">XAUUSD</span><br>
+        <span id="livePrice">4754.24</span>
+        <span id="priceChange" style="color:#4ade80; font-size:1.1em;">+0.85 (+0.02%)</span>
     </div>
 
-    <h2 style="text-align:center;margin:30px 0 20px;color:var(--gold);">🤖 6 ta AI Strategiyasi (Har biri alohida hisob)</h2>
+    <h2 style="text-align:center; margin:40px 0 25px; color:var(--gold);">🤖 6 ta AI Strategiyasi (Alohida balans)</h2>
     <div class="strategies" id="strategiesContainer"></div>
 
-    <h2 style="margin:40px 0 15px;text-align:center;">Ochilgan pozitsiyalar</h2>
+    <h2 style="margin:50px 0 20px; text-align:center; color:var(--gold);">📍 Ochilgan Pozitsiyalar</h2>
     <table id="positionsTable">
         <thead>
             <tr>
@@ -182,14 +201,16 @@
                 <th>Kirish narxi</th>
                 <th>Lot</th>
                 <th>Joriy narx</th>
-                <th>P&L</th>
+                <th>P&L ($)</th>
+                <th>P&L (%)</th>
+                <th>Vaqt</th>
                 <th>Amal</th>
             </tr>
         </thead>
         <tbody id="positionsBody"></tbody>
     </table>
 
-    <h2 style="margin:50px 0 15px;text-align:center;">Savdo Tarixi (Yopilgan bitimlar)</h2>
+    <h2 style="margin:60px 0 20px; text-align:center; color:var(--gold);">📜 Savdo Tarixi (Yopilgan bitimlar)</h2>
     <table id="historyTable">
         <thead>
             <tr>
@@ -198,26 +219,27 @@
                 <th>Kirish</th>
                 <th>Chiqish</th>
                 <th>Lot</th>
-                <th>P&L</th>
+                <th>P&L ($)</th>
+                <th>P&L (%)</th>
                 <th>Vaqt</th>
             </tr>
         </thead>
         <tbody id="historyBody"></tbody>
     </table>
 
-    <div style="text-align:center;margin-top:40px;">
-        <button onclick="resetAllDemo()" style="background:#fb7185;color:white;border:none;padding:16px 36px;border-radius:9999px;font-size:1.1em;cursor:pointer;">Butun hisobni qayta tiklash</button>
-        <button onclick="startAllAI()" style="background:#4ade80;color:#111827;border:none;padding:16px 36px;border-radius:9999px;font-size:1.1em;margin-left:15px;cursor:pointer;">Barcha AI ni ishga tushirish</button>
-        <button onclick="stopAllAI()" style="background:#64748b;color:white;border:none;padding:16px 36px;border-radius:9999px;font-size:1.1em;margin-left:15px;cursor:pointer;">Barcha AI ni to‘xtatish</button>
+    <div style="text-align:center; margin-top:50px;">
+        <button onclick="resetAllDemo()" style="background:#fb7185; color:white; border:none; padding:16px 40px; border-radius:9999px; font-size:1.1em; cursor:pointer;">Hisobni to‘liq qayta tiklash</button>
+        <button onclick="startAllAI()" style="background:#4ade80; color:#111827; border:none; padding:16px 40px; border-radius:9999px; font-size:1.1em; margin-left:15px; cursor:pointer;">Barcha AI ni yoqish</button>
+        <button onclick="stopAllAI()" style="background:#64748b; color:white; border:none; padding:16px 40px; border-radius:9999px; font-size:1.1em; margin-left:15px; cursor:pointer;">Barcha AI ni o‘chirish</button>
     </div>
 </div>
 
 <div class="footer">
-    © 2026 GOLD AI PRO • Har bir strategiya alohida demo hisob bilan ishlaydi • Ma'lumotlar brauzer xotirasida saqlanadi
+    © 2026 GOLD AI PRO • Har bir strategiya alohida boshqariladi • Ma'lumotlar brauzer xotirasida saqlanadi
 </div>
 
 <script>
-// ====================== ASOSIY MA'LUMOTLAR ======================
+// ====================== MA'LUMOTLAR ======================
 let price = 4754.24;
 let lastPrices = [price, price, price];
 
@@ -234,8 +256,7 @@ let closedTrades = [];
 
 // ====================== LOCALSTORAGE ======================
 function saveToLocalStorage() {
-    const data = { strategies, closedTrades };
-    localStorage.setItem('goldAIProDemo', JSON.stringify(data));
+    localStorage.setItem('goldAIProDemo', JSON.stringify({strategies, closedTrades}));
 }
 
 function loadFromLocalStorage() {
@@ -243,12 +264,12 @@ function loadFromLocalStorage() {
     if (saved) {
         const data = JSON.parse(saved);
         strategies = data.strategies || strategies;
-        closedTrades = data.closedTrades || [];
+        closedTrades = data.closedTrades || closedTrades;
     }
 }
 
-// ====================== HISOBLARNI HISOBLASH ======================
-function calculateStrategyFloating(strat) {
+// ====================== HISOB HISOBLASH ======================
+function calculateFloating(strat) {
     let total = 0;
     strat.positions.forEach(pos => {
         const diff = pos.type === 'buy' ? (price - pos.entry) : (pos.entry - price);
@@ -261,15 +282,15 @@ function updateTotal() {
     let totalEquity = 0;
     let totalFloat = 0;
     strategies.forEach(strat => {
-        const float = calculateStrategyFloating(strat);
+        const float = calculateFloating(strat);
         totalEquity += strat.balance + float;
         totalFloat += float;
     });
 
     document.getElementById("totalBalance").textContent = '$' + totalEquity.toFixed(2);
     document.getElementById("totalEquity").innerHTML = `
-        Equity: <span style="color:#67e8f9">$${totalEquity.toFixed(2)}</span> • 
-        Floating P&L: <span id="totalFloat" style="color:${totalFloat>=0?'#4ade80':'#fb7185'}">$${totalFloat.toFixed(2)}</span>
+        Equity: <span style="color:var(--cyan)">$${totalEquity.toFixed(2)}</span> • 
+        Floating P&L: <span style="color:${totalFloat >= 0 ? 'var(--green)' : 'var(--red)'}">$${totalFloat.toFixed(2)}</span>
     `;
 }
 
@@ -278,21 +299,21 @@ function renderStrategies() {
     const container = document.getElementById("strategiesContainer");
     container.innerHTML = '';
     strategies.forEach((strat, index) => {
-        const float = calculateStrategyFloating(strat);
-        const equity = strat.balance + float;
+        const float = calculateFloating(strat);
+        const equity = (strat.balance + float).toFixed(2);
 
         const card = document.createElement('div');
         card.className = `strat-card ${strat.active ? 'active' : ''}`;
         card.innerHTML = `
             <div class="strat-header">
-                <span style="font-size:2.6em;">${strat.icon}</span>
+                <span style="font-size:2.8em;">${strat.icon}</span>
                 <div class="toggle ${strat.active ? 'active' : ''}" onclick="toggleStrategy(${index}); event.stopImmediatePropagation();"></div>
             </div>
             <div class="strat-name">${strat.name}</div>
-            <div class="mini-info">
+            <div style="margin-top:16px; font-size:1.05em; line-height:1.7;">
                 Balans: <strong>$${strat.balance.toFixed(2)}</strong><br>
-                Equity: <strong>$${equity.toFixed(2)}</strong><br>
-                Savdolar: <strong>${strat.trades}</strong> • P&L: <strong style="color:${strat.pnl>=0?'#4ade80':'#fb7185'}">$${strat.pnl.toFixed(2)}</strong><br>
+                Equity: <strong>$${equity}</strong><br>
+                Savdolar: <strong>${strat.trades}</strong> • Umumiy P&L: <strong style="color:${strat.pnl >= 0 ? 'var(--green)' : 'var(--red)'}">$${strat.pnl.toFixed(2)}</strong><br>
                 Ochiq pozitsiyalar: <strong>${strat.positions.length}</strong>
             </div>
         `;
@@ -306,10 +327,10 @@ function toggleStrategy(index) {
     saveToLocalStorage();
 }
 
-// ====================== POZITSIYA OCHISH ======================
+// ====================== POZITSIYALAR ======================
 function openPosition(index, type) {
     const strat = strategies[index];
-    if (!strat.active) return;
+    if (!strat.active || strat.positions.length > 1) return; // har bir strategiyada faqat 1 ta ochiq pozitsiya
 
     const lot = 0.05;
     const entry = parseFloat(price.toFixed(2));
@@ -319,36 +340,35 @@ function openPosition(index, type) {
         type: type,
         entry: entry,
         lot: lot,
-        openTime: new Date().toLocaleString('uz-UZ')
+        openTime: new Date().toLocaleString('uz-UZ', {hour:'2-digit', minute:'2-digit', second:'2-digit'})
     });
     strat.trades++;
     saveToLocalStorage();
     renderAll();
 }
 
-// ====================== POZITSIYA YOPISH ======================
 function closePosition(posId) {
-    for (let i = 0; i < strategies.length; i++) {
-        const posIndex = strategies[i].positions.findIndex(p => p.id === posId);
-        if (posIndex !== -1) {
-            const pos = strategies[i].positions[posIndex];
+    for (let strat of strategies) {
+        const idx = strat.positions.findIndex(p => p.id === posId);
+        if (idx !== -1) {
+            const pos = strat.positions[idx];
             const diff = pos.type === 'buy' ? (price - pos.entry) : (pos.entry - price);
             const pnl = diff * pos.lot * 100;
 
-            strategies[i].balance += pnl;
-            strategies[i].pnl += pnl;
+            strat.balance += pnl;
+            strat.pnl += pnl;
 
             closedTrades.unshift({
-                strategy: strategies[i].name,
+                strategy: strat.name,
                 type: pos.type,
                 entry: pos.entry,
-                exit: price,
+                exit: price.toFixed(2),
                 lot: pos.lot,
                 pnl: pnl,
                 time: new Date().toLocaleString('uz-UZ')
             });
 
-            strategies[i].positions.splice(posIndex, 1);
+            strat.positions.splice(idx, 1);
             saveToLocalStorage();
             renderAll();
             return;
@@ -356,7 +376,7 @@ function closePosition(posId) {
     }
 }
 
-// ====================== BARCHA JADVAL VA KARTALarni YANGILASH ======================
+// ====================== JADVAL RENDER ======================
 function renderPositions() {
     const tbody = document.getElementById("positionsBody");
     tbody.innerHTML = '';
@@ -365,16 +385,19 @@ function renderPositions() {
         strat.positions.forEach(pos => {
             const diff = pos.type === 'buy' ? (price - pos.entry) : (pos.entry - price);
             const pnl = diff * pos.lot * 100;
+            const pnlPercent = ((pnl / (pos.lot * 100 * pos.entry)) * 100).toFixed(2);
 
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${strat.name}</td>
-                <td style="color:${pos.type==='buy'?'#4ade80':'#fb7185'}">${pos.type.toUpperCase()}</td>
+                <td><strong>${strat.name}</strong></td>
+                <td style="color:${pos.type==='buy' ? 'var(--green)' : 'var(--red)'}"><strong>${pos.type.toUpperCase()}</strong></td>
                 <td>${pos.entry}</td>
-                <td>${pos.lot}</td>
-                <td>${price.toFixed(2)}</td>
-                <td class="${pnl>=0?'profit':'loss'}">$${pnl.toFixed(2)}</td>
-                <td><button onclick="closePosition(${pos.id});" style="background:#fb7185;color:white;border:none;padding:6px 14px;border-radius:8px;font-size:0.9em;">Yopish</button></td>
+                <td><strong>${pos.lot}</strong></td>
+                <td><strong>${price.toFixed(2)}</strong></td>
+                <td class="${pnl >= 0 ? 'profit' : 'loss'}">$${pnl.toFixed(2)}</td>
+                <td class="${pnl >= 0 ? 'profit' : 'loss'}">${pnlPercent}%</td>
+                <td style="font-size:0.95em; color:#94a3b8;">${pos.openTime}</td>
+                <td><button class="action-btn" onclick="closePosition(${pos.id})">Yopish</button></td>
             `;
             tbody.appendChild(row);
         });
@@ -386,15 +409,18 @@ function renderHistory() {
     tbody.innerHTML = '';
 
     closedTrades.forEach(trade => {
+        const pnlPercent = ((trade.pnl / (trade.lot * 100 * trade.entry)) * 100).toFixed(2);
+
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${trade.strategy}</td>
-            <td style="color:${trade.type==='buy'?'#4ade80':'#fb7185'}">${trade.type.toUpperCase()}</td>
+            <td><strong>${trade.strategy}</strong></td>
+            <td style="color:${trade.type==='buy' ? 'var(--green)' : 'var(--red)'}">${trade.type.toUpperCase()}</td>
             <td>${trade.entry}</td>
             <td>${trade.exit}</td>
-            <td>${trade.lot}</td>
-            <td class="${trade.pnl>=0?'profit':'loss'}">$${trade.pnl.toFixed(2)}</td>
-            <td style="font-size:0.9em;color:#94a3b8;">${trade.time}</td>
+            <td><strong>${trade.lot}</strong></td>
+            <td class="${trade.pnl >= 0 ? 'profit' : 'loss'}">$${trade.pnl.toFixed(2)}</td>
+            <td class="${trade.pnl >= 0 ? 'profit' : 'loss'}">${pnlPercent}%</td>
+            <td style="font-size:0.95em; color:#94a3b8;">${trade.time}</td>
         `;
         tbody.appendChild(row);
     });
@@ -407,42 +433,31 @@ function renderAll() {
     updateTotal();
 }
 
-// ====================== AVTOMATIK AI ======================
+// ====================== AVTOMATIK SAVDO ======================
 function runAIStrategies() {
     strategies.forEach((strat, index) => {
         if (!strat.active || strat.positions.length > 0) return;
-        if (Math.random() > 0.6) return;
+        if (Math.random() > 0.55) return;
 
         const trendUp = lastPrices[2] > lastPrices[0];
-        const shouldBuy = Math.random() > (trendUp ? 0.35 : 0.65);
-
+        const shouldBuy = Math.random() > (trendUp ? 0.4 : 0.7);
         openPosition(index, shouldBuy ? 'buy' : 'sell');
     });
 }
 
-// ====================== BOSHQA TUGMALAR ======================
-function startAllAI() {
-    strategies.forEach(s => s.active = true);
-    renderAll();
-    alert("✅ Barcha 6 ta strategiya ishga tushdi!");
-}
-
-function stopAllAI() {
-    strategies.forEach(s => s.active = false);
-    renderAll();
-    alert("⛔ Barcha strategiyalar to‘xtatildi.");
-}
+// ====================== BOSHQA FUNKSIYALAR ======================
+function startAllAI() { strategies.forEach(s => s.active = true); renderAll(); }
+function stopAllAI() { strategies.forEach(s => s.active = false); renderAll(); }
 
 function resetAllDemo() {
-    if (confirm("Butun demo hisobni (barcha strategiyalarni) qayta tiklashni xohlaysizmi?")) {
+    if (confirm("Butun demo hisobni qayta tiklashni xohlaysizmi? Barcha ma'lumotlar o‘chib ketadi.")) {
         localStorage.removeItem('goldAIProDemo');
         location.reload();
     }
 }
 
-// ====================== NARX SIMULYATSIYASI ======================
 function updateLivePrice() {
-    const change = (Math.random() * 2.8 - 1.3);
+    const change = (Math.random() * 3.2 - 1.5);
     price += change;
     lastPrices.shift();
     lastPrices.push(price);
@@ -451,7 +466,7 @@ function updateLivePrice() {
     const percent = (change / price * 100).toFixed(2);
     const el = document.getElementById("priceChange");
     el.textContent = `${change > 0 ? '+' : ''}${change.toFixed(2)} (${percent}%)`;
-    el.style.color = change > 0 ? '#4ade80' : '#fb7185';
+    el.style.color = change > 0 ? 'var(--green)' : 'var(--red)';
 }
 
 // ====================== ASOSIY LOOP ======================
@@ -459,7 +474,7 @@ setInterval(() => {
     updateLivePrice();
     renderAll();
     runAIStrategies();
-}, 2500);
+}, 2800);
 
 window.onload = () => {
     loadFromLocalStorage();
