@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>💎 GOLD AI PRO - Axborot | Gold Yangiliklari</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<style>
+    :root {
+        --gold: #fbbf24;
+        --green: #4ade80;
+        --red: #fb7185;
+        --cyan: #67e8f9;
+        --card: #1e2937;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+        background: linear-gradient(135deg, #020617 0%, #0a1428 100%);
+        color: white;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        min-height: 100vh;
+    }
+    .header {
+        background: rgba(15,23,42,0.98);
+        backdrop-filter: blur(16px);
+        padding: 18px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-bottom: 1px solid rgba(251,191,36,0.3);
+    }
+    .logo { font-size: 2.2em; font-weight: 900; color: var(--gold); }
+    .nav a {
+        color: #cbd5e1;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 9999px;
+        font-size: 1.05em;
+        transition: all 0.3s;
+    }
+    .nav a:hover, .nav a.active { background: rgba(251,191,36,0.25); color: var(--gold); }
+
+    .main { padding: 40px 24px 100px; }
+    h1 { text-align: center; font-size: 2.9em; color: var(--gold); margin-bottom: 12px; }
+    .subtitle { text-align: center; color: #94a3b8; font-size: 1.4em; margin-bottom: 40px; }
+
+    .news-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+        gap: 28px;
+    }
+    .news-card {
+        background: var(--card);
+        border-radius: 20px;
+        padding: 26px;
+        border: 1px solid #334155;
+        transition: all 0.4s;
+    }
+    .news-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 35px rgba(251,191,36,0.25);
+    }
+    .news-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+    .impact-badge {
+        padding: 6px 18px;
+        border-radius: 9999px;
+        font-size: 0.9em;
+        font-weight: 700;
+    }
+    .high { background: #fb7185; color: white; }
+    .medium { background: #fbbf24; color: #111827; }
+    .bullish { color: var(--green); font-size: 1.4em; }
+    .bearish { color: var(--red); font-size: 1.4em; }
+
+    .footer {
+        text-align: center;
+        padding: 60px 20px;
+        color: #64748b;
+        font-size: 1.05em;
+    }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">GOLD AI PRO</div>
+    <div class="nav">
+        <a href="index.html">Asosiy</a>
+        <a href="demo.html">Demo Hisob</a>
+        <a href="axborot.html" class="active">Axborot</a>
+        <a href="risk.html">Risk</a>
+    </div>
+</div>
+
+<div class="main">
+    <h1>🌍 Gold Bozorga Ta’sir Qiluvchi Yangiliklar</h1>
+    <p class="subtitle">Har bir yangilik Gold (XAUUSD) narxiga qanday va qanchalik kuchli ta’sir qilishi tahlil qilinadi • 2026-yil aprel holati</p>
+
+    <div style="text-align:center; margin-bottom:30px;">
+        <button onclick="refreshNews()" 
+                style="background:#fbbf24; color:#111827; border:none; padding:14px 40px; border-radius:9999px; font-size:1.15em; cursor:pointer; font-weight:700;">
+            🔄 Yangiliklarni yangilash
+        </button>
+    </div>
+
+    <div class="news-grid" id="newsContainer"></div>
+</div>
+
+<div class="footer">
+    © 2026 GOLD AI PRO • Yangiliklar real vaqtga yaqin simulyatsiya • Professional tahlil
+</div>
+
+<script>
+// ====================== GOLD YANGILIKLARI (2026-aprel real holatiga asoslangan) ======================
+let goldNews = [
+    {
+        time: "3-aprel 2026, 18:45",
+        title: "Trump Eron mojarosini kuchaytirish haqida yangi bayonot berdi",
+        impact: "Yuqori",
+        direction: "🟢 Bullish",
+        effect: "Xavfsiz boshpana talabi keskin oshdi. Neft narxi ko‘tarilishi inflyatsiya xavfini kuchaytirdi. Gold narxi +0.8% dan +2.0% gacha ko‘tarilishi mumkin."
+    },
+    {
+        time: "3-aprel 2026, 16:30",
+        title: "AQSh Non-Farm Payrolls ma’lumotlari kutilganidan kuchli chiqdi",
+        impact: "Yuqori",
+        direction: "🔴 Bearish",
+        effect: "Dollar kuchaydi va Fed foiz stavkalarini pasaytirish ehtimoli kamaydi. Gold bosim ostida, -0.7% dan -1.5% gacha tushishi mumkin."
+    },
+    {
+        time: "3-aprel 2026, 14:20",
+        title: "Neft narxi 7% ga oshdi – O‘rta Sharq mojarosi ta’siri",
+        impact: "Yuqori",
+        direction: "🟢 Bullish",
+        effect: "Energiya inflyatsiyasi xavfi ortdi. Markaziy banklar oltinni yanada faol sotib olishi mumkin. Gold uchun ijobiy signal."
+    },
+    {
+        time: "2-aprel 2026",
+        title: "J.P. Morgan: 2026-yil oxiriga kelib Gold $5000–$5400 ga yetishi mumkin",
+        impact: "O‘rta",
+        direction: "🟢 Bullish",
+        effect: "Markaziy banklar va investorlar talabi kuchli davom etmoqda. Uzoq muddatli ijobiy prognoz."
+    },
+    {
+        time: "3-aprel 2026",
+        title: "FOMC protokoli oldidan bozor ehtiyotkorlikni oshirdi",
+        impact: "Yuqori",
+        direction: "🔴 Bearish",
+        effect: "Agar Fed dovish signal bermasa, dollar yanada kuchayadi va Gold pasayishi ehtimoli yuqori."
+    },
+    {
+        time: "1-aprel 2026",
+        title: "Xitoy PMI ma’lumotlari kutilganidan yaxshi chiqdi",
+        impact: "O‘rta",
+        direction: "🟢 Bullish",
+        effect: "Sanoat talabi oshishi Goldning sanoat va zargarlik qismini qo‘llab-quvvatlaydi."
+    }
+];
+
+function renderNews() {
+    const container = document.getElementById("newsContainer");
+    container.innerHTML = '';
+    
+    goldNews.forEach(news => {
+        const card = document.createElement('div');
+        card.className = 'news-card';
+        card.innerHTML = `
+            <div class="news-header">
+                <span style="color:#94a3b8; font-size:1em;">${news.time}</span>
+                <span class="impact-badge ${news.impact === 'Yuqori' ? 'high' : 'medium'}">${news.impact}</span>
+            </div>
+            <h3 style="font-size:1.35em; margin-bottom:16px; line-height:1.4;">${news.title}</h3>
+            <p style="margin:12px 0; font-weight:700;" class="${news.direction.includes('Bullish') ? 'bullish' : 'bearish'}">
+                ${news.direction}
+            </p>
+            <p style="line-height:1.65; color:#cbd5e1;">${news.effect}</p>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function refreshNews() {
+    // Yangi yangilik qo‘shish (demo uchun)
+    goldNews.unshift({
+        time: "Hozir",
+        title: "Yangi muhim yangilik keldi (simulyatsiya)",
+        impact: Math.random() > 0.5 ? "Yuqori" : "O‘rta",
+        direction: Math.random() > 0.5 ? "🟢 Bullish" : "🔴 Bearish",
+        effect: "Gold narxiga kuchli ta’sir kutilmoqda. Bozor hozirda yuqori volatillikni ko‘rsatmoqda. Kuzatib boring!"
+    });
+    
+    if (goldNews.length > 8) goldNews.pop();
+    renderNews();
+}
+
+// Sahifa yuklanganda
+window.onload = () => {
+    renderNews();
+};
+</script>
+</body>
+</html>
