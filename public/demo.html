@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>💎 GOLD AI PRO v5.1 - Demo Hisob</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<style>
+    :root {
+        --gold: #fbbf24; --soft-cyan: #67e8f9; --green: #4ade80;
+        --purple: #c084fc; --orange: #fb923c; --rose: #fb7185;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+        background: linear-gradient(135deg, #020617 0%, #0a1428 100%);
+        color: white; font-family: 'Segoe UI', system-ui, sans-serif;
+        min-height: 100vh;
+    }
+    .header { background: rgba(15,23,42,0.95); backdrop-filter: blur(16px);
+        padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
+        position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(251,191,36,0.25); }
+    .logo { font-size: 2em; font-weight: 900; color: var(--gold); }
+    .nav { display: flex; gap: 12px; }
+    .nav a { color: #cbd5e1; text-decoration: none; padding: 8px 16px; border-radius: 9999px;
+        font-size: 0.98em; transition: all 0.3s; }
+    .nav a:hover, .nav a.active { background: rgba(251,191,36,0.2); color: var(--gold); }
+
+    .main { padding: 30px 20px 80px; }
+    h1 { text-align: center; font-size: 2.6em; background: linear-gradient(90deg, #fbbf24, #bae6fd);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+    .subtitle { text-align: center; color: #94a3b8; font-size: 1.25em; margin-bottom: 30px; }
+
+    .account-box {
+        background: #0f172a; border-radius: 24px; padding: 24px; margin-bottom: 30px;
+        border: 2px solid var(--gold); text-align: center;
+    }
+    .balance { font-size: 2.8em; font-weight: 800; color: var(--green); }
+    .equity { font-size: 1.4em; color: #67e8f9; }
+
+    .price-ticker {
+        background: rgba(15,23,42,0.9); border: 2px solid var(--gold); border-radius: 9999px;
+        padding: 14px 24px; margin: 0 auto 30px; max-width: 420px; text-align: center;
+        box-shadow: 0 10px 30px rgba(251,191,36,0.25);
+    }
+
+    .strategies {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-bottom: 40px;
+    }
+    .strat-card {
+        background: #0f172a; border-radius: 20px; padding: 20px; transition: all 0.3s;
+        border: 1px solid rgba(251,191,36,0.15); cursor: pointer;
+    }
+    .strat-card.active { border-color: var(--green); box-shadow: 0 0 20px rgba(74,222,128,0.3); }
+    .strat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .strat-name { font-size: 1.35em; color: var(--gold); }
+    .toggle { width: 52px; height: 28px; background: #334155; border-radius: 9999px; position: relative; }
+    .toggle.active { background: #4ade80; }
+    .toggle::after { content: ''; position: absolute; width: 22px; height: 22px; background: white;
+        border-radius: 50%; top: 3px; left: 3px; transition: 0.3s; }
+    .toggle.active::after { left: 26px; }
+
+    .positions-table { width: 100%; border-collapse: collapse; background: #0f172a; border-radius: 16px; overflow: hidden; }
+    .positions-table th, .positions-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid #334155; }
+    .positions-table th { background: #1e2937; color: var(--gold); }
+    .profit { color: #4ade80; }
+    .loss { color: #fb7185; }
+
+    .footer { text-align: center; padding: 60px 20px; color: #64748b; font-size: 1.05em; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">GOLD AI PRO</div>
+    <div class="nav">
+        <a href="index.html">Asosiy</a>
+        <a href="demo.html" class="active">Demo Hisob</a>
+        <a href="risk.html">Risk</a>
+    </div>
+</div>
+
+<div class="main">
+    <h1>Demo Hisob</h1>
+    <p class="subtitle">Real bozorda sinovdan o‘tkazish uchun virtual hisob • AI avtomatik savdo qiladi</p>
+
+    <!-- Account Info -->
+    <div class="account-box">
+        <div style="font-size:1.1em; color:#94a3b8; margin-bottom:8px;">Hisob balansi</div>
+        <div id="balance" class="balance">$50,000.00</div>
+        <div id="equity" class="equity">Equity: $50,000.00 • Floating P&L: <span id="floatPnl">+0.00</span></div>
+        <div style="margin-top:12px; font-size:0.95em; color:#64748b;">
+            Ishlatilgan marja: <span id="marginUsed">$0</span> • Boshlang‘ich balans: $50,000
+        </div>
+    </div>
+
+    <!-- Live Price -->
+    <div class="price-ticker">
+        <span style="color:var(--gold);">XAUUSD</span>
+        <span id="livePrice" style="font-size:2.4em; font-weight:800; color:#4ade80;">4689.65</span>
+        <span id="priceChange" style="color:#4ade80;">+27.80 (+0.60%)</span>
+    </div>
+
+    <h2 style="text-align:center; margin:30px 0 20px; color:var(--gold);">🤖 6 ta AI Strategiyasi (Avtomatik)</h2>
+    
+    <div class="strategies" id="strategiesContainer">
+        <!-- JS orqali qo'shiladi -->
+    </div>
+
+    <h2 style="margin:40px 0 15px; text-align:center;">Ochilgan pozitsiyalar</h2>
+    <table class="positions-table" id="positionsTable">
+        <thead>
+            <tr>
+                <th>Strategiya</th>
+                <th>Tur</th>
+                <th>Kirish narxi</th>
+                <th>Lot</th>
+                <th>Joriy narx</th>
+                <th>P&L</th>
+                <th>Amal</th>
+            </tr>
+        </thead>
+        <tbody id="positionsBody"></tbody>
+    </table>
+
+    <div style="margin-top:30px; text-align:center;">
+        <button onclick="resetDemo()" style="background:#fb7185; color:white; border:none; padding:14px 32px; border-radius:9999px; font-size:1.1em; cursor:pointer;">
+            Hisobni qayta tiklash (Reset)
+        </button>
+        <button onclick="startAllAI()" style="background:#4ade80; color:#020617; border:none; padding:14px 32px; border-radius:9999px; font-size:1.1em; margin-left:12px; cursor:pointer;">
+            Barcha AI ni ishga tushirish
+        </button>
+        <button onclick="stopAllAI()" style="background:#64748b; color:white; border:none; padding:14px 32px; border-radius:9999px; font-size:1.1em; margin-left:12px; cursor:pointer;">
+            Barcha AI ni to‘xtatish
+        </button>
+    </div>
+</div>
+
+<div class="footer">
+    © 2026 GOLD AI PRO • Demo hisob real bozorda sinov uchun • Avtomatik AI savdo
+</div>
+
+<script>
+// ==================== ASOSIY O‘ZGARUVCHILAR ====================
+let balance = 50000;
+let equity = 50000;
+let positions = [];
+let price = 4689.65;
+let lastPrices = [price, price, price]; // trend uchun
+
+const strategiesList = [
+    { id:1, name:"Trend Strategy", icon:"📈", color:"#4ade80" },
+    { id:2, name:"Scalping AI", icon:"⚡", color:"#67e8f9" },
+    { id:3, name:"Smart Money", icon:"🧠", color:"#c084fc" },
+    { id:4, name:"AI Prediction", icon:"🤖", color:"#fb923c" },
+    { id:5, name:"Market Sentiment", icon:"📊", color:"#fb7185" },
+    { id:6, name:"Signal Strength", icon:"🔥", color:"#a3e4d7" }
+];
+
+// Har bir strategiya holati
+let strategies = strategiesList.map(s => ({...s, active: false, pnl: 0, trades: 0}));
+
+// ==================== NARX SIMULYATSIYASI ====================
+function updateLivePrice() {
+    const change = (Math.random() * 3.2 - 1.4);
+    price += change;
+    lastPrices.shift();
+    lastPrices.push(price);
+
+    document.getElementById("livePrice").textContent = price.toFixed(2);
+    
+    const percent = (change / (price - change) * 100).toFixed(2);
+    const changeEl = document.getElementById("priceChange");
+    changeEl.textContent = `${change > 0 ? '+' : ''}${change.toFixed(2)} (${percent}%)`;
+    changeEl.style.color = change > 0 ? '#4ade80' : '#fb7185';
+}
+
+// ==================== STRATEGIYALarni chizish ====================
+function renderStrategies() {
+    const container = document.getElementById("strategiesContainer");
+    container.innerHTML = '';
+    strategies.forEach((strat, index) => {
+        const card = document.createElement('div');
+        card.className = `strat-card ${strat.active ? 'active' : ''}`;
+        card.innerHTML = `
+            <div class="strat-header">
+                <span style="font-size:2.2em;">${strat.icon}</span>
+                <div class="toggle ${strat.active ? 'active' : ''}" onclick="toggleStrategy(${index}); event.stopImmediatePropagation();"></div>
+            </div>
+            <div class="strat-name">${strat.name}</div>
+            <p style="font-size:0.95em; color:#94a3b8; margin-top:8px;">
+                Savdolar: ${strat.trades} • P&L: <span style="color:${strat.pnl>=0?'#4ade80':'#fb7185'}">$${strat.pnl.toFixed(2)}</span>
+            </p>
+        `;
+        card.onclick = () => toggleStrategy(index);
+        container.appendChild(card);
+    });
+}
+
+// ==================== STRATEGIYA TOGGLE ====================
+function toggleStrategy(index) {
+    strategies[index].active = !strategies[index].active;
+    renderStrategies();
+}
+
+// ==================== YANGI POZITSIYA OCHISH ====================
+function openPosition(strategyIndex, type) {
+    const strat = strategies[strategyIndex];
+    const lot = 0.05; // demo uchun kichik lot
+    const entry = parseFloat(price.toFixed(2));
+
+    positions.push({
+        id: Date.now(),
+        strategy: strat.name,
+        stratIndex: strategyIndex,
+        type: type,
+        entry: entry,
+        lot: lot,
+        openTime: new Date()
+    });
+
+    strat.trades++;
+    renderPositions();
+}
+
+// ==================== POZITSIYALARNI HISOBLASH VA KO‘RSATISH ====================
+function calculateFloatingPnl() {
+    let totalPnl = 0;
+    positions.forEach(pos => {
+        const diff = pos.type === 'buy' ? (price - pos.entry) : (pos.entry - price);
+        const pnl = diff * pos.lot * 100; // XAUUSD pip hisobi
+        totalPnl += pnl;
+    });
+    return totalPnl;
+}
+
+function renderPositions() {
+    const tbody = document.getElementById("positionsBody");
+    tbody.innerHTML = '';
+
+    let totalFloat = 0;
+
+    positions.forEach((pos, i) => {
+        const diff = pos.type === 'buy' ? (price - pos.entry) : (pos.entry - price);
+        const pnl = diff * pos.lot * 100;
+        totalFloat += pnl;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${pos.strategy}</td>
+            <td style="color:${pos.type==='buy'?'#4ade80':'#fb7185'}">${pos.type.toUpperCase()}</td>
+            <td>${pos.entry}</td>
+            <td>${pos.lot}</td>
+            <td>${price.toFixed(2)}</td>
+            <td class="${pnl>=0?'profit':'loss'}">$${pnl.toFixed(2)}</td>
+            <td><button onclick="closePosition(${i});" style="background:#fb7185;color:white;border:none;padding:4px 12px;border-radius:8px;font-size:0.85em;">Yopish</button></td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    // Balans va equity yangilash
+    equity = balance + totalFloat;
+    document.getElementById("balance").textContent = '$' + balance.toFixed(2);
+    document.getElementById("equity").innerHTML = `
+        Equity: <span style="color:#67e8f9">$${equity.toFixed(2)}</span> • 
+        Floating P&L: <span id="floatPnl" style="color:${totalFloat>=0?'#4ade80':'#fb7185'}">$${totalFloat.toFixed(2)}</span>
+    `;
+}
+
+// ==================== POZITSIYANI YOPISH ====================
+function closePosition(index) {
+    const pos = positions[index];
+    const diff = pos.type === 'buy' ? (price - pos.entry) : (pos.entry - price);
+    const pnl = diff * pos.lot * 100;
+
+    balance += pnl;
+    strategies[pos.stratIndex].pnl += pnl;
+
+    positions.splice(index, 1);
+    renderPositions();
+    renderStrategies();
+}
+
+// ==================== AVTOMATIK AI SAVDO LOGIKASI ====================
+function runAIStrategies() {
+    strategies.forEach((strat, index) => {
+        if (!strat.active) return;
+
+        // Har 8-15 soniyada bir marta signal berish ehtimoli
+        if (Math.random() > 0.65) return;
+
+        // Oddiy trend tahlili (oxirgi 3 narx)
+        const trendUp = lastPrices[2] > lastPrices[0];
+        
+        // 50/50 ehtimollik bilan BUY yoki SELL
+        const shouldBuy = trendUp ? (Math.random() > 0.3) : (Math.random() > 0.7);
+
+        // Agar allaqachon shu strategiyadan ochiq pozitsiya bo‘lsa — ochmaydi
+        const alreadyOpen = positions.some(p => p.stratIndex === index);
+        if (alreadyOpen) return;
+
+        openPosition(index, shouldBuy ? 'buy' : 'sell');
+    });
+}
+
+// ==================== BOSHQA FUNKSIYALAR ====================
+function startAllAI() {
+    strategies.forEach(s => s.active = true);
+    renderStrategies();
+    alert("✅ Barcha 6 ta AI strategiyasi ishga tushdi! Avtomatik savdo boshlandi.");
+}
+
+function stopAllAI() {
+    strategies.forEach(s => s.active = false);
+    renderStrategies();
+    alert("⛔ Barcha AI strategiyalari to‘xtatildi.");
+}
+
+function resetDemo() {
+    if (confirm("Hisobni butunlay qayta tiklashni xohlaysizmi?")) {
+        balance = 50000;
+        equity = 50000;
+        positions = [];
+        strategies.forEach(s => { s.pnl = 0; s.trades = 0; });
+        renderPositions();
+        renderStrategies();
+        alert("Demo hisob qayta tiklandi!");
+    }
+}
+
+// ==================== ASOSIY LOOP ====================
+setInterval(() => {
+    updateLivePrice();
+    renderPositions();
+    runAIStrategies();
+}, 2800); // har 2.8 soniyada yangilanish
+
+// Dastlabki yuklash
+window.onload = () => {
+    renderStrategies();
+    renderPositions();
+    updateLivePrice();
+};
+</script>
+</body>
+</html>
